@@ -110,6 +110,13 @@ CREATE TABLE `tbl_product_photo` (
     PRIMARY KEY (`pp_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `tbl_language` (
+    `lang_id` int(11) NOT NULL AUTO_INCREMENT,
+    `lang_name` varchar(255) NOT NULL,
+    `lang_value` text NOT NULL,
+    PRIMARY KEY (`lang_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE `tbl_customer_message` (
     `customer_message_id` int(11) NOT NULL AUTO_INCREMENT,
     `subject` varchar(255) NOT NULL,
