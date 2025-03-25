@@ -1,7 +1,7 @@
 require('dotenv').config()
 const express = require('express');
 const cors = require('cors')
-const productRouter = require('./routes/product.router');
+const apiRoutes = require('./routes');
 
 const connection = require("./database/database")
 
@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(cors());
 
-app.use('/api/products', productRouter);
+app.use('/api', apiRoutes);
 
 (async () => {
     try {
