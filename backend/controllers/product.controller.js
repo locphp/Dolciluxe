@@ -70,11 +70,11 @@ const getProductsByType = async (req, res) => {
 
 const createProduct = async (req, res) => {
     try {
-        const { productName, description, imageLink, productType, quantity, price, discount } = req.body;
+        const { productName, description, imageLink, productType, quantity, price } = req.body;
         const productTypeExists = await ProductType.findById(productType);
         if (!productTypeExists) return res.status(404).json({ code: 404, message: 'ProductType not found' });
 
-        const newProduct = new Product({ productName, description, imageLink, productType, quantity, price, discount });
+        const newProduct = new Product({ productName, description, imageLink, productType, quantity, price });
         await newProduct.save();
 
         const populatedProduct = await Product.findById(newProduct._id)

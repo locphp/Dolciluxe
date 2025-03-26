@@ -11,7 +11,6 @@ const productSchema = new mongoose.Schema({
     },
     quantity: { type: Number, default: 100 },
     price: { type: Number, required: true },
-    discount: { type: Number, default: 0 },
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date, default: null },
     createdAt: { type: Date, default: Date.now },
