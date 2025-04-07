@@ -8,6 +8,7 @@ exports.getAllUsersService = async () => {
             name: user.name,
             email: user.email,
             phone: user.phone || null,
+            avatar: user.avatar,
             address: {
                 street: user.address?.street || null,
                 city: user.address?.city || null,
