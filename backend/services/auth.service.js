@@ -20,24 +20,32 @@ const generateRefreshToken = (user) => {
     );
 };
 
+const generateAvatar = (name) => {
+    const initials = name.split(" ").map(word => word[0]).join("").toUpperCase();
+    return `https://ui-avatars.com/api/?name=${initials}&background=random&color=fff&size=128`;
+};
+
 exports.registerUser = async (name, email, password, phone, address) => {
     try {
-        const userExist = await User.findOne({ email });
-        if (userExist) return { code: 400, message: "Account already exists!" };
+        const avatar = generateAvatar(name);
 
-        const newUser = new User({
+        let user = await User.findOne({ email });
+        if (user) {
+            return { code: 400, message: "Email already exists!" };
+        }
+
+        user = await User.create({
             name,
             email,
             password,
             phone,
             address,
+            avatar,
         });
 
-        await newUser.save();
-
-        return { code: 200, message: "Register successful!" };
+        return { code: 201, message: "User registered successfully!", user: { avatar: user.avatar } };
     } catch (error) {
-        throw new Error("Server error");
+        return { code: 500, message: "Server error", error: error.message };
     }
 };
 
