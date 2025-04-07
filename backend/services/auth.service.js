@@ -103,3 +103,32 @@ exports.refreshToken = async (refreshToken) => {
         throw new Error("Server error");
     }
 };
+
+exports.loginWithGoogle = async (profile) => {
+    try {
+        let user = await User.findOne({ googleId: profile.id });
+
+        if (!user) {
+            user = await User.create({
+                name: profile.displayName,
+                email: profile.emails[0].value,
+                googleId: profile.id,
+                avatar: profile.photos[0].value,
+            });
+        }
+
+        return {
+            code: 200,
+            message: 'Login with Google successfully',
+            data: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                avatar: user.avatar,
+                isAdmin: user.isAdmin
+            }
+        };
+    } catch (error) {
+        return { code: 500, message: 'Internal server error', error: error.message };
+    }
+};
