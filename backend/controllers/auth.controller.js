@@ -38,3 +38,47 @@ exports.refreshToken = async (req, res) => {
         res.status(500).json({ code: 500, message: "Server error", error: error.message });
     }
 };
+// dùng để test khi chưa có FE
+// exports.googleCallback = async (req, res) => {
+//     try {
+//         const response = await authService.loginWithGoogle(req.user);
+//         // Trả về thông tin user và token (nếu cần)
+//         res.status(200).json({
+//             code: 200,
+//             message: "Login with Google success",
+//             data: req.user,  // thông tin user Google
+//         });
+//     } catch (error) {
+//         res.status(400).json({
+//             code: 400,
+//             message: "Login with Google failed",
+//         });
+//     }
+// };
+
+// Google Auth Callback
+exports.googleCallback = async (req, res) => {
+    try {
+        const response = await authService.loginWithGoogle(req.user);
+
+        res.redirect(`${process.env.CLIENT_URL}/login-success`);
+    } catch (error) {
+        res.redirect(`${process.env.CLIENT_URL}/login-failed`);
+    }
+};
+
+// Handle Success
+exports.googleLoginSuccess = async (req, res) => {
+    if (!req.user) return res.status(401).json({ code: 401, message: 'Not Authorized' });
+
+    return res.status(200).json({
+        code: 200,
+        message: 'Login with Google success',
+        data: req.user,
+    });
+};
+
+// Handle Failed
+exports.googleLoginFailed = async (req, res) => {
+    res.status(401).json({ code: 401, message: 'Login with Google failed' });
+};
