@@ -4,7 +4,11 @@ exports.register = async (req, res) => {
     try {
         const { name, email, password, phone, address } = req.body;
         const response = await authService.registerUser(name, email, password, phone, address);
-        res.status(response.code).json(response);
+        res.status(response.code).json({
+            code: response.code,
+            message: response.message,
+            user: response.user
+        });
     } catch (error) {
         res.status(500).json({ code: 500, message: "Server error", error: error.message });
     }
