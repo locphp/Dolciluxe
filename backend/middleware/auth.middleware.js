@@ -1,24 +1,24 @@
 const jwt = require('jsonwebtoken');
 
-// Middleware xác thực token
+// Middleware to verify token
 exports.verifyToken = (req, res, next) => {
     const token = req.cookies.accessToken || req.headers.authorization?.split(" ")[1];
-    if (!token) return res.status(401).json({ message: "Bạn chưa đăng nhập!" });
+    if (!token) return res.status(401).json({ message: "Unauthorized: No token provided." });
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) return res.status(403).json({ message: "Token không hợp lệ!" });
+        if (err) return res.status(403).json({ message: "Forbidden: Invalid or expired token." });
         req.user = user;
         next();
     });
 };
 
-// Middleware kiểm tra quyền Admin
+// Middleware to check Admin role
 exports.verifyAdmin = (req, res, next) => {
     exports.verifyToken(req, res, (err) => {
-        if (err) return res.status(403).json({ message: "Token không hợp lệ!" });
+        if (err) return res.status(403).json({ message: "Forbidden: Invalid or expired token." });
 
         if (!req.user.isAdmin) {
-            return res.status(403).json({ message: "Bạn không có quyền truy cập!" });
+            return res.status(403).json({ message: "Forbidden: You do not have admin privileges." });
         }
         next();
     });
