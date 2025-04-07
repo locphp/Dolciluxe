@@ -1,77 +1,139 @@
-const User = require('../models/user.model');
+const userService = require('../services/user.service');
 
-// Lấy danh sách tất cả người dùng (Chỉ Admin)
+// Get all users (Only Admin)
 exports.getAllUsers = async (req, res) => {
     try {
-        const users = await User.find({ isDeleted: false }).select('-password');  // Ẩn password
-        res.status(200).json({ message: "Lấy danh sách user thành công!", users });
+        const users = await userService.getAllUsersService();
+        res.status(200).json({
+            code: 200,
+            message: "Successfully fetched user list!",
+            data: users
+        });
     } catch (error) {
-        res.status(500).json({ message: "Lỗi server!", error });
+        console.error("Error fetching user list:", error);
+        res.status(500).json({
+            code: 500,
+            message: "Server error!",
+            data: error.message
+        });
     }
 };
 
-// Lấy thông tin user theo ID
+// Get user information by ID
 exports.getUserById = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).select('-password');
-        if (!user || user.isDeleted) {
-            return res.status(404).json({ message: "User không tồn tại!" });
-        }
-        res.status(200).json({ message: "Lấy thông tin user thành công!", user });
+        const user = await userService.getUserByIdService(req.params.id);
+        res.status(200).json({
+            code: 200,
+            message: "Successfully fetched user info!",
+            data: user
+        });
     } catch (error) {
-        res.status(500).json({ message: "Lỗi server!", error });
+        res.status(500).json({
+            code: 500,
+            message: "Server error!",
+            data: error.message
+        });
     }
 };
 
-// Cập nhật thông tin người dùng (User hoặc Admin)
+// Update user information (User or Admin)
 exports.updateUser = async (req, res) => {
     try {
         const { name, phone, address } = req.body;
-        const updatedUser = await User.findByIdAndUpdate(
-            req.params.id,
-            { name, phone, address, updatedAt: Date.now() },
-            { new: true }
-        ).select('-password');
-
-        if (!updatedUser) return res.status(404).json({ message: "User không tồn tại!" });
-        res.status(200).json({ message: "Cập nhật user thành công!", user: updatedUser });
+        const updatedUser = await userService.updateUserService(req.params.id, { name, phone, address });
+        res.status(200).json({
+            code: 200,
+            message: "User updated successfully!",
+            data: updatedUser
+        });
     } catch (error) {
-        res.status(500).json({ message: "Lỗi server!", error });
+        res.status(500).json({
+            code: 500,
+            message: "Server error!",
+            data: error.message
+        });
     }
 };
 
-// Xóa mềm user (Chỉ Admin)
+// Soft delete user (Only Admin)
 exports.softDeleteUser = async (req, res) => {
     try {
-        const user = await User.findByIdAndUpdate(req.params.id, { isDeleted: true, deletedAt: Date.now() }, { new: true });
-        if (!user) return res.status(404).json({ message: "User không tồn tại!" });
-
-        res.status(200).json({ message: "Đã xóa user (soft delete)!", user });
+        const user = await userService.softDeleteUserService(req.params.id);
+        res.status(200).json({
+            code: 200,
+            message: "User soft deleted!",
+            data: user
+        });
     } catch (error) {
-        res.status(500).json({ message: "Lỗi server!", error });
+        res.status(500).json({
+            code: 500,
+            message: "Server error!",
+            data: error.message
+        });
     }
 };
 
-// Khôi phục user đã bị xóa mềm (Chỉ Admin)
+// Restore soft deleted user (Only Admin)
 exports.restoreUser = async (req, res) => {
     try {
-        const user = await User.findByIdAndUpdate(req.params.id, { isDeleted: false, deletedAt: null }, { new: true });
-        if (!user) return res.status(404).json({ message: "User không tồn tại!" });
-
-        res.status(200).json({ message: "User đã được khôi phục!", user });
+        const user = await userService.restoreUserService(req.params.id);
+        res.status(200).json({
+            code: 200,
+            message: "User restored successfully!",
+            data: user
+        });
     } catch (error) {
-        res.status(500).json({ message: "Lỗi server!", error });
+        res.status(500).json({
+            code: 500,
+            message: "Server error!",
+            data: error.message
+        });
     }
 };
 
-// Xóa vĩnh viễn user (Chỉ Admin)
+// Permanently delete user (Only Admin)
 exports.deleteUserPermanently = async (req, res) => {
     try {
-        const user = await User.findByIdAndDelete(req.params.id);
-        if (!user) return res.status(404).json({ message: "User không tồn tại!" });
-
-        res.status(200).json({ message: "User đã bị xóa vĩnh viễn!" });
+        await userService.deleteUserPermanentlyService(req.params.id);
+        res.status(200).json({
+            code: 200,
+            message: "User permanently deleted!",
+            data: null
+        });
     } catch (error) {
-        res.status(500).json({ message: "Lỗi server!", error });
+        res.status(500).json({
+            code: 500,
+            message: "Server error!",
+            data: error.message
+        });
+    }
+};
+
+exports.updatePasswordById = async (req, res, next) => {
+    try {
+        const userId = req.params.id;
+        const { password } = req.body;
+
+        // So sánh id trong token với id trên params
+        if (req.user.id !== userId) {
+            return res.status(403).json(
+                {
+                    code: 403,
+                    message: "Forbidden: You can only update your own password."
+                });
+        }
+
+        await userService.updatePasswordByIdService(userId, password);
+
+        res.status(200).json(
+            {
+                code: 200,
+                message: "Password updated successfully."
+
+            }
+        );
+    } catch (error) {
+        next(error);
     }
 };

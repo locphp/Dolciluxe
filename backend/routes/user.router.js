@@ -1,6 +1,6 @@
 const express = require('express');
 const { verifyToken, verifyAdmin } = require('../middleware/auth.middleware');
-const { getAllUsers, getUserById, updateUser, softDeleteUser, restoreUser, deleteUserPermanently } = require('../controllers/user.controller');
+const { getAllUsers, getUserById, updateUser, softDeleteUser, restoreUser, deleteUserPermanently, updatePasswordById } = require('../controllers/user.controller');
 
 const router = express.Router();
 
@@ -10,5 +10,6 @@ router.put('/:id', verifyToken, updateUser); // Cập nhật user
 router.delete('/:id', verifyAdmin, softDeleteUser);  // Admin xóa mềm user
 router.patch('/restore/:id', verifyAdmin, restoreUser);  // Admin khôi phục user
 router.delete('/permanent/:id', verifyAdmin, deleteUserPermanently);  // Admin xóa vĩnh viễn user
+router.put('/users/update-password/:id', verifyToken, updatePasswordById);
 
 module.exports = router;
