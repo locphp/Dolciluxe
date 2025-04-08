@@ -86,3 +86,9 @@ exports.googleLoginSuccess = async (req, res) => {
 exports.googleLoginFailed = async (req, res) => {
     res.status(401).json({ code: 401, message: 'Login with Google failed' });
 };
+
+exports.forgotPassword = async (req, res) => {
+    const { email } = req.body;
+    await authService.forgotPassword(email);
+    res.status(200).json({ message: 'Đã gửi mail reset mật khẩu' });
+}

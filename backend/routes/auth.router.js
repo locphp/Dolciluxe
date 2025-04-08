@@ -7,7 +7,8 @@ const {
     refreshToken,
     googleCallback,
     googleLoginSuccess,
-    googleLoginFailed
+    googleLoginFailed,
+    forgotPassword
 } = require('../controllers/auth.controller');
 
 const authRouter = express.Router();
@@ -35,5 +36,7 @@ authRouter.get('/google/success', googleLoginSuccess);
 
 // Handle Login Failed
 authRouter.get('/google/failed', googleLoginFailed);
+
+authRouter.post('/forgot-password', forgotPassword);
 
 module.exports = authRouter;

@@ -1,6 +1,8 @@
+const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
+const sendMail = require('../utils/sendMail');
 
 // Generate Access Token
 const generateAccessToken = (user) => {
@@ -140,3 +142,60 @@ exports.loginWithGoogle = async (profile) => {
         return { code: 500, message: 'Internal server error', error: error.message };
     }
 };
+
+exports.forgotPassword = async (email) => {
+    const user = await User.findOne({ email });
+    if (!user) throw new Error('Email không tồn tại');
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const hashToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+    // Set token & expire to user
+    user.resetPasswordToken = hashToken;
+    user.resetPasswordExpire = Date.now() + process.env.RESET_PASSWORD_EXPIRE * 60 * 1000; // 15 phút
+    await user.save();
+
+    // Create reset password URL
+    const resetURL = `${process.env.CLIENT_URL}/reset-password?token=${resetToken}`;
+
+    // HTML content
+    const html = `
+  <div style="
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 30px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      font-family: Arial, sans-serif;
+      color: #333;
+      text-align: center;
+  ">
+    <h2 style="color: #ff6b81;">Đặt lại mật khẩu DolciLuxe</h2>
+    <p>Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn.</p>
+    <p>Nhấn vào nút bên dưới để tiếp tục:</p>
+    <a href="${resetURL}" target="_blank" style="
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 25px;
+        background-color: #ff6b81;
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 5px;
+    ">
+      Đặt lại mật khẩu
+    </a>
+    <p style="margin-top: 30px; font-size: 14px; color: #777;">
+      Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.
+    </p>
+    <p style="margin-top: 5px; font-size: 14px; color: #777;">
+      Trân trọng,<br>DolciLuxe Team
+    </p>
+  </div>
+`;
+
+    // Send mail
+    await sendMail(user.email, 'Reset mật khẩu DolciLuxe', html);
+}
