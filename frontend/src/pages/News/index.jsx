@@ -5,12 +5,15 @@ import Newsfeed3 from '~/components/Layouts/components/Newsfeed/News3';
 import Newsfeed4 from '~/components/Layouts/components/Newsfeed/News4';
 import Newsfeed5 from '~/components/Layouts/components/Newsfeed/News5';
 import Newsfeed6 from '~/components/Layouts/components/Newsfeed/News6';
+import Newsfeed7 from '~/components/Layouts/components/Newsfeed/News7';
+import Newsfeed8 from '~/components/Layouts/components/Newsfeed/News8';
+
 import { useLocation } from 'react-router-dom';
 function News() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const news = searchParams.get('mode') || 'default';
-  console.log(news)
+  console.log(news);
   const renderNews = () => {
     switch (news) {
       case 'news1':
@@ -25,6 +28,10 @@ function News() {
         return <Newsfeed5 />;
       case 'news6':
         return <Newsfeed6 />;
+      case 'news7':
+        return <Newsfeed7 />;
+      case 'news8':
+        return <Newsfeed8 />;
       default:
         return <Newsfeed />;
     }

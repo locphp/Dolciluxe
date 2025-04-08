@@ -1,184 +1,143 @@
-import newsfeed1 from '~/assets/images/newsfeed1.png';
-import newsfeed2 from '~/assets/images/newsfeed2.png';
-import newsfeed3 from '~/assets/images/newsfeed3.png';
-import newsfeed4 from '~/assets/images/newsfeed4.png';
-import newsfeed5 from '~/assets/images/newsfeed5.png';
-import newsfeed6 from '~/assets/images/newsfeed6_1.png';
 import { Link } from 'react-router-dom';
+import * as React from 'react';
+import { useState } from 'react';
+import { Pagination, Stack } from '@mui/material';
+import newsfeed7 from '~/assets/images/newsfeed7.png';
+import newsfeed8 from '~/assets/images/newsfeed8.png';
+import newsfeed9 from '~/assets/images/newsfeed9.png';
+import newsfeed10 from '~/assets/images/newsfeed10.png';
+import newsfeed11 from '~/assets/images/newsfeed11.png';
+import newsfeed12 from '~/assets/images/newsfeed12.png';
+import newsfeed13 from '~/assets/images/newsfeed13.png';
+import newsfeed14 from '~/assets/images/newsfeed14.png';
+
+const newsItems = [
+  {
+    id: 'news8',
+    title: 'Cakewai - Tưng Bừng Khai Trương Chi Nhánh...',
+    desc: 'Cakewai xin chân thành cảm ơn sự quan tâm và ủng hộ từ quý khách hàng...',
+    date: '2025-02-01',
+    author: 'Cakewai',
+    image: newsfeed7,
+  },
+  {
+    id: 'news7',
+    title: 'Valentine Ngọt Ngào - Giảm Giá 50% Mừng Lễ Tình Nh...',
+    desc: 'Ngày 14/02 - ngày của tình nhân, hãy dành tặng cho người thương...',
+    date: '2025-02-01',
+    author: 'Gia Mẫn',
+    image: newsfeed10,
+  },
+  {
+    id: 'news1',
+    title: 'Cakewai Thông Báo Lịch Nghỉ Tết Nguyên Đán...',
+    desc: 'Cakewai: Thông Báo Lịch Nghỉ Tết Nguyên Đán 2025...',
+    date: '2025-01-05',
+    author: 'Cakewai',
+    image: newsfeed8,
+  },
+  {
+    id: 'news2',
+    title: 'Mẫu bánh kem mừng 20/11 ngày Nhà Giáo...',
+    desc: '"Không thầy đố mày làm nên" Ngày 20/11 là ngày lễ trọng đại...',
+    date: '2024-11-02',
+    author: 'Gia Mẫn',
+    image: newsfeed9,
+  },
+  {
+    id: 'news3',
+    title: 'Happy women day - 20/10 Dành tặng cho những đóa hoa hồn...',
+    desc: 'Happy women day - 20/10. Dành tặng cho những người phụ nữ tôi yêu...',
+    date: '2024-10-01',
+    author: 'Gia Mẫn',
+    image: newsfeed14,
+  },
+  {
+    id: 'news4',
+    title: 'Tưng bừng đắm chìm vào không gian huyền ảo cùng...',
+    desc: 'Bánh Passion Mousse Cheesecake là sự kết hợp tuyệt vời giữa vị chua ngọt...',
+    date: '2024-07-29',
+    author: 'Cakewai',
+    image: newsfeed11,
+  },
+  {
+    id: 'news5',
+    title: 'Bầu trời châu âu được ra mắt hoành tráng với...',
+    desc: 'Nhà Cakewai đã vô cùng tâm đắc và trau chuốt khi ra mắt bộ sưu tập mới...',
+    date: '2024-04-12',
+    author: 'Gia Mẫn',
+    image: newsfeed12,
+  },
+  {
+    id: 'news6',
+    title: 'Cakewai - Đặt bánh teabreak cho sự kiện, hội thảo,...',
+    desc: 'Cakewai cung cấp: Bánh sinh nhật, bánh minicake, bánh sự kiện...',
+    date: '2024-01-03',
+    author: 'Gia Mẫn',
+    image: newsfeed13,
+  },
+];
+
 function Newsfeed() {
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 6;
+
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
+
+  const totalPages = Math.ceil(newsItems.length / itemsPerPage);
+  const paginatedItems = newsItems.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+
   const handleDate = (field) => {
     const date = new Date(field);
-    const formattedDate = date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
     });
-    return formattedDate;
   };
   return (
-    <div className="flex flex-col px-7 md:px-10 lg:px-28 my-24 items-center justify-center text-black text-primary">
-      <div className='text-left w-full'>
+    <div className="my-24 flex flex-col items-center justify-center px-7 text-black text-primary md:px-10 lg:px-28">
+      <div className="w-full text-left">
         <a href="/">Trang chủ </a>
         <span>&gt;&gt;</span>
         <a href="/news"> Tin tức </a>
       </div>
-      <h1 className="font-inter mb-10 text-center  text-4xl font-extrabold leading-none text-black">Tin tức</h1>
-      <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 justify-center place-items-center items-stretch">
-        <div className="img-scale flex flex-col h-full w-full max-w-[354px] overflow-hidden rounded-xl border-2">
-          <Link to="/news?mode=news1">
-            <img src={newsfeed5} alt="" width='full'/>
-          </Link>
-          <div className="bg-white flex flex-col justify-between h-full pb-4 pt-2">
-            <div className="mx-3">
-              <div className="font-inter mt-3 flex items-center text-sm text-[#6D758F]">
-                <img src="./src/assets/images/Circle Avatar.svg" alt="" className="mr-1 inline-flex" />
-                <span>Baskerville</span>
-                <hr className="mx-4 mt-1 w-[24px] border border-gray-400" />
-                <img src="./src/assets/images/calendar.svg" alt="" className="mr-1 inline-flex" />
-                <p>{handleDate('2025-01-05')}</p>
-              </div>
-              <Link to='/news?mode=news1'>
-                <h2 className="mb-3 mt-3 text-xl font-bold text-[#6D758F] hover:text-slate-900 min-h-[56px]">
-                  Cakewai Thông Báo Lịch Nghỉ Tết Nguyên Đán...
-                </h2>
-              </Link>
-              <h3 className="mb-3 mt-3 text-base text-[#6D758F] min-h-[80px]">
-                Cakewai: Thông Báo Lịch Nghỉ Tết Nguyên Đán 2025. Kính Chúc Quý Khách Hàng Năm Mới An Khang Và Thịnh
-                Vượng. Cảm Ơn Quý Khách Hàng Đã Luôn Ủng Hộ Cakewai Tron...
-              </h3>
-            </div>
-          </div>
-        </div>
+      <h1 className="font-inter mb-10 text-center text-4xl font-extrabold leading-none text-black">Tin tức</h1>
 
-        <div className="img-scale flex flex-col h-full w-full max-w-[354px] overflow-hidden rounded-xl border-2">
-          <Link  to="/news?mode=news2">
-            <img src={newsfeed6} alt="" width="auto" />
-          </Link>
-          <div className="bg-white flex flex-col justify-between h-full pb-4 pt-2">
-            <div className="mx-3">
-              <div className="font-inter mt-3 flex items-center text-sm text-[#6D758F]">
-                <img src="./src/assets/images/Circle Avatar.svg" alt="" className="mr-1 inline-flex" />
-                <span>Gia Mẫn</span>
-                <hr className="mx-4 mt-1 w-[24px] border border-gray-400" />
-                <img src="./src/assets/images/calendar.svg" alt="" className="mr-1 inline-flex" />
-                <p>{handleDate('2024-11-02')}</p>
+      <div className="grid w-full grid-cols-1 place-items-center items-stretch justify-center gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {paginatedItems.map((item) => (
+          <div
+            key={item.id}
+            className="img-scale flex h-full w-full max-w-[354px] flex-col overflow-hidden rounded-xl border-2"
+          >
+            <Link to={`/news?mode=${item.id}`}>
+              <img src={item.image} alt="" width="auto" />
+            </Link>
+            <div className="flex h-full flex-col justify-between bg-white pb-4 pt-2">
+              <div className="mx-3">
+                <div className="font-inter mt-3 flex items-center text-sm text-[#6D758F]">
+                  <img src="./src/assets/images/Circle Avatar.svg" alt="" className="mr-1 inline-flex" />
+                  <span>{item.author}</span>
+                  <hr className="mx-4 mt-1 w-[24px] border border-gray-400" />
+                  <img src="./src/assets/images/calendar.svg" alt="" className="mr-1 inline-flex" />
+                  <p>{handleDate(item.date)}</p>
+                </div>
+                <Link to={`/news?mode=${item.id}`}>
+                  <h2 className="mb-3 mt-3 min-h-[56px] text-xl font-bold text-[#6D758F] hover:text-slate-900">
+                    {item.title}
+                  </h2>
+                </Link>
+                <h3 className="mb-3 mt-3 min-h-[80px] text-base text-[#6D758F]">{item.desc}</h3>
               </div>
-              <Link to="/news?mode=news2">
-                <h2 className="mb-3 mt-3 text-xl font-bold text-[#6D758F] hover:text-slate-900">Mẫu bánh kem mừng 20/11 ngày Nhà Giáo...</h2>
-              </Link>
-              <h3 className="mb-3 mt-3 text-base text-[#6D758F] min-h-[80px]">
-                "Không thầy đố mày làm nên" <br />
-                Ngày 20/11 được xem là ngày lễ lớn trọng đại của con người Việt Nam nhằm tôn vinh vẻ đẹp trong sáng và
-                trân quý nhất đối với những người lái đò dìu dắt bao...
-              </h3>
             </div>
           </div>
-        </div>
-
-        <div className="img-scale flex flex-col h-full w-full max-w-[354px] overflow-hidden rounded-xl border-2">
-          <Link to="/news?mode=news3">
-            <img src={newsfeed2} alt="" width="auto" />
-          </Link>
-          <div className="bg-white flex flex-col justify-between h-full pb-4 pt-2">
-            <div className="mx-3">
-              <div className="font-inter mt-3 flex items-center text-sm text-[#6D758F]">
-                <img src="./src/assets/images/Circle Avatar.svg" alt="" className="mr-1 inline-flex" />
-                <span>Gia Mẫn</span>
-                <hr className="mx-4 mt-1 w-[24px] border border-gray-400" />
-                <img src="./src/assets/images/calendar.svg" alt="" className="mr-1 inline-flex" />
-                <p>{handleDate('2024-10-01')}</p>
-              </div>
-              <Link to="/news?mode=news3">
-                <h2 className="mb-3 mt-3 text-xl font-bold text-[#6D758F] hover:text-slate-900">
-                  Happy women day - 20/10 Dành tặng cho những đóa hoa hồn...
-                </h2>
-              </Link>
-              <h3 className="mb-3 mt-3 text-base text-[#6D758F] min-h-[80px]">
-                Happy women day - 20/10. Dành tặng cho những người phụ nữ tôi yêu----- Vẻ đẹp hút hồn của những quý cô
-                được so sánh như bông hoa hồng nở rộ...
-              </h3>
-            </div>
-          </div>
-        </div>
-
-        <div className="img-scale flex flex-col h-full w-full max-w-[354px] overflow-hidden rounded-xl border-2">
-          <Link to="/news?mode=news4">
-            <img src={newsfeed4} alt="" width="auto" />
-          </Link>
-          <div className="bg-white flex flex-col justify-between h-full pb-4 pt-2">
-            <div className="mx-3">
-              <div className="font-inter mt-3 flex items-center text-sm text-[#6D758F]">
-                <img src="./src/assets/images/Circle Avatar.svg" alt="" className="mr-1 inline-flex" />
-                <span>Cakewai</span>
-                <hr className="mx-4 mt-1 w-[24px] border border-gray-400" />
-                <img src="./src/assets/images/calendar.svg" alt="" className="mr-1 inline-flex" />
-                <p>{handleDate('2024-07-29')}</p>
-              </div>
-              <Link to="/news?mode=news4">
-                <h2 className="mb-3 mt-3 text-xl font-bold text-[#6D758F] hover:text-slate-900">
-                  Tưng bừng đắm chìm vào không gian huyền ảo cùng...
-                </h2>
-              </Link>
-              <h3 className="mb-3 mt-3 text-base text-[#6D758F] min-h-[80px]">
-                Bánh Passion Mousse Cheesecake là sự kết hợp tuyệt vời giữa vị chua ngọt của chanh dây và vị béo ngậy
-                của...
-              </h3>
-            </div>
-          </div>
-        </div>
-
-        <div className="img-scale flex flex-col h-full w-full max-w-[354px] overflow-hidden rounded-xl border-2">
-          <Link to="/news?mode=news5">
-            <img src={newsfeed3} alt="" width="auto" />
-          </Link>
-          <div className="bg-white flex flex-col justify-between h-full pb-4 pt-2">
-            <div className="mx-3">
-              <div className="font-inter mt-3 flex items-center text-sm text-[#6D758F]">
-                <img src="./src/assets/images/Circle Avatar.svg" alt="" className="mr-1 inline-flex" />
-                <span>Gia Mẫn</span>
-                <hr className="mx-4 mt-1 w-[24px] border border-gray-400" />
-                <img src="./src/assets/images/calendar.svg" alt="" className="mr-1 inline-flex" />
-                <p>{handleDate('2024-04-12')}</p>
-              </div>
-              <Link to="/news?mode=news5">
-                <h2 className="mb-3 mt-3 text-xl font-bold text-[#6D758F] hover:text-slate-900">
-                  Bầu trời châu âu được ra mắt hoành tráng với...
-                </h2>
-              </Link>
-              <h3 className="mb-3 mt-3 text-base text-[#6D758F] min-h-[80px]">
-                Nhà Cakewai đã vô cùng tâm đắc và trau chuốt khi đã chính thức cho ra mắt bộ sưu tập mới đầy màu sắc và
-                mang tính biểu tượng đến...
-              </h3>
-            </div>
-          </div>
-        </div>
-
-        <div className="img-scale flex flex-col h-full w-full max-w-[354px] overflow-hidden rounded-xl border-2">
-          <Link to="/news?mode=news6">
-            <img src={newsfeed1} alt="" width="auto" />
-          </Link>
-          <div className="bg-white flex flex-col justify-between h-full pb-4 pt-2">
-            <div className="mx-3">
-              <div className="font-inter mt-3 flex items-center text-sm text-[#6D758F]">
-                <img src="./src/assets/images/Circle Avatar.svg" alt="" className="mr-1 inline-flex" />
-                <span>Gia Mẫn</span>
-                <hr className="mx-4 mt-1 w-[24px] border border-gray-400" />
-                <img src="./src/assets/images/calendar.svg" alt="" className="mr-1 inline-flex" />
-                <p>{handleDate('2024-01-03')}</p>
-              </div>
-              <Link to="/news?mode=news6">
-                <h2 className="mb-3 mt-3 text-xl font-bold text-[#6D758F] hover:text-slate-900">
-                  Cakewai - Đặt bánh teabreak cho sự kiện, hội thảo,...
-                </h2>
-              </Link>
-              <h3 className="mb-3 mt-3 text-base text-[#6D758F] min-h-[80px]">
-                Cakewai cung cấp: Bánh sinh nhật, bánh minicake, bánh sự kiện, tiệc buffet bánh ngọt, tiệc bánh ngọt
-                khai trương, bánh coockies,... liên hệ hotline để được tư...
-              </h3>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
+      <Stack spacing={2} className="mt-6 items-center">
+        <Pagination count={totalPages} page={page} onChange={handleChange} />
+      </Stack>
     </div>
   );
 }
