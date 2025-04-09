@@ -1,7 +1,7 @@
-import newsfeed8 from '~/assets/images/newsfeed8.png';
+import newsfeed7 from '~/assets/images/newsfeed7.png';
 import { Link } from 'react-router-dom';
 
-function Newsfeed1() {
+function Newsfeed8() {
   const handleDate = (field) => {
     const date = new Date(field);
     const formattedDate = date.toLocaleDateString('en-US', {
@@ -23,7 +23,7 @@ function Newsfeed1() {
       <div className="flex justify-center text-lg">
         <div className="font-inter my-5 flex h-auto max-w-[900px] flex-col space-y-2 overflow-hidden break-words rounded-xl border-2 bg-[#E8E1E1] px-5 py-5">
           <h1 className="font-inter mb-10 text-center text-2xl font-extrabold leading-none text-black sm:text-3xl lg:text-4xl">
-            Cakewai Thông Báo Lịch Nghỉ Tết Nguyên Đán 2024.
+            Cakewai - Tưng bừng khai trương chi nhánh Võ Văn Ngân.
           </h1>
           <div className="inline-flex space-x-4 sm:space-x-8">
             <div className="flex items-center">
@@ -36,15 +36,62 @@ function Newsfeed1() {
             </div>
             <div className="flex items-center">
               <img src="./src/assets/images/calendar.svg" alt="" className="mr-1 inline-flex h-6 w-6 sm:h-8 sm:w-8" />
-              <p>{handleDate('2025-01-05')}</p>
+              <p>{handleDate('2025-03-06')}</p>
             </div>
           </div>
           <hr className="mx-auto my-5 h-[2px] w-full border border-t-2 border-gray-400 bg-gray-400 sm:w-[850px]" />
-          <div className="text-center text-black">
-            <div className="my-5">Cakewai: Thông Báo Lịch Nghỉ Tết Nguyên Đán 2025.</div>
-            <div>Kính Chúc Quý Khách Hàng Năm Mới An Khang Và Thịnh Vượng.</div>
-            <div> Cảm Ơn Quý Khách Hàng Đã Luôn Ủng Hộ Cakewai và đồng hành trong suốt thời gian vừa qua.</div>
-            <img src={newsfeed8} alt="" className="mx-auto my-5 block w-full max-w-[600px]" />
+          <div class="text-black">
+            <h2 class="mb-4 text-center text-2xl font-bold text-red-600">
+              🎉 Cakewai - Tưng Bừng Khai Trương Chi Nhánh Võ Văn Ngân! 🎉
+            </h2>
+            <p class="text-center text-lg">
+              📍 <span class="font-semibold">Địa điểm mới - Trải nghiệm mới!</span>
+            </p>
+            <p class="mt-4">
+              Chúng tôi vui mừng thông báo sự kiện{' '}
+              <span class="font-semibold">khai trương chi nhánh mới tại Võ Văn Ngân</span>, đánh dấu một bước phát triển
+              quan trọng trong hành trình mang đến những chiếc bánh thơm ngon và chất lượng nhất đến gần hơn với khách
+              hàng.
+            </p>
+            <img
+              src={newsfeed7}
+              alt="Khai trương chi nhánh Võ Văn Ngân"
+              width="600px"
+              class="mx-auto my-5 block w-full max-w-[600px]"
+            />
+            <div class="mt-6 rounded-lg bg-yellow-100 p-4">
+              <h3 class="text-center text-xl font-semibold text-yellow-700">💖 Sự Kiện Đặc Biệt - Ưu Đãi Hấp Dẫn 💖</h3>
+              <ul class="mt-3 space-y-2">
+                <li>
+                  ✅ <span class="font-semibold">Giảm giá 20%</span> cho tất cả các loại bánh trong 3 ngày đầu tiên.
+                </li>
+                <li>
+                  ✅ <span class="font-semibold">Tặng ngay 1 phần bánh miễn phí</span> cho 100 khách hàng đầu tiên.
+                </li>
+                <li>
+                  ✅ Cơ hội tham gia <span class="font-semibold">bốc thăm trúng thưởng</span> với nhiều phần quà hấp
+                  dẫn.
+                </li>
+              </ul>
+            </div>
+
+            <p class="mt-6 text-center text-lg font-semibold">
+              🎈 Đừng bỏ lỡ cơ hội trải nghiệm không gian mới, hương vị mới và những ưu đãi tuyệt vời từ Cakewai!
+            </p>
+
+            <div class="mt-6 text-center">
+              <p class="text-lg font-semibold">
+                📅 Thời gian: <span class="text-blue-600">9 giờ - ngày 17/03/2025</span>
+              </p>
+              <p class="text-lg font-semibold">
+                📍 Địa điểm:{' '}
+                <span class="text-blue-600">123 Đường Võ Văn Ngân, Phường Bình Thọ, TP. Thủ Đức, TP. Hồ Chí Minh</span>
+              </p>
+            </div>
+
+            <p class="mt-6 text-center text-xl font-bold text-red-500">
+              📌 Hãy đến và cùng chúng tôi tạo nên những khoảnh khắc ngọt ngào nhé! ❤️🎂
+            </p>
           </div>
           <div>
             <h1 className="font-inter mb-10 mb-3 mt-5 text-left text-2xl font-extrabold leading-none text-black sm:text-3xl lg:text-4xl">
@@ -78,9 +125,6 @@ function Newsfeed1() {
               <li className="hover:text-slate-900 hover:underline">
                 <Link to="/news?mode=news7"> Valentine Ngọt Ngào - Giảm Giá 50% Mừng Lễ Tình Nhân!</Link>
               </li>
-              <li className="hover:text-slate-900 hover:underline">
-                <Link to="/news?mode=news8"> Cakewai - Tưng bừng khai trương chi nhánh Võ Văn Ngân.</Link>
-              </li>
             </ul>
           </div>
         </div>
@@ -89,4 +133,4 @@ function Newsfeed1() {
   );
 }
 
-export default Newsfeed1;
+export default Newsfeed8;
