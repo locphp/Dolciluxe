@@ -1,4 +1,6 @@
 const productService = require('../services/product.service');
+const Product = require('../models/product.model'); 
+const mongoose = require('mongoose');
 
 const getAllProducts = async (req, res) => {
     try {
@@ -32,10 +34,26 @@ const getProductById = async (req, res) => {
 const getProductsByType = async (req, res) => {
     try {
         const { typeId } = req.params;
-        const products = await productService.getProductsByTypeService(typeId);
-        res.status(200).json({ code: 200, message: 'Success', data: products });
+
+        // Ép kiểu về ObjectId
+        const objectId = new mongoose.Types.ObjectId(typeId);
+
+        const products = await Product.find({
+            productType: objectId,
+            isDeleted: false
+        }).populate('productType', 'typeName'); // lấy tên loại bánh thôi
+
+        res.status(200).json({
+            code: 200,
+            message: 'Get products by type successfully',
+            data: products
+        });
     } catch (error) {
-        res.status(500).json({ code: 500, message: 'Internal server error', error: error.message });
+        res.status(500).json({
+            code: 500,
+            message: error.message,
+            data: null
+        });
     }
 };
 
