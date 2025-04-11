@@ -26,32 +26,10 @@ exports.login = async (req, res) => {
 
 exports.logout = async (req, res) => {
     try {
-      // Xóa thông tin đăng nhập Google (nếu có)
-      req.logout(function (err) {
-        if (err) {
-          console.error('Logout error:', err);
-          return res.status(500).json({ code: 500, message: 'Logout failed', error: err });
-        }
-  
-        req.session.destroy((err) => {
-          if (err) {
-            console.error('Session destroy error:', err);
-            return res.status(500).json({ code: 500, message: 'Failed to destroy session' });
-          }
-  
-          // 👇 RẤT QUAN TRỌNG: xóa cookie trùng với config session
-          res.clearCookie('connect.sid', {
-            path: '/',
-            httpOnly: true,
-            sameSite: 'lax',
-            secure: false, // ⚠️ nếu không chạy HTTPS thì bắt buộc false
-          });
-  
-          return res.status(200).json({ code: 200, message: 'Logout successful' });
-        });
-      });
+        await authService.logoutUser(req, res);
+        res.status(response.code).json(response);
     } catch (error) {
-      return res.status(500).json({ code: 500, message: 'Unexpected logout error', error: error.message });
+        res.status(500).json({ code: 500, message: "Server error", error: error.message });
     }
   };
   
