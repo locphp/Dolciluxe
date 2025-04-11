@@ -26,12 +26,36 @@ exports.login = async (req, res) => {
 
 exports.logout = async (req, res) => {
     try {
-        const response = await authService.logoutUser();
-        res.status(response.code).json(response);
+      // Xóa thông tin đăng nhập Google (nếu có)
+      req.logout(function (err) {
+        if (err) {
+          console.error('Logout error:', err);
+          return res.status(500).json({ code: 500, message: 'Logout failed', error: err });
+        }
+  
+        req.session.destroy((err) => {
+          if (err) {
+            console.error('Session destroy error:', err);
+            return res.status(500).json({ code: 500, message: 'Failed to destroy session' });
+          }
+  
+          // 👇 RẤT QUAN TRỌNG: xóa cookie trùng với config session
+          res.clearCookie('connect.sid', {
+            path: '/',
+            httpOnly: true,
+            sameSite: 'lax',
+            secure: false, // ⚠️ nếu không chạy HTTPS thì bắt buộc false
+          });
+  
+          return res.status(200).json({ code: 200, message: 'Logout successful' });
+        });
+      });
     } catch (error) {
-        res.status(500).json({ code: 500, message: "Server error", error: error.message });
+      return res.status(500).json({ code: 500, message: 'Unexpected logout error', error: error.message });
     }
-};
+  };
+  
+  
 
 exports.refreshToken = async (req, res) => {
     try {
@@ -65,7 +89,7 @@ exports.googleCallback = async (req, res) => {
     try {
         const response = await authService.loginWithGoogle(req.user);
 
-        res.redirect(`${process.env.CLIENT_URL}/login-success`);
+        res.redirect(`${process.env.CLIENT_URL}/`);
     } catch (error) {
         res.redirect(`${process.env.CLIENT_URL}/login-failed`);
     }

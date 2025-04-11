@@ -18,13 +18,18 @@ app.use(cors({
 
 // Config session cho PassportJS
 app.use(session({
+    name: 'connect.sid',
     secret: process.env.SESSION_SECRET || 'secret',
     resave: false,
     saveUninitialized: false,
     cookie: {
-        maxAge: 1000 * 60 * 60 * 24,
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+      httpOnly: true,
+      sameSite: 'lax',   // hoặc 'none' nếu frontend khác domain
+      secure: false      // true nếu dùng HTTPS
     }
-}));
+  }));
+  
 
 // Initialize Passport Middleware
 app.use(passport.initialize());

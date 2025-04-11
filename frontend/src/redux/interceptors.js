@@ -1,13 +1,14 @@
 import {response} from '~/services/axios';
 import { jwtDecode } from 'jwt-decode'; // Fix import
-import { refreshToken, renewToken } from './apiRequest';
+// import { refreshToken, renewToken } from './apiRequest';
+import { refreshToken} from './apiRequest';
 
 export const createInstance = (user, dispatch, stateAuth) => {
   let newInstance = response.create();
   newInstance.interceptors.request.use(
     async (config) => {
       let date = new Date();
-      const decodedToken = jwtDecode(user?.access_token);
+      // const decodedToken = jwtDecode(user?.access_token);
       const decodedRefresh = jwtDecode(user?.refresh_token);
       if ((decodedRefresh.exp + 60) < date.getTime() / 1000) {
         let res = await refreshToken(user?.refresh_token)
@@ -16,17 +17,17 @@ export const createInstance = (user, dispatch, stateAuth) => {
           refresh_token: res.refresh_token
         }
         dispatch(stateAuth(refreshUser))
-        config.headers['Authorization'] = 'Bearer ' + data.access_token;
+        config.headers['Authorization'] = 'Bearer ' + res.access_token;
       }
-      else if (decodedToken.exp < date.getTime() / 1000) {
-        let data = await renewToken(user?.refresh_token);
-        const refreshUser = {
-          ...user,
-          access_token: data.access_token,
-        };
-        dispatch(stateAuth(refreshUser));
-        config.headers['Authorization'] = 'Bearer ' + data.access_token;
-      }
+      // else if (decodedToken.exp < date.getTime() / 1000) {
+      //   let data = await renewToken(user?.refresh_token);
+      //   const refreshUser = {
+      //     ...user,
+      //     access_token: data.access_token,
+      //   };
+      //   dispatch(stateAuth(refreshUser));
+      //   config.headers['Authorization'] = 'Bearer ' + data.access_token;
+      // }
       return config;
     },
     (err) => Promise.reject(err),
