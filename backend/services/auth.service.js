@@ -83,13 +83,37 @@ exports.loginUser = async (email, password) => {
 };
 
 
-exports.logoutUser = async () => {
+exports.logoutUser = async (req, res) => {
     try {
-        return { code: 200, message: "Logout successful!" };
+      await new Promise((resolve, reject) => {
+        req.logout((err) => {
+          if (err) return reject(err);
+          resolve();
+        });
+      });
+  
+      await new Promise((resolve, reject) => {
+        req.session.destroy((err) => {
+          if (err) return reject(err);
+          resolve();
+        });
+      });
+  
+      res.clearCookie('connect.sid', {
+        path: '/',
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: false,
+      });
+  
+      return res.status(200).json({ code: 200, message: 'Logout successful' });
     } catch (error) {
-        throw new Error("Server error");
+      console.error('Logout service error:', error);
+      return res.status(500).json({ code: 500, message: 'Logout failed', error: error.message });
     }
-};
+  };
+  
+  
 
 exports.refreshToken = async (refreshToken) => {
     try {
