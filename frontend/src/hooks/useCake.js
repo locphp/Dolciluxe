@@ -5,10 +5,10 @@ const useCake = (params) => {
   const [cakes, setCakes] = useState([]);
   const categories = [
     { typeId: '', name: 'Tất cả sản phẩm', title: '' },
-    { typeId: '672ece906add28a7d3c76449', name: 'Bánh sinh nhật', title: '' },
-    { typeId: '672ecebd6add28a7d3c7644a', name: 'Bánh truyền thống', title: '' },
-    { typeId: '672ecede6add28a7d3c7644b', name: 'Cookies and Mini Cakes', title: '' },
-    { typeId: '672ecefe6add28a7d3c7644c', name: 'Bánh mì và bánh mặn', title: '' },
+    { typeId: '67de79685a1a07a80a724780', name: 'Bánh sinh nhật', title: '' },
+    { typeId: '67de79685a1a07a80a724782', name: 'Bánh truyền thống', title: '' },
+    { typeId: '67de79685a1a07a80a724783', name: 'Cookies and Mini Cakes', title: '' },
+    { typeId: '67de79685a1a07a80a724781', name: 'Bánh mì và bánh mặn', title: '' },
   ];
 
   const getTypeOfCakes = (param) => {
@@ -27,6 +27,7 @@ const useCake = (params) => {
   };
 
   const fetchCakes = async (typeId) => {
+    if (!typeId) return; // ✅ tránh gọi API rỗng
     try {
       const result = await getCake(typeId);
       setCakes(result?.data || []);

@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useParams, useLocation } from 'react-router-dom';
+import { NavLink, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { getCake, getCakeById } from '~/api/apiCakes';
 import Card from '../Card';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,176 +8,175 @@ import { AddToCartContext } from '../../DefaultLayout';
 import { loginSuccess } from '~/redux/authSlice';
 import { createInstance } from '~/redux/interceptors';
 import { addCartItem } from '~/api/apiCart';
+
 function DetailedCake() {
   const [cake, setCake] = useState({});
   const [alikeCake, setAlikeCake] = useState([]);
-  const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
-  const [selected, setSelected] = useState(null);
-  const { triggerSuccessPopup } = useContext(AddToCartContext);
-  const user = useSelector((state) => state.auth.login.currentUser);
+
+  const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  let instance = createInstance(user, dispatch, loginSuccess);
 
+  const user = useSelector((state) => state.auth.login.currentUser);
+  const { triggerSuccessPopup } = useContext(AddToCartContext);
+  const instance = createInstance(user, dispatch, loginSuccess);
   const { categoryName } = location.state || {};
 
   useEffect(() => {
-    if (id) fetchData();
+    if (id) {
+      fetchCakeDetail();
+    }
   }, [id]);
-  const fetchData = async () => {
-    try {
-      // Fetch cake by ID
-      const result = await getCakeById(id);
-      const cakeData = result.data;
-      setCake(cakeData);
-      console.log('Fetching OK');
 
-      // Fetch similar cakes
-      if (cakeData?.product_type_id) {
-        const alikeResult = await getCake(cakeData.product_type_id);
-        setAlikeCake(alikeResult.data);
+  const fetchCakeDetail = async () => {
+    try {
+      const res = await getCakeById(id);
+      const cakeData = res.data;
+      setCake(cakeData);
+  
+      console.log("Chi tiết bánh:", cakeData);
+  
+      const productTypeId = cakeData?.productType?._id || cakeData?.product_type_id;
+      if (productTypeId) {
+        const resAlike = await getCake(productTypeId);
+        console.log("Tất cả bánh cùng loại:", resAlike.data);
+  
+        const filteredAlike = resAlike.data.filter(
+          (item) => String(item._id) !== String(cakeData._id)
+        );
+        setAlikeCake(filteredAlike);
       }
     } catch (err) {
-      console.error('Error fetching data:', err);
+      console.error('Lỗi khi tải dữ liệu chi tiết bánh:', err);
     }
+  };  
+
+  const handleAddToCart = async () => {
+    if (!user) return navigate('/auth?mode=signin');
+
+    const newItem = {
+      product_id: cake._id,
+      type_id: cake.productType,
+      name: cake.productName,
+      price: cake.price,
+      image_link: cake.imageLink,
+      buy_quantity: quantity,
+    };
+
+    dispatch(addToCart(newItem));
+    await addCartItem(user.access_token, instance, newItem);
+    triggerSuccessPopup();
   };
 
-  const handleAddToCart = async (cake) => {
-    if (user) {
-      const variant = selected ? selected : cake.product_variant[0];
-      const newItem = {
-        product_id: cake._id,
-        type_id: cake.product_type_id,
-        name: cake.product_name,
-        variant: variant.variant_features,
-        discount: variant.discount,
-        price: variant.price,
-        image_link: cake.image_link,
-        buy_quantity: quantity,
-      };
-      dispatch(addToCart(newItem));
-      await addCartItem(user.access_token, instance, newItem);
-      triggerSuccessPopup();
-    } else navigate('/auth?mode=signin');
+  const handleBuyNow = () => {
+    if (!user) return navigate('/auth?mode=signin');
+
+    const newItem = {
+      product_id: cake._id,
+      type_id: cake.productType,
+      name: cake.productName,
+      price: cake.price,
+      image_link: cake.imageLink,
+      buy_quantity: quantity,
+    };
+
+    navigate('/payment', { state: { newItem } });
   };
 
-  const handleBuyNow = (cake) => {
-    if (user) {
-      const variant = selected ? selected : cake.product_variant[0];
-      const newItem = {
-        product_id: cake._id,
-        type_id: cake.product_type_id,
-        name: cake.product_name,
-        variant: variant.variant_features,
-        discount: variant.discount,
-        price: variant.price,
-        image_link: cake.image_link,
-        buy_quantity: quantity,
-      };
-      navigate('/payment', { state: { newItem } });
-    }
-    else navigate('/auth?mode=signin');
-  }
-  const selectVariant = (value) => {
-    setSelected(value);
-  };
-  const message =
-    cake.product_variant && cake?.product_variant.length > 1
-      ? 'Vui lòng chọn kích thước'
-      : `${cake?.product_variant && cake?.product_variant[0].price.toLocaleString('vi-VN')} VND`;
-  const size = cake.product_variant && cake?.product_variant.length > 1 ? 'Kích thước' : '';
   return (
     <div className="mt-16 w-full bg-white">
       <div className="mx-[5rem]">
-        <div className="flex h-11 items-center text-primary">
-          <div className="capitalize">
-            <NavLink to="/">Trang chủ </NavLink>
-            <span>&gt;&gt;</span>
-            <NavLink to="/category"> Menu Bánh </NavLink>
-            <span>&gt;&gt;</span>
-            <NavLink to="/birthday-cake"> {categoryName} </NavLink>
-            <span>&gt;&gt;</span>
-            <NavLink to="/detailed"> {cake.product_name} </NavLink>
-          </div>
+        {/* Breadcrumb */}
+        <div className="flex h-11 items-center text-primary capitalize">
+          <NavLink to="/">Trang chủ</NavLink>
+          <span className="mx-2">&gt;&gt;</span>
+          <NavLink to="/category">Menu Bánh</NavLink>
+          <span className="mx-2">&gt;&gt;</span>
+          <NavLink to="/birthday-cake">{categoryName}</NavLink>
+          <span className="mx-2">&gt;&gt;</span>
+          <span>{cake.productName}</span>
         </div>
+
+        {/* Chi tiết bánh */}
         <div className="my-10 flex gap-5">
-          <img src={cake.image_link} alt={cake.product_name} className="h-[450px] w-[450px] rounded-xl" />
+          <img
+            src={cake.imageLink}
+            alt={cake.productName}
+            className="h-[450px] w-[450px] rounded-xl object-cover"
+          />
           <div className="flex flex-col justify-center">
-            <h2 className="pb-4 text-4xl font-bold capitalize">{cake.product_name}</h2>
-            <span className={`text-3xl font-semibold text-primary`}>
-              {selected ? `${selected.price.toLocaleString('vi-VN')} VND` : message}
+            <h2 className="pb-4 text-4xl font-bold capitalize">{cake.productName}</h2>
+            <span className="text-3xl font-semibold text-primary">
+              {cake.price ? `${cake.price.toLocaleString('vi-VN')} VND` : 'Giá không khả dụng'}
             </span>
-            <h4 className={`my-4 text-2xl font-semibold text-black`}>{size} </h4>
-            <div className={`flex items-center gap-4`}>
-              {cake?.product_variant?.length > 1 &&
-                cake.product_variant?.map(
-                  (variant, index) =>
-                    variant.variant_features && (
-                      <button
-                        key={index}
-                        onClick={() => selectVariant(variant)}
-                        className={`h-10 w-[72px] rounded-lg border text-center leading-10 ${selected === variant ? 'bg-secondary' : 'bg-slate-100'}`}
-                      >
-                        {variant.variant_features}
-                      </button>
-                    ),
-                )}
-            </div>
+
             <h4 className="my-4 text-2xl font-semibold">Số lượng</h4>
-            <div className="flex">
+            <div className="flex items-center">
               <button
                 className="h-10 w-10 rounded-bl-lg rounded-tl-lg border border-primary"
-                onClick={() => {
-                  quantity === 1 ? setQuantity(quantity) : setQuantity(quantity - 1);
-                }}
+                onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
               >
                 -
               </button>
               <input
-                type="text"
+                type="number"
+                min="1"
                 value={quantity}
-                onChange={(e) => e.target.quantity}
-                className="h-10 w-10 border-b border-t border-primary text-center"
+                onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
+                className="h-10 w-12 border-b border-t border-primary text-center"
               />
               <button
                 className="h-10 w-10 rounded-br-lg rounded-tr-lg border border-primary"
-                onClick={() => setQuantity(quantity + 1)}
+                onClick={() => setQuantity((prev) => prev + 1)}
               >
                 +
               </button>
             </div>
+
             <div className="mt-10 flex gap-4">
               <button
-                onClick={() => handleAddToCart(cake)}
+                onClick={handleAddToCart}
                 className="h-[65px] w-[260px] rounded-lg border border-primary text-2xl font-semibold text-primary"
               >
                 Thêm vào giỏ hàng
               </button>
-              
-                <button onClick={() => handleBuyNow(cake)} className="h-[65px] w-[260px] rounded-lg border bg-primary text-2xl font-semibold text-slate-100">
-                  Mua ngay
-                </button>
-            
+
+              <button
+                onClick={handleBuyNow}
+                className="h-[65px] w-[260px] rounded-lg bg-primary text-2xl font-semibold text-white"
+              >
+                Mua ngay
+              </button>
             </div>
           </div>
         </div>
+
+        {/* Mô tả */}
         <h4 className="text-2xl font-semibold text-primary">Mô tả</h4>
         <p className="my-5 text-xl font-normal">{cake.description}</p>
-        <h2 className="my-5 text-center text-[40px] font-bold leading-[48px] text-primary">Sản phẩm tương tự</h2>
-        <div className="grid-custom-3 grid w-full justify-between">
-          {alikeCake.slice(1, 4).map((cake, index) => (
-            <Card
-              key={index}
-              product_name={cake.product_name}
-              description={cake.description}
-              image_link={cake.image_link}
-              id={cake._id}
-              price={cake.product_variant[0].price}
-            />
-          ))}
-        </div>
+
+        {/* Sản phẩm tương tự */}
+        <h2 className="my-5 text-center text-[40px] font-bold leading-[48px] text-primary">
+          Sản phẩm tương tự
+        </h2>
+        {alikeCake.length > 0 ? (
+          <div className="grid-custom-4 grid w-full justify-between">
+            {alikeCake.slice(0, 4).map((item) => (
+              <Card
+                key={item._id}
+                product_name={item.productName}
+                description={item.description}
+                image_link={item.imageLink}
+                id={item._id}
+                price={item.price}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-gray-500 text-lg">Không có sản phẩm tương tự.</p>
+        )}
       </div>
     </div>
   );
