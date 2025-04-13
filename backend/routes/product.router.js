@@ -16,9 +16,9 @@ product.get('/', getAllProducts);
 
 product.get('/trash', getDeletedProducts);
 
-product.get('/:id', getProductById);
-
 product.get('/by-type/:typeId', getProductsByType);
+
+product.get('/:id', getProductById);
 
 product.post('/', createProduct);
 
