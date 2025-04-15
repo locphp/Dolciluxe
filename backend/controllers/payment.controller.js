@@ -1,4 +1,5 @@
 const paymentService = require('../services/payment.service');
+const { sendOrderConfirmationEmail } = require('../utils/sendOrderConfirmationEmail');
 
 const createPaymentUrl = async (req, res) => {
     const { orderId } = req.body;
@@ -16,14 +17,14 @@ const vnpayReturn = async (req, res) => {
         const result = await paymentService.handleReturn(req.query);
 
         if (result.success) {
-            // Ví dụ: redirect về trang success
-            return res.redirect(`/payment-success?orderId=${result.orderId}`);
+            await sendOrderConfirmationEmail(result.orderId, result.transactionId);
+            return res.redirect(`${process.env.CLIENT_URL}/payment-success?orderId=${result.orderId}`);
         } else {
-            return res.redirect(`/payment-fail`);
+            return res.redirect(`${process.env.CLIENT_URL}/payment-fail`);
         }
     } catch (error) {
         console.log(error);
-        return res.redirect(`/payment-fail`);
+        return res.redirect(`${process.env.CLIENT_URL}/payment-fail`);
     }
 };
 
