@@ -13,7 +13,14 @@ const orderSchema = new mongoose.Schema({
     totalPrice: { type: Number, required: true },
     paymentMethod: { type: String, enum: ['COD', 'VNPAY'], required: true },
     paymentStatus: { type: String, enum: ['pending', 'paid'], default: 'pending' },
-    orderStatus: { type: String, enum: ['pending', 'processing', 'shipping', 'completed', 'cancelled'], default: 'pending' }
+    orderStatus: { type: String, enum: ['pending', 'processing', 'shipping', 'completed', 'cancelled'], default: 'pending' },
+    paymentResult: {
+        vnp_TransactionNo: { type: String },
+        vnp_BankCode: { type: String },
+        vnp_PayDate: { type: String },
+        vnp_ResponseCode: { type: String },
+        vnp_Amount: { type: String }
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Order', orderSchema);
