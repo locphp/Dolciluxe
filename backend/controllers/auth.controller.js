@@ -26,12 +26,14 @@ exports.login = async (req, res) => {
 
 exports.logout = async (req, res) => {
     try {
-        const response = await authService.logoutUser();
+        await authService.logoutUser(req, res);
         res.status(response.code).json(response);
     } catch (error) {
         res.status(500).json({ code: 500, message: "Server error", error: error.message });
     }
-};
+  };
+  
+  
 
 exports.refreshToken = async (req, res) => {
     try {
@@ -65,7 +67,7 @@ exports.googleCallback = async (req, res) => {
     try {
         const response = await authService.loginWithGoogle(req.user);
 
-        res.redirect(`${process.env.CLIENT_URL}/login-success`);
+        res.redirect(`${process.env.CLIENT_URL}/`);
     } catch (error) {
         res.redirect(`${process.env.CLIENT_URL}/login-failed`);
     }

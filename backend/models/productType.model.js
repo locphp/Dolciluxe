@@ -7,4 +7,4 @@ const productTypeSchema = new mongoose.Schema({
     deletedAt: { type: Date, default: null },
 }, { timestamps: true });
 
-module.exports = mongoose.model('ProductType', productTypeSchema);
+module.exports = mongoose.models.ProductType || mongoose.model('ProductType', productTypeSchema, 'productType');

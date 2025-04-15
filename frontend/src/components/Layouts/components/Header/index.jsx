@@ -44,8 +44,7 @@ function Header() {
       } catch (err) {
         console.error('Failed to update cart items', err);
       }
-    }
-    else setOpen(false)
+    } else setOpen(false);
   };
   const handleLogin = () => {
     navigate('/auth?mode=signin');

@@ -1,5 +1,5 @@
 const Product = require('../models/product.model');
-const ProductType = require('../models/producttype.model');
+const ProductType = require('../models/productType.model');
 
 // Get all products
 const getAllProductsService = async () => {
@@ -21,8 +21,8 @@ const getProductByIdService = async (id) => {
 
 // Get products by product type
 const getProductsByTypeService = async (typeId) => {
-    return await Product.find({ productTypeId: typeId, isDeleted: false })
-        .populate({ path: 'productTypeId', select: '_id typeName' });
+    return await Product.find({ productType: typeId, isDeleted: false })
+        .populate({ path: 'productType', select: '_id typeName' });
 };
 
 // Create a new product

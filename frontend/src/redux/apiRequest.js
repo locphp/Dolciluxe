@@ -14,7 +14,10 @@ import { toast } from 'react-toastify';
 export const loginUser = async (dispatch, user, navigate, redirectPath = '/') => {
   dispatch(loginStart());
   try {
-    const res = await response.post('/api/public/login', user);
+    // const res = await response.post('/api/public/login', user);
+    const res = await response.post('/api/auth/login', user);
+    localStorage.removeItem('loggedOut');
+    sessionStorage.removeItem('googleSynced');
     dispatch(loginSuccess(res));
     toast.success('Đăng nhập thành công', {
       position: 'bottom-right',
@@ -39,7 +42,10 @@ export const loginUser = async (dispatch, user, navigate, redirectPath = '/') =>
 export const logOutUser = async (dispatch, token, navigate, redirectPath = '/auth?mode=signin') => {
   dispatch(logOutStart());
   try {
-    await response.post('/api/public/logout', { refresh_token: token });
+    
+    await response.post('/api/auth/logout', { refresh_token: token });
+    localStorage.setItem('loggedOut', 'true');
+    sessionStorage.removeItem('googleSynced');
     dispatch(logOutSuccess());
     navigate(redirectPath);
   } catch (err) {
@@ -51,7 +57,7 @@ export const logOutUser = async (dispatch, token, navigate, redirectPath = '/aut
 export const registerUser = async (dispatch, user, navigator) => {
   dispatch(registerStart());
   try {
-    await response.post('/api/public/signup', user);
+    await response.post('/api/auth/register', user);
     dispatch(registerSuccess());
     toast.success('Đăng kí thành công', {
       position: 'bottom-right',
@@ -73,38 +79,63 @@ export const registerUser = async (dispatch, user, navigator) => {
   }
 };
 
-export const googleLoginUser = async (dispatch, refToken, token) => {
-  dispatch(loginStart());
-  try {
-    const res = await response.get('/api/protected/user/current_user', {
-      headers: { Authorization: `Bearer ${refToken}` },
-    });
-    const data = {
-      user: res.data,
-      refresh_token: refToken,
-      access_token: token,
-    };
-    console.log(data);
-    dispatch(loginSuccess(data));
-  } catch (err) {
-    dispatch(loginFail());
-  }
-};
+// export const googleLoginUser = async (dispatch, refToken, token) => {
+//   dispatch(loginStart());
+//   try {
+//     const res = await response.get('/api/protected/user/current_user', {
+//       headers: { Authorization: `Bearer ${refToken}` },
+//     });
+//     const data = {
+//       user: res.data,
+//       refresh_token: refToken,
+//       access_token: token,
+//     };
+//     console.log(data);
+//     dispatch(loginSuccess(data));
+//   } catch (err) {
+//     dispatch(loginFail());
+//   }
+// };
 
-export const renewToken = async (token) => {
-  try {
-    const res = await response.post('/api/public/renew_access', { refresh_token: token });
-    return res.data;
-  } catch (err) {
-    console.log(err);
-  }
-};
+// export const renewToken = async (token) => {
+//   try {
+//     const res = await response.post('/api/public/renew_access', { refresh_token: token });
+//     return res.data;
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
+
+// export const refreshToken = async (token) => {
+//   try {
+//     const res = await response.post('/auth/renew_refresh', { refresh_token: token });
+//     return res.data;
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 
 export const refreshToken = async (token) => {
   try {
-    const res = await response.post('/api/public/renew_refresh', { refresh_token: token });
+    const res = await response.post('/api/auth/refresh-token', { refresh_token: token });
     return res.data;
   } catch (err) {
     console.log(err);
+    return null;
+  }
+};
+
+export const googleLoginUser = async (dispatch) => {
+  dispatch(loginStart());
+  try {
+    const res = await response.get('/api/auth/google');
+    const { user, access_token, refresh_token } = res.data;
+
+    localStorage.setItem('access_token', access_token);
+    localStorage.setItem('refresh_token', refresh_token);
+
+    dispatch(loginSuccess({ user, access_token, refresh_token }));
+  } catch (err) {
+    dispatch(loginFail());
   }
 };
