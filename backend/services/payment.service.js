@@ -1,7 +1,7 @@
 const Order = require('../models/order.model');
 const crypto = require('crypto');
 const moment = require('moment');
-const querystring = require('qs');
+
 const { vnp_TmnCode, vnp_HashSecret, vnp_Url, vnp_ReturnUrl, vnp_IpnUrl } = require('../configs/vnpay.config');
 const { updateOrderStatus } = require('../utils/order.utils')
 
@@ -49,51 +49,35 @@ const createPaymentUrl = async (orderId, userId) => {
     return redirectUrl.toString();
 };
 
-const handleReturn = async (vnp_Params) => {
-    const secureHash = vnp_Params['vnp_SecureHash'];
-    delete vnp_Params['vnp_SecureHash'];
-    delete vnp_Params['vnp_SecureHashType'];
+const handleReturn = async (vnpParams) => {
+    const secureHash = vnpParams['vnp_SecureHash'];
+    delete vnpParams['vnp_SecureHash'];
+    delete vnpParams['vnp_SecureHashType'];
 
-    // Sắp xếp key
-    const sortedParams = Object.keys(vnp_Params).sort().reduce((acc, key) => {
-        acc[key] = vnp_Params[key];
-        return acc;
-    }, {});
+    const sortedParams = sortObject(vnpParams);
 
-    const signData = querystring.stringify(sortedParams, { encode: false });
+    const signData = Object.entries(sortedParams)
+        .map(([key, val]) => `${key}=${val}`)
+        .join('&');
 
-    const checkSum = crypto.createHmac('sha512', vnp_HashSecret)
-        .update(signData)
-        .digest('hex');
+    const hmac = crypto.createHmac('sha512', vnp_HashSecret);
+    const signed = hmac.update(Buffer.from(signData, 'utf-8')).digest('hex');
 
-    if (secureHash !== checkSum) {
+    if (secureHash !== signed) {
         return { success: false, message: 'Invalid signature' };
     }
 
-    if (vnp_Params['vnp_TransactionStatus'] === '00') {
-        const orderId = vnp_Params['vnp_TxnRef'];
-        const amount = vnp_Params['vnp_Amount'];
+    const success = vnpParams['vnp_ResponseCode'] === '00' && vnpParams['vnp_TransactionStatus'] === '00';
 
-        const order = await Order.findById(orderId);
-        if (!order) {
-            return { success: false, message: 'Order not found' };
-        }
-
-        order.isPaid = true;
-        order.paidAt = Date.now();
-        order.paymentResult = {
-            status: 'Success',
-            transactionId: vnp_Params['vnp_TransactionNo'],
-            amount: amount / 100, // Vì VNPAY nhân 100
-            bankCode: vnp_Params['vnp_BankCode'],
-        };
-
-        await order.save();
-
-        return { success: true, orderId };
-    }
-
-    return { success: false, message: 'Payment failed' };
+    return {
+        success,
+        orderId: vnpParams['vnp_TxnRef'],
+        transactionId: vnpParams['vnp_TransactionNo'],
+        amount: Number(vnpParams['vnp_Amount']) / 100,
+        bankCode: vnpParams['vnp_BankCode'],
+        payDate: vnpParams['vnp_PayDate'],
+        message: success ? 'Payment successful' : 'Payment failed'
+    };
 };
 
 const handleVnpIpn = async (vnpParams) => {
