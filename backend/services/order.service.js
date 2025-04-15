@@ -1,6 +1,7 @@
 const Order = require('../models/order.model');
 const Cart = require('../models/cart.model');
 const Address = require('../models/address.model');
+const paymentService = require('../services/payment.service')
 
 const createOrder = async (userId, { cartItemIds, addressId, paymentMethod }) => {
     const cart = await Cart.findOne({ user: userId }).populate('items.product');
@@ -28,14 +29,29 @@ const createOrder = async (userId, { cartItemIds, addressId, paymentMethod }) =>
         address,
         paymentMethod,
         totalPrice,
-        status: 'pending'
+        paymentStatus: paymentMethod === 'COD' ? 'pending' : 'pending',
+        orderStatus: 'pending'
     });
 
     // Xoá item đã đặt khỏi cart
     cart.items = cart.items.filter(item => !cartItemIds.includes(item._id.toString()));
     await cart.save();
 
-    return newOrder;
+    if (paymentMethod === 'COD') {
+        return {
+            order: newOrder,
+            paymentUrl: null
+        };
+    }
+
+    if (paymentMethod === 'VNPAY') {
+        const paymentUrl = await paymentService.createPaymentUrl(newOrder._id, userId);
+        return {
+            order: newOrder,
+            paymentUrl
+        }
+    }
+    throw new Error('Invalid payment method');
 };
 const getOrders = async (userId) => {
     const orders = await Order.find({ user: userId }).populate('items.product').populate('address');
