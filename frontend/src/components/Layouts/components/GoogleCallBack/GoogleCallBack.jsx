@@ -43,7 +43,8 @@ export const GoogleCallBack = () => {
         const res = await axios.get(`${BE_BASE_URL}/api/auth/google/success`, {
           withCredentials: true,
         });
-        console.log('Google login response:', res);
+        localStorage.setItem('login_type', 'google');
+        // console.log('Google login response:', res);
         localStorage.removeItem('loggedOut');
         sessionStorage.removeItem('googleSynced');
         dispatch(loginSuccess(res.data.data)); // tùy backend trả về user ở đâu

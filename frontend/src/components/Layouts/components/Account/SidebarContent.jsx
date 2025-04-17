@@ -10,19 +10,21 @@ import { useEffect } from 'react';
 const SidebarContent = ({ currentKey, handleUpdateContent }) => {
   const { currentUser } = useSelector((state) => state.auth.login);
   const dispatch = useDispatch();
-  let instance = createInstance(currentUser, dispatch, loginSuccess);
+
+  if (!currentUser) {
+    return <p className="py-10 text-center">Đang tải dữ liệu người dùng...</p>;
+  }
+
+  const instance = createInstance(currentUser, dispatch, loginSuccess);
 
   useEffect(() => {
     handleUpdateContent(currentKey);
-  }, [currentKey, handleUpdateContent]);
+  }, []);
 
   let content;
   switch (currentKey) {
     case 'profile':
       content = <AccountProfile currentUser={currentUser} instance={instance} />;
-      break;
-    case 'address':
-      content = <AccountAddress currentUser={currentUser} instance={instance} />;
       break;
     case 'change-password':
       content = <AccountChangePassword currentUser={currentUser} instance={instance} />;
@@ -35,11 +37,9 @@ const SidebarContent = ({ currentKey, handleUpdateContent }) => {
   }
 
   return (
-    <>
-      <div className="h-fit rounded-[8px] border-[1px] border-[#ccc] border-[solid] bg-[#fff]">
-        <div className="mx-[16px] my-[16px]">{content}</div>
-      </div>
-    </>
+    <div className="h-fit rounded-[8px] border-[1px] border-[#ccc] bg-[#fff]">
+      <div className="mx-[16px] my-[16px]">{content}</div>
+    </div>
   );
 };
 

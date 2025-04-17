@@ -2,7 +2,7 @@
 import { Dropdown, Tooltip } from 'flowbite-react';
 import avatar from '~/assets/default_avt.jpg';
 import { Link } from 'react-router-dom';
-export function DropdownLib({label, items, props}) {
+export function DropdownLib({ label, items, props }) {
   return (
     <Dropdown {...props} label={label} dismissOnClick={false}>
       {items?.map((item, index) => (
@@ -33,30 +33,31 @@ const customThemeTooltip = {
   content: 'relative z-20',
 };
 export function UserTooltip({ onClick, currentUser }) {
+  // console.log('👉 currentUser trong UserTooltip:', currentUser);
   return (
     <Tooltip
       theme={customThemeTooltip}
       content={
         <div>
           <ul className="">
-            <Link to='/account'>
-              <li className="rounded-tl-lg rounded-tr-lg px-3 py-2  hover:text-fourth">
-                Tài khoản của tôi
-              </li>
+            <Link to="/account">
+              <li className="rounded-tl-lg rounded-tr-lg px-3 py-2 hover:text-fourth">Tài khoản của tôi</li>
             </Link>
-            <Link to='/account/orders'>
-              <li className="px-3 py-2  hover:text-fourth">Lịch sử mua hàng</li>
+            <Link to="/account/orders">
+              <li className="px-3 py-2 hover:text-fourth">Lịch sử mua hàng</li>
             </Link>
             <button onClick={() => onClick()}>
-              <li className="rounded-bl-lg rounded-br-lg px-3 py-2  hover:text-fourth">Đăng xuất</li>
+              <li className="rounded-bl-lg rounded-br-lg px-3 py-2 hover:text-fourth">Đăng xuất</li>
             </button>
           </ul>
         </div>
       }
     >
-      <img src={currentUser?.profile_picture || avatar} alt="User account" className="h-7 w-7 rounded-full border-2" />
+      <img
+        src={currentUser?.profile_picture || currentUser?.avatar || currentUser?.data.avatar || avatar}
+        alt="User account"
+        className="h-7 w-7 rounded-full border-2"
+      />
     </Tooltip>
   );
 }
-
-

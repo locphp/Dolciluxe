@@ -87,7 +87,7 @@ const AccountAddress = ({ currentUser, instance }) => {
           user: newUser,
         }),
       );
-      setProfile(newUser)
+      setProfile(newUser);
     }
   };
 
