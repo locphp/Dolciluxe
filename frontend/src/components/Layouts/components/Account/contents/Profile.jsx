@@ -109,24 +109,25 @@ const AccountProfile = ({ currentUser, instance }) => {
 
       <div className="relative basis-2/3">
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
+          <Form.Item label="Email" name="email" rules={[{ type: 'email', message: 'Email không hợp lệ' }]}>
+            <Input
+              disabled={!editProfile.email}
+              onClick={() => setEditProfile((prev) => ({ ...prev, email: prev.email }))} //email: !prev.email
+              // suffix={
+              //   <Pencil
+              //     onClick={() => setEditProfile((prev) => ({ ...prev, email: prev.email }))} //email: !prev.email
+              //     className="cursor-pointer text-black/30 hover:text-black/60"
+              //   />
+              // }
+            />
+          </Form.Item>
+
           <Form.Item label="Họ tên" name="name">
             <Input
               disabled={!editProfile.name}
               suffix={
                 <Pencil
                   onClick={() => setEditProfile((prev) => ({ ...prev, name: !prev.name }))}
-                  className="cursor-pointer text-black/30 hover:text-black/60"
-                />
-              }
-            />
-          </Form.Item>
-
-          <Form.Item label="Email" name="email" rules={[{ type: 'email', message: 'Email không hợp lệ' }]}>
-            <Input
-              disabled={!editProfile.email}
-              suffix={
-                <Pencil
-                  onClick={() => setEditProfile((prev) => ({ ...prev, email: !prev.email }))}
                   className="cursor-pointer text-black/30 hover:text-black/60"
                 />
               }
