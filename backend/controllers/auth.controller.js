@@ -66,7 +66,7 @@ exports.refreshToken = async (req, res) => {
 exports.googleCallback = async (req, res) => {
     try {
         const response = await authService.loginWithGoogle(req.user);
-
+        req.session.user = response.data;
         res.redirect(`${process.env.CLIENT_URL}/`);
     } catch (error) {
         res.redirect(`${process.env.CLIENT_URL}/login-failed`);

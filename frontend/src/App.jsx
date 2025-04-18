@@ -17,8 +17,9 @@ function App() {
   useEffect(() => {
     const hasSynced = sessionStorage.getItem('googleSynced');
     const isLoggedOut = localStorage.getItem('loggedOut');
+    const loginType = localStorage.getItem('login_type');
 
-    if (hasSynced === 'true' || isLoggedOut === 'true') return;
+    if (loginType !== 'google' || hasSynced === 'true' || isLoggedOut === 'true') return;
 
     const syncGoogleUser = async () => {
       try {

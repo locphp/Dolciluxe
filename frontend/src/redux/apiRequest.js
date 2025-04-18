@@ -11,17 +11,25 @@ import {
 } from './authSlice';
 import { response } from '~/services/axios';
 import { toast } from 'react-toastify';
+
 export const loginUser = async (dispatch, user, navigate, redirectPath = '/') => {
   dispatch(loginStart());
   try {
     // const res = await response.post('/api/public/login', user);
+    
     const res = await response.post('/api/auth/login', user);
+    const { accessToken, refreshToken } = res;
+    localStorage.setItem('access_token', accessToken);
+    localStorage.setItem('refresh_token', refreshToken);
+    localStorage.setItem('login_type', 'normal');
     localStorage.removeItem('loggedOut');
     sessionStorage.removeItem('googleSynced');
+    localStorage.setItem('login_type', 'normal');
     dispatch(loginSuccess(res));
     toast.success('Đăng nhập thành công', {
       position: 'bottom-right',
     });
+    console.log('Res login:', res);
     navigate(redirectPath);
   } catch (err) {
     dispatch(loginFail());

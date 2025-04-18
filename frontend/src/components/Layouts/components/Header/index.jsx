@@ -153,7 +153,7 @@ function Header() {
           </Drawer>
           {/* User Logo */}
           {user ? (
-            <UserTooltip onClick={() => setIsLogout(true)} currentUser={user.user} />
+            <UserTooltip onClick={() => setIsLogout(true)} currentUser={user} />
           ) : (
             <UserProfile className="navbar-icon" onClick={() => handleLogin()} />
           )}

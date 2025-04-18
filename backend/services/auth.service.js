@@ -75,6 +75,14 @@ exports.loginUser = async (email, password) => {
             message: "Login successfully!",
             accessToken,
             refreshToken,
+            data: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                avatar: user.avatar,
+                isAdmin: user.isAdmin,
+                phone: user.phone,
+            }
         };
     } catch (error) {
         console.error(error);

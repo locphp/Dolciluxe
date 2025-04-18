@@ -40,8 +40,8 @@ exports.getUserById = async (req, res) => {
 // Update user information (User or Admin)
 exports.updateUser = async (req, res) => {
     try {
-        const { name, phone, address } = req.body;
-        const updatedUser = await userService.updateUserService(req.params.id, { name, phone, address });
+        const { name, phone, email } = req.body;
+        const updatedUser = await userService.updateUserService(req.params.id, { name, phone, email });
         res.status(200).json({
             code: 200,
             message: "User updated successfully!",
