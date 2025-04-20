@@ -117,7 +117,7 @@ export const updateImageUser = async (file) => {
 
   export const requestPasswordUser = async (email) => {
     try {
-      const res = await response.post('/api/public/request-password-reset', { email });
+      const res = await response.post('/api/auth/forgot-password', { email });
       return res.message;
     } catch (err) {
       console.error('Lỗi requestPasswordUser:', err.response?.data || err.message);
