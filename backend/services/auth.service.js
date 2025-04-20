@@ -9,7 +9,7 @@ const generateAccessToken = (user) => {
     return jwt.sign(
         { id: user.id, isAdmin: user.isAdmin },
         process.env.JWT_SECRET,
-        { expiresIn: '45m' }
+        { expiresIn: process.env.JWT_EXPIRES_IN }
     );
 };
 
@@ -18,7 +18,7 @@ const generateRefreshToken = (user) => {
     return jwt.sign(
         { id: user.id, isAdmin: user.isAdmin },
         process.env.JWT_REFRESH_SECRET,
-        { expiresIn: '7d' }
+        { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN }
     );
 };
 
@@ -93,35 +93,35 @@ exports.loginUser = async (email, password) => {
 
 exports.logoutUser = async (req, res) => {
     try {
-      await new Promise((resolve, reject) => {
-        req.logout((err) => {
-          if (err) return reject(err);
-          resolve();
+        await new Promise((resolve, reject) => {
+            req.logout((err) => {
+                if (err) return reject(err);
+                resolve();
+            });
         });
-      });
-  
-      await new Promise((resolve, reject) => {
-        req.session.destroy((err) => {
-          if (err) return reject(err);
-          resolve();
+
+        await new Promise((resolve, reject) => {
+            req.session.destroy((err) => {
+                if (err) return reject(err);
+                resolve();
+            });
         });
-      });
-  
-      res.clearCookie('connect.sid', {
-        path: '/',
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: false,
-      });
-  
-      return res.status(200).json({ code: 200, message: 'Logout successful' });
+
+        res.clearCookie('connect.sid', {
+            path: '/',
+            httpOnly: true,
+            sameSite: 'lax',
+            secure: false,
+        });
+
+        return res.status(200).json({ code: 200, message: 'Logout successful' });
     } catch (error) {
-      console.error('Logout service error:', error);
-      return res.status(500).json({ code: 500, message: 'Logout failed', error: error.message });
+        console.error('Logout service error:', error);
+        return res.status(500).json({ code: 500, message: 'Logout failed', error: error.message });
     }
-  };
-  
-  
+};
+
+
 
 exports.refreshToken = async (refreshToken) => {
     try {
@@ -231,3 +231,33 @@ exports.forgotPassword = async (email) => {
     // Send mail
     await sendMail(user.email, 'Reset mật khẩu DolciLuxe', html);
 }
+
+exports.resetPassword = async (token, newPassword, confirmPassword) => {
+    if (!token || !newPassword || !confirmPassword) {
+        return { code: 400, message: 'Vui lòng điền đầy đủ thông tin.' };
+    }
+
+    if (newPassword !== confirmPassword) {
+        return { code: 400, message: 'Mật khẩu xác nhận không khớp.' };
+    }
+
+    // Hash lại token để so sánh
+    const hashToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    const user = await User.findOne({
+        resetPasswordToken: hashToken,
+        resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+        return { code: 400, message: 'Token không hợp lệ hoặc đã hết hạn.' };
+    }
+
+    user.password = newPassword
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    return { code: 200, message: 'Mật khẩu đã được cập nhật thành công.' };
+};

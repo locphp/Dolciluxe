@@ -1,6 +1,6 @@
 const User = require('../models/user.model');
 
-exports.getAllUsersService = async () => {
+exports.getAllUsers = async () => {
     try {
         const users = await User.find({ isDeleted: false }).select('-password');
         return users.map(user => ({
@@ -23,7 +23,24 @@ exports.getAllUsersService = async () => {
     }
 };
 
-exports.getUserByIdService = async (userId) => {
+exports.getCurrentUser = async (userId) => {
+    try {
+        const user = await User.findById(userId).select("-password");
+        if (!user) {
+            return { code: 404, message: "User not found" };
+        }
+
+        return {
+            code: 200,
+            message: "Get current user successfully",
+            data: user
+        };
+    } catch (error) {
+        return { code: 500, message: "Internal server error", error: error.message };
+    }
+};
+
+exports.getUserById = async (userId) => {
     try {
         const user = await User.findById(userId).select('-password');
         if (!user || user.isDeleted) {
@@ -35,7 +52,32 @@ exports.getUserByIdService = async (userId) => {
     }
 };
 
-exports.updateUserService = async (userId, updateData) => {
+exports.updatePassword = async (userId, currentPassword, newPassword, confirmPassword) => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        return { code: 400, message: 'Vui lòng điền đầy đủ thông tin.' };
+    }
+
+    if (newPassword !== confirmPassword) {
+        return { code: 400, message: 'Mật khẩu xác nhận không khớp.' };
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+        return { code: 404, message: 'Không tìm thấy người dùng.' };
+    }
+
+    const isMatch = await user.comparePassword(currentPassword);
+    if (!isMatch) {
+        return { code: 401, message: 'Mật khẩu hiện tại không đúng.' };
+    }
+
+    user.password = newPassword; // middleware sẽ tự hash
+    await user.save();
+
+    return { code: 200, message: 'Cập nhật mật khẩu thành công.' };
+};
+
+exports.updateUser = async (userId, updateData) => {
     try {
         const updatedUser = await User.findByIdAndUpdate(
             userId,
@@ -53,7 +95,7 @@ exports.updateUserService = async (userId, updateData) => {
     }
 };
 
-exports.softDeleteUserService = async (userId) => {
+exports.softDeleteUser = async (userId) => {
     try {
         const user = await User.findByIdAndUpdate(userId, { isDeleted: true, deletedAt: Date.now() }, { new: true });
         if (!user) {
@@ -66,7 +108,7 @@ exports.softDeleteUserService = async (userId) => {
     }
 };
 
-exports.restoreUserService = async (userId) => {
+exports.restoreUser = async (userId) => {
     try {
         const user = await User.findByIdAndUpdate(userId, { isDeleted: false, deletedAt: null }, { new: true });
         if (!user) {
@@ -79,7 +121,7 @@ exports.restoreUserService = async (userId) => {
     }
 };
 
-exports.deleteUserPermanentlyService = async (userId) => {
+exports.deleteUserPermanently = async (userId) => {
     try {
         const user = await User.findByIdAndDelete(userId);
         if (!user) {
@@ -90,18 +132,4 @@ exports.deleteUserPermanentlyService = async (userId) => {
     } catch (error) {
         throw new Error('Error permanently deleting user: ' + error.message);
     }
-};
-
-exports.updatePasswordByIdService = async (userId, newPassword) => {
-    const user = await User.findById(userId);
-
-    if (!user) {
-        throw new Error("User not found.");
-    }
-
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    user.password = hashedPassword;
-
-    await user.save();
 };
