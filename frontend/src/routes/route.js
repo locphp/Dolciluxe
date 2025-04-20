@@ -19,7 +19,7 @@ import AdminCustomer from "~/pages/AdminCustomer/customer";
 import Payment from "~/pages/Payment";
 import EmailRecovery from "~/components/Layouts/components/Forgot Password/EmailRecovery";
 import EmailSent from "~/components/Layouts/components/Forgot Password/EmailSent";
-
+import NewPassword from "~/components/Layouts/components/Forgot Password/NewPassword";
 const publicRoute = [
   { path: "/", component: Home },
   { path: "/generator", component: GenImage },
@@ -34,6 +34,7 @@ const publicRoute = [
   { path: "/payment", component: Payment },
   { path: "/email/recovery", component: EmailRecovery },
   { path: "/email/message", component: EmailSent },
+  { path: "/reset-password", component: NewPassword },
 ]
 
 const privateRoute = [

@@ -10,15 +10,16 @@ const AccountLayout = () => {
   const [breadCrumbItems, setBreadcrumbItems] = useState([{ title: 'Trang chủ', link: '/' }, { title: 'Tài khoản' }]);
 
   const [pageTitle, setPageTitle] = useState('Tài khoản');
-
+  const currentUser = useSelector((state) => state.auth.login.currentUser);
+  const instance = createInstance(currentUser, null, loginSuccess);
   const menuMapping = {
     profile: {
       link: '/account/profile',
       title: 'Tài khoản',
     },
-    // "address": {
-    //     link: "/account/address",
-    //     title: "Địa chỉ giao hàng"
+    // address: {
+    //   link: '/account/address',
+    //   title: 'Địa chỉ giao hàng',
     // },
     'change-password': {
       link: '/account/change-password',
@@ -56,8 +57,6 @@ const AccountLayout = () => {
     }
   };
 
-  const currentUser = useSelector((state) => state.auth.login.currentUser);
-  const instance = createInstance(currentUser, null, loginSuccess);
   return (
     <>
       <BreadCrumb items={breadCrumbItems} />
