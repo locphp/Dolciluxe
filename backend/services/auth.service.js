@@ -243,12 +243,13 @@ exports.resetPassword = async (token, newPassword, confirmPassword) => {
 
     // Hash lại token để so sánh
     const hashToken = crypto.createHash('sha256').update(token).digest('hex');
-
+    // console.log('Token từ frontend:', token);
+    // console.log('Token sau khi hash:', hashToken);
     const user = await User.findOne({
         resetPasswordToken: hashToken,
         resetPasswordExpire: { $gt: Date.now() },
     });
-
+    console.log('User tìm được:', user);
     if (!user) {
         return { code: 400, message: 'Token không hợp lệ hoặc đã hết hạn.' };
     }

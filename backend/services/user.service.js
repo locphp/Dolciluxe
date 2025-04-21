@@ -1,3 +1,4 @@
+const passport = require('passport');
 const User = require('../models/user.model');
 
 exports.getAllUsers = async () => {
@@ -60,7 +61,9 @@ exports.updatePassword = async (userId, currentPassword, newPassword, confirmPas
     if (newPassword !== confirmPassword) {
         return { code: 400, message: 'Mật khẩu xác nhận không khớp.' };
     }
-
+    if (newPassword === currentPassword){
+        return { code: 400, message: 'Mật khẩu mới trùng với mật khẩu cũ.' };
+    }
     const user = await User.findById(userId);
     if (!user) {
         return { code: 404, message: 'Không tìm thấy người dùng.' };

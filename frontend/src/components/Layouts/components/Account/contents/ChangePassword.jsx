@@ -18,15 +18,16 @@ const AccountChangePassword = () => {
     //e.preventDefault()
     if (newPassword === confirm) {
       let data = {
-        current_password: password,
-        new_password: newPassword,
+        currentPassword: password,
+        newPassword: newPassword,
+        confirmPassword: confirm,
       };
       try {
-        const res = await changePasswordUser(instance, currentUser.access_token, data);
+        const res = await changePasswordUser(data);
         console.log(res);
         toast.success('Đổi mật khẩu thành công', {
           position: 'bottom-right',
-          onClose: 3000,
+          autoClose: 3000,
         });
       } catch (err) {
         console.log(err);
@@ -34,7 +35,13 @@ const AccountChangePassword = () => {
     } else {
       toast.error('Nhập lại mật khẩu mới không khớp', {
         position: 'bottom-right',
-        onClose: 3000,
+        autoClose: 3000,
+      });
+    }
+    if (newPassword === password) {
+      toast.error('Mật khẩu mới trùng với mật khẩu cũ', {
+        position: 'bottom-right',
+        autoClose: 3000,
       });
     }
   };
