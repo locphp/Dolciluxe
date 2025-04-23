@@ -43,10 +43,10 @@ const Sidebar = ({ currentKey, handleUpdateContent, currentUser, instance }) => 
       label: <NavLink to={'/account/profile'}>Hồ sơ</NavLink>,
       key: 'profile',
     },
-    // {
-    //     label: <NavLink to={"/account/address"}>Địa chỉ giao hàng</NavLink>,
-    //     key: 'address',
-    // },
+    {
+      label: <NavLink to={'/account/address'}>Địa chỉ giao hàng</NavLink>,
+      key: 'address',
+    },
     // {
     //   label: <NavLink to={'/account/change-password'}>Đổi mật khẩu</NavLink>,
     //   key: 'change-password',

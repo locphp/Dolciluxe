@@ -194,3 +194,43 @@ export const getListUsers = async () => {
       throw err;
     }
   };
+
+  export const createAddress = async (data) => {
+    try {
+      const res = await response.post(`/api/address/`, data);
+      return res;
+    } catch (err) {
+      console.error('Lỗi createAddress:', err.response?.data || err.message);
+      throw err;
+    }
+  };
+
+  export const getAllAddress = async () => {
+    try {
+      const res = await response.get(`/api/address/`);
+      return res;
+    } catch (err) {
+      console.error('Lỗi getAllAddress:', err.response?.data || err.message );
+      throw err;
+    }
+  };
+
+  export const updateAddress = async (id, data) => {
+    try {
+      const res = await response.put(`/api/address/${id}`, data);
+      return res;
+    } catch (err) {
+      console.error('Lỗi updateAddress:', err.response?.data || err.message);
+      throw err;
+    }
+  };
+
+  export const deleteAddress = async (id) => {
+    try {
+      const res =  await response.delete(`/api/address/${id}`);
+      return res;
+    } catch (err) {
+        console.error('Lỗi deleteAddress:', err.response?.data || err.message);
+        throw err;
+    }
+  };

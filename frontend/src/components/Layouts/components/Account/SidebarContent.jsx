@@ -1,5 +1,5 @@
 import { createInstance } from '~/redux/interceptors';
-import AccountAddress from './contents/Addresss';
+import AccountAddress from './contents/Address';
 import AccountChangePassword from './contents/ChangePassword';
 import AccountOrders from './contents/Orders';
 import AccountProfile from './contents/Profile';
@@ -25,6 +25,9 @@ const SidebarContent = ({ currentKey, handleUpdateContent }) => {
   switch (currentKey) {
     case 'profile':
       content = <AccountProfile currentUser={currentUser} instance={instance} />;
+      break;
+    case 'address':
+      content = <AccountAddress currentUser={currentUser} instance={instance} />;
       break;
     case 'change-password':
       content = <AccountChangePassword currentUser={currentUser} instance={instance} />;

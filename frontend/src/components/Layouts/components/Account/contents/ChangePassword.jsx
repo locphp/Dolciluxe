@@ -14,37 +14,82 @@ const AccountChangePassword = () => {
   const { currentUser } = useSelector((state) => state.auth.login);
   const dispatch = useDispatch();
   let instance = createInstance(currentUser, dispatch, loginSuccess);
-  const handleSubmit = async (e) => {
-    //e.preventDefault()
-    if (newPassword === confirm) {
-      let data = {
-        currentPassword: password,
-        newPassword: newPassword,
-        confirmPassword: confirm,
-      };
-      try {
-        const res = await changePasswordUser(data);
-        console.log(res);
-        toast.success('Đổi mật khẩu thành công', {
-          position: 'bottom-right',
-          autoClose: 3000,
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      toast.error('Nhập lại mật khẩu mới không khớp', {
+  // const handleSubmit = async (e) => {
+  //   //e.preventDefault()
+  //   if (newPassword === confirm) {
+  //     let data = {
+  //       currentPassword: password,
+  //       newPassword: newPassword,
+  //       confirmPassword: confirm,
+  //     };
+  //     try {
+  //       const res = await changePasswordUser(data);
+  //       console.log(res);
+  //       toast.success('Đổi mật khẩu thành công', {
+  //         position: 'bottom-right',
+  //         autoClose: 3000,
+  //       });
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   } else {
+  //     toast.error('Nhập lại mật khẩu mới không khớp', {
+  //       position: 'bottom-right',
+  //       autoClose: 3000,
+  //     });
+  //   }
+  // };
+  const handleSubmit = async () => {
+    if (!password || !newPassword || !confirm) {
+      toast.error('Vui lòng nhập đầy đủ các trường thông tin.', {
         position: 'bottom-right',
         autoClose: 3000,
       });
+      return;
     }
-    if (newPassword === password) {
-      toast.error('Mật khẩu mới trùng với mật khẩu cũ', {
+
+    if (password === newPassword) {
+      toast.error('Mật khẩu mới không được trùng với mật khẩu hiện tại.', {
+        position: 'bottom-right',
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    if (newPassword !== confirm) {
+      toast.error('Nhập lại mật khẩu mới không khớp.', {
+        position: 'bottom-right',
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    let data = {
+      currentPassword: password,
+      newPassword: newPassword,
+      confirmPassword: confirm,
+    };
+
+    try {
+      const res = await changePasswordUser(data);
+      console.log(res);
+      toast.success('Đổi mật khẩu thành công', {
+        position: 'bottom-right',
+        autoClose: 3000,
+      });
+      // Có thể reset state sau khi đổi mật khẩu thành công
+      setPassword('');
+      setNewPassword('');
+      setConfirm('');
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.response?.data?.message || 'Có lỗi xảy ra, vui lòng thử lại.', {
         position: 'bottom-right',
         autoClose: 3000,
       });
     }
   };
+
   return (
     <>
       <Form onFinish={(e) => handleSubmit(e)} layout="vertical">
