@@ -29,7 +29,7 @@ export const loginUser = async (dispatch, user, navigate, redirectPath = '/') =>
     toast.success('Đăng nhập thành công', {
       position: 'bottom-right',
     });
-    console.log('Res login:', res);
+    // console.log('Res login:', res);
     navigate(redirectPath);
   } catch (err) {
     dispatch(loginFail());
@@ -141,6 +141,7 @@ export const googleLoginUser = async (dispatch) => {
 
     localStorage.setItem('access_token', access_token);
     localStorage.setItem('refresh_token', refresh_token);
+    localStorage.setItem('login_type', 'google');
 
     dispatch(loginSuccess({ user, access_token, refresh_token }));
   } catch (err) {

@@ -248,7 +248,6 @@ exports.resetPassword = async (token, newPassword, confirmPassword) => {
         resetPasswordToken: hashToken,
         resetPasswordExpire: { $gt: Date.now() },
     });
-
     if (!user) {
         return { code: 400, message: 'Token không hợp lệ hoặc đã hết hạn.' };
     }

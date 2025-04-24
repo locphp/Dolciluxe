@@ -16,9 +16,9 @@ import {response} from '~/services/axios';
 //   }
 // };
 
-export const getCurrentUser = async (id) => {
+export const getCurrentUser = async () => {
   try {
-    const res = await response.get(`/api/users/${id}`);
+    const res = await response.get(`/api/users/current-user`);
     return res;
   } catch (err) {
     console.error('Lỗi getCurrentUser:', err.response?.data || err.message);
@@ -117,7 +117,7 @@ export const updateImageUser = async (file) => {
 
   export const requestPasswordUser = async (email) => {
     try {
-      const res = await response.post('/api/public/request-password-reset', { email });
+      const res = await response.post('/api/auth/forgot-password', { email });
       return res.message;
     } catch (err) {
       console.error('Lỗi requestPasswordUser:', err.response?.data || err.message);
@@ -125,21 +125,20 @@ export const updateImageUser = async (file) => {
     }
   };
 
-// export const changePasswordUser = async (instance, token, data) => {
-//   try {
-//     const res = await instance.put(`/api/users/update-password/${data.id}`, { password: data.password }, {
-//       headers: { Authorization: `Bearer ${token}` },
-//     });
-//     return res.data.message;
-//   } catch (err) {
-//     console.log('Lỗi đổi mật khẩu:', err.response?.data?.message || err.message);
-//   }
-// };
+  export const changePasswordFromMail = async (data) => {
+    try {
+      const res = await response.post('/api/auth/reset-password', data);
+      return res;
+    } catch (err) {
+      console.error('Lỗi changePasswordUserFromMail:', err.response?.data?.message || err.message);
+      throw err;
+    }
+  };
 
-export const changePasswordUser = async ({ id, password }) => {
+export const changePasswordUser = async ( data ) => {
   try {
-    const res = await response.put(`/api/users/update-password/${id}`, { password });
-    return res.message;
+    const res = await response.put(`/api/users/current-user/update-password`,  data );
+    return res;
   } catch (err) {
     console.error('Lỗi changePasswordUser:', err.response?.data?.message || err.message);
     throw err;
@@ -193,5 +192,45 @@ export const getListUsers = async () => {
     } catch (err) {
       console.error('Lỗi deleteUsers:', err.response?.data || err.message);
       throw err;
+    }
+  };
+
+  export const createAddress = async (data) => {
+    try {
+      const res = await response.post(`/api/address/`, data);
+      return res;
+    } catch (err) {
+      console.error('Lỗi createAddress:', err.response?.data || err.message);
+      throw err;
+    }
+  };
+
+  export const getAllAddress = async () => {
+    try {
+      const res = await response.get(`/api/address/`);
+      return res;
+    } catch (err) {
+      console.error('Lỗi getAllAddress:', err.response?.data || err.message );
+      throw err;
+    }
+  };
+
+  export const updateAddress = async (id, data) => {
+    try {
+      const res = await response.put(`/api/address/${id}`, data);
+      return res;
+    } catch (err) {
+      console.error('Lỗi updateAddress:', err.response?.data || err.message);
+      throw err;
+    }
+  };
+
+  export const deleteAddress = async (id) => {
+    try {
+      const res =  await response.delete(`/api/address/${id}`);
+      return res;
+    } catch (err) {
+        console.error('Lỗi deleteAddress:', err.response?.data || err.message);
+        throw err;
     }
   };

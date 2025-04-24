@@ -36,26 +36,32 @@ const Sidebar = ({ currentKey, handleUpdateContent, currentUser, instance }) => 
     handleUpdateContent(e.key);
     navigate(selectedItem.label.props.to);
   };
+  const loginType = localStorage.getItem('login_type');
 
   const items = [
     {
       label: <NavLink to={'/account/profile'}>Hồ sơ</NavLink>,
       key: 'profile',
     },
-    // {
-    //     label: <NavLink to={"/account/address"}>Địa chỉ giao hàng</NavLink>,
-    //     key: 'address',
-    // },
     {
-      label: <NavLink to={'/account/change-password'}>Đổi mật khẩu</NavLink>,
-      key: 'change-password',
+      label: <NavLink to={'/account/address'}>Địa chỉ giao hàng</NavLink>,
+      key: 'address',
     },
+    // {
+    //   label: <NavLink to={'/account/change-password'}>Đổi mật khẩu</NavLink>,
+    //   key: 'change-password',
+    // },
     {
       label: <NavLink to={'/account/orders'}>Đơn hàng</NavLink>,
       key: 'orders',
     },
   ];
-
+  if (loginType !== 'google') {
+    items.splice(1, 0, {
+      label: <NavLink to={'/account/change-password'}>Đổi mật khẩu</NavLink>,
+      key: 'change-password',
+    });
+  }
   return (
     <div className="mb-16 mt-16 flex flex-col gap-[20px] md:flex-row md:items-start">
       <div className="[flex-basis:25%]">
