@@ -17,10 +17,10 @@ const AccountLayout = () => {
       link: '/account/profile',
       title: 'Tài khoản',
     },
-    // address: {
-    //   link: '/account/address',
-    //   title: 'Địa chỉ giao hàng',
-    // },
+    address: {
+      link: '/account/address',
+      title: 'Địa chỉ giao hàng',
+    },
     'change-password': {
       link: '/account/change-password',
       title: 'Đổi mật khẩu',
