@@ -30,6 +30,10 @@ response.interceptors.response.use(
 
     // Nếu lỗi 401 (Unauthorized) và chưa retry
     if (err.response?.status === 401 && !originalConfig._retry) {
+      const isChangeRoleAPI = originalConfig.url?.includes('/users/role');
+      if (isChangeRoleAPI) {
+        return Promise.reject(err);
+      }
       originalConfig._retry = true;
       const loginType = localStorage.getItem('login_type');
 

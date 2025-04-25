@@ -98,6 +98,7 @@ export const getListUsers = async () => {
       return res;
     } catch (err) {
       console.error('Lỗi restoreUser:', err.response?.data|| err.message);
+      throw err;
     }
   };
 
@@ -107,8 +108,32 @@ export const getListUsers = async () => {
       return res;
     } catch (err) {
       console.error('Lỗi deleteUserPermanent:',err.response?.data || err.message);
+      throw err;
     }
   };
+
+  export const toggleUserActive = async (id, isActive) => {
+    try {
+      const res = await response.patch(`/api/users/toggle-active/${id}`, {isActive});
+      return res;
+    } catch (err) {
+      console.error('Lỗi toggleUserActive:', err.response?.data || err.message);
+      throw err;
+    }
+  }
+
+  export const updateUserRoleWithAuth = async (id, adminPassword, isAdmin) => {
+    try {
+      const res = await response.patch(`/api/users/role/${id}`,{
+        adminPassword,
+        isAdmin,
+      });
+      return res;
+    } catch (err) {
+      console.error('Lỗi updateUserRoleWithAuth:', err.response?.data || err.message);
+      throw err;
+    }
+  }
 //ADDRESS
   export const createAddress = async (data) => {
     try {

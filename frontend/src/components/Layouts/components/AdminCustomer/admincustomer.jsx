@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { getListUsers } from '~/api/apiUser';
+import { getListUsers, toggleUserActive, updateUserRoleWithAuth } from '~/api/apiUser';
+import { getOrders } from '~/api/apiOrder';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 function AdminCustomer() {
   const [users, setUsers] = useState([]);
@@ -10,14 +12,28 @@ function AdminCustomer() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [password, setPassword] = useState('');
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [hidden, setHidden] = useState({
+    password: true,
+    confirm: true,
+  });
 
-  const currentUser = useSelector((state) => state.auth.login.currentUser);
-  console.log(currentUser);
+  const hiddenPassword = (field) => {
+    setHidden((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await getListUsers();
-        setUsers(res.data);
+        const [userRes, orderRes] = await Promise.all([getListUsers(), getOrders()]);
+        const orders = orderRes.data || [];
+        const enrichedUsers = userRes.data.map((user) => {
+          const userOrders = orders.filter((order) => order.user === user.id);
+          return { ...user, orderCount: userOrders.length };
+        });
+        setUsers(enrichedUsers);
         setLoading(false);
       } catch (err) {
         setError(err.message || 'Không thể tải danh sách khách hàng');
@@ -28,20 +44,36 @@ function AdminCustomer() {
     fetchUsers();
   }, []);
 
+  const handleToggleActive = async (user) => {
+    try {
+      const res = await toggleUserActive(user.id, !user.isActive);
+      setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, isActive: res.data.isActive } : u)));
+    } catch (err) {
+      alert('Không thể cập nhật trạng thái hoạt động');
+    }
+  };
+
   const handleOpenConfirm = (user) => {
     setSelectedUser(user);
     setConfirmOpen(true);
   };
 
-  const handleConfirmChangeRole = () => {
-    // Kiểm tra mật khẩu thật sự là mật khẩu của current admin
-    if (password === 'admin123') {
-      setUsers((prev) => prev.map((u) => (u.id === selectedUser.id ? { ...u, isAdmin: !u.isAdmin } : u)));
+  const handleConfirmChangeRole = async () => {
+    try {
+      const res = await updateUserRoleWithAuth(selectedUser.id, password, !selectedUser.isAdmin);
+      setUsers((prev) => prev.map((u) => (u.id === selectedUser.id ? { ...u, isAdmin: res.data.isAdmin } : u)));
       setConfirmOpen(false);
       setPassword('');
-      alert('Cập nhật quyền thành công');
-    } else {
-      alert('Mật khẩu không đúng');
+      toast.success(`Đã cập nhật phân quyền cho ${selectedUser.name}`, {
+        position: 'bottom-right',
+        autoClose: 3000,
+        icon: '✅',
+      });
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Cập nhật quyền thất bại', {
+        position: 'bottom-right',
+        autoClose: 3000,
+      });
     }
   };
 
@@ -60,7 +92,9 @@ function AdminCustomer() {
               <th className="border-y border-gray-200 px-4 py-3 text-center">Tên khách hàng</th>
               <th className="border-y border-gray-200 px-4 py-3 text-center">Email</th>
               <th className="border-y border-gray-200 px-4 py-3 text-center">Số điện thoại</th>
+              <th className="border-y border-gray-200 px-4 py-3 text-center">Số đơn</th>
               <th className="border-y border-gray-200 px-4 py-3 text-center">Phân quyền</th>
+              <th className="border-y border-gray-200 px-4 py-3 text-center">Trạng thái</th>
             </tr>
           </thead>
           <tbody>
@@ -70,15 +104,26 @@ function AdminCustomer() {
                 <td className="border-y border-gray-200 px-4 py-3 text-center">{user.name}</td>
                 <td className="border-y border-gray-200 px-4 py-3 text-center">{user.email}</td>
                 <td className="border-y border-gray-200 px-4 py-3 text-center">{user.phone}</td>
+                <td className="border-y border-gray-200 px-4 py-3 text-center">{user.orderCount}</td>
                 <td className="border-y border-gray-200 px-4 py-3 text-center">
-                  <button
-                    className={`rounded px-3 py-1 text-white hover:opacity-90 ${
-                      user.isAdmin ? 'border-red-600 bg-red-600' : 'border-blue-600 bg-blue-600'
-                    }`}
+                  <span
                     onClick={() => handleOpenConfirm(user)}
+                    className={`cursor-pointer rounded px-3 py-1 text-white transition ${
+                      user.isAdmin ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-500 hover:bg-blue-600'
+                    }`}
                   >
                     {user.isAdmin ? 'Admin' : 'User'}
-                  </button>
+                  </span>
+                </td>
+                <td className="border-y border-gray-200 px-4 py-3 text-center">
+                  <span
+                    onClick={() => handleToggleActive(user)}
+                    className={`cursor-pointer rounded px-3 py-1 text-sm font-medium text-white transition ${
+                      user.isActive ? 'bg-green-600 hover:bg-green-700' : 'bg-red-500 hover:bg-red-600'
+                    }`}
+                  >
+                    {user.isActive ? '✅ Đang hoạt động' : '⚠️ Vô hiệu hóa'}
+                  </span>
                 </td>
               </tr>
             ))}
@@ -89,14 +134,25 @@ function AdminCustomer() {
       <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
         <DialogTitle>Xác nhận thay đổi phân quyền</DialogTitle>
         <DialogContent>
-          <TextField
-            type="password"
-            label="Nhập mật khẩu xác nhận"
-            fullWidth
-            variant="outlined"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="relative">
+            <TextField
+              type={hidden.password ? 'password' : 'text'}
+              label="Nhập mật khẩu xác nhận"
+              fullWidth
+              variant="filled"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleConfirmChangeRole();
+              }}
+            />
+            <i
+              className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+              onClick={() => hiddenPassword('password')}
+            >
+              {hidden.password ? <FaEyeSlash className="text-gray-500" /> : <FaEye className="text-gray-700" />}
+            </i>
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setConfirmOpen(false)}>Hủy</Button>
