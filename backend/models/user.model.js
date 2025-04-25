@@ -8,12 +8,8 @@ const userSchema = new mongoose.Schema({
     googleId: { type: String },
     avatar: { type: String, default: '' },
     phone: { type: String },
-    // address: {
-    //     street: { type: String },
-    //     city: { type: String },
-    //     country: { type: String },
-    // },
     isAdmin: { type: Boolean, default: false },
+    isActive: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now },
     resetPasswordToken: { type: String },

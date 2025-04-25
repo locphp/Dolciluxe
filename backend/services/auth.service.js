@@ -58,6 +58,10 @@ exports.loginUser = async (email, password) => {
             return { code: 400, message: "Email does not exist!" };
         }
 
+        if (!user.isActive) {
+            return { code: 403, message: "Tài khoản của bạn đã bị khóa" };
+        }
+
         if (user.isDeleted) {
             return { code: 400, message: "Account has been deleted!" };
         }
@@ -81,6 +85,7 @@ exports.loginUser = async (email, password) => {
                 email: user.email,
                 avatar: user.avatar,
                 isAdmin: user.isAdmin,
+                isActive: user.isActive,
                 phone: user.phone,
             }
         };

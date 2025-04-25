@@ -129,3 +129,46 @@ exports.deleteUserPermanently = async (req, res) => {
         });
     }
 };
+
+exports.toggleUserActive = async (req, res) => {
+    try {
+        const { isActive } = req.body;
+        const userId = req.params.id;
+
+        const updated = await userService.toggleUserActive(userId, isActive);
+
+        res.status(200).json({
+            code: 200,
+            message: `User ${isActive ? 'activated' : 'deactivated'} successfully`,
+            data: updated,
+        });
+    } catch (error) {
+        res.status(500).json({ code: 500, message: error.message });
+    }
+};
+
+exports.updateUserRoleWithAuth = async (req, res) => {
+    try {
+        const { adminPassword, isAdmin } = req.body;
+        const targetUserId = req.params.id;
+        const adminId = req.user.id;
+
+        const updatedUser = await userService.updateUserRoleWithAuth({
+            adminId,
+            adminPassword,
+            targetUserId,
+            isAdmin
+        });
+
+        return res.status(200).json({
+            code: 200,
+            message: 'Cập nhật quyền người dùng thành công',
+            data: updatedUser,
+        });
+    } catch (error) {
+        return res.status(error.statusCode || 500).json({
+            code: error.statusCode || 500,
+            message: error.message || 'Lỗi server khi cập nhật quyền người dùng',
+        });
+    }
+};
