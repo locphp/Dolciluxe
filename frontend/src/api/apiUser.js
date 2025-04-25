@@ -1,21 +1,6 @@
 import {response} from '~/services/axios';
 
-
-
-// Đổi lại thứ tự tham số cho hợp lý và nhất quán
-
-// export const getCurrentUser = async (instance, token, id) => {
-//   try {
-//     const res = await instance.get(`/api/users/${id}`, {
-//       headers: { Authorization: `Bearer ${token}` },
-//     });
-//     return res.data;
-//   } catch (err) {
-//     if (err.response) console.error('Server error: ', err.response.data.message, err.response.status);
-//     else console.error('Request error: ', err.message);
-//   }
-// };
-
+//USERS
 export const getCurrentUser = async () => {
   try {
     const res = await response.get(`/api/users/current-user`);
@@ -25,27 +10,6 @@ export const getCurrentUser = async () => {
     throw err;
   }
 };
-
-
-// export const updateUser = async (instance, token, data) => {
-//   try {
-//     const config = {
-//       headers: token
-//         ? { Authorization: `Bearer ${token}` }
-//         : undefined,
-//       withCredentials: !token, // true nếu không dùng token
-//     };
-//     console.log('ID gửi update:', data.id);
-//     console.log('Data gửi update:', data);
-//     console.log('Token truyền vào:', token);
-//     console.log('config truyền vào:', config);
-//     const res = await instance.put(`/api/users/${data.id}`, config, data);
-//     return res.data;
-//   } catch (err) {
-//     console.error('Lỗi khi gọi updateUser API:', err.response?.data || err.message);
-//     throw err;
-//   }
-// };
 
 export const updateUser = async (data) => {
   try {
@@ -57,39 +21,7 @@ export const updateUser = async (data) => {
     throw err;
   }
 };
-// export const updateUser = async (instance, data) => {
-//   try {
-//     const { id, ...updateData } = data;
-//     const res = await instance.put(`/api/users/${id}`, updateData);
-//     return res;
-//   } catch (err) {
-//     console.error('Lỗi updateUser:', err.response?.data || err.message);
-//     throw err;
-//   }
-// };
 
-
-
-// export const updateImageUser = async (instance, token, file) => {
-//     try {
-//       const formData = new FormData();
-//       formData.append('file', file);
-//       const res = await instance.post('/api/upload', formData, {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//           'Content-Type': 'multipart/form-data', 
-//         },
-//       });
-  
-//       return res.data;
-//     } catch (err) {
-//       if (err.response) {
-//         console.error('Server error: ', err.response.message, err.response.status);
-//       } else {
-//         console.error('Request error: ', err.message);
-//       }
-//     }
-//   };
 
 export const updateImageUser = async (file) => {
   try {
@@ -105,15 +37,6 @@ export const updateImageUser = async (file) => {
   }
 };
   
-  // export const requestPasswordUser = async (email) => {
-  //   try {
-  //     const res = await response.post('/api/public/request-password-reset', {"email": email})
-  //     return res.message
-  //   }
-  //   catch(err) {
-  //    console.log(err)
-  //   }
-  // }
 
   export const requestPasswordUser = async (email) => {
     try {
@@ -146,18 +69,7 @@ export const changePasswordUser = async ( data ) => {
 };
 
 
-// export const getListUsers = async (token, instance) => {
-//     try {
-//       const res = await instance.get('/api/users/', {
-//         headers: { Authorization: `Bearer ${token}` },
-//       });
-//       console.log('Response từ API:', res.data);
-//       return res.data; 
-//     } catch (err) {
-//       console.error('Lỗi API:', err.response?.data || err.message);
-//       throw new Error(err.response?.data?.message || 'Lỗi khi lấy danh sách người dùng');
-//     }
-//   };
+
 
 export const getListUsers = async () => {
   try {
@@ -169,32 +81,35 @@ export const getListUsers = async () => {
   }
 };
 
-  // export const deleteUsers = async (token, id, instance) => {
-  //   try{
-  //       const res = await instance.delete(`/api/protected/user/${id}`, {
-  //           headers: {Authorization: `Bearer ${token}`},
-  //       });
-  //       console.log('Xóa thành công:', res.data);
-  //       return res.data;
-  //   } catch (err) {
-  //       if(err.response){
-  //           console.error('Server error: ', err.response.data, err.response.status);
-  //           console.error('Request error: ', err.message);
-  //           throw err;
-  //       }
-  //   }
-  // }; 
 
-  export const deleteUsers = async (id) => {
+  export const softDeleteUser = async (id) => {
     try {
-      const res = await response.delete(`/api/protected/user/${id}`);
+      const res = await response.delete(`/api/users/${id}`);
       return res;
     } catch (err) {
-      console.error('Lỗi deleteUsers:', err.response?.data || err.message);
+      console.error('Lỗi softDeleteUser:', err.response?.data || err.message);
       throw err;
     }
   };
 
+  export const restoreUser = async (id) => {
+    try {
+      const res = await response.patch(`/api/users/${id}`);
+      return res;
+    } catch (err) {
+      console.error('Lỗi restoreUser:', err.response?.data|| err.message);
+    }
+  };
+
+  export const deleteUserPermanent = async (id) => {
+    try {
+      const res = await response.delete(`/api/users/permanent/${id}`);
+      return res;
+    } catch (err) {
+      console.error('Lỗi deleteUserPermanent:',err.response?.data || err.message);
+    }
+  };
+//ADDRESS
   export const createAddress = async (data) => {
     try {
       const res = await response.post(`/api/address/`, data);

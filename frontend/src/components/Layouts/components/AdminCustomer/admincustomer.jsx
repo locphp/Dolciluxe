@@ -1,24 +1,24 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getListUsers,  deleteUsers } from '~/api/apiUser'; 
-import { loginSuccess } from '~/redux/authSlice';
-import { createInstance } from '~/redux/interceptors';
-function AdminCustomer() {
-  const [users, setUsers] = useState([]); 
-  const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState(null); 
-  const dispatch = useDispatch();
-  const user = useSelector(state => state.auth.login.currentUser); 
-  let instance = createInstance(user,dispatch,loginSuccess); 
+import React, { useEffect, useState } from 'react';
+import { getListUsers } from '~/api/apiUser';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from '@mui/material';
+import { useSelector } from 'react-redux';
 
+function AdminCustomer() {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [password, setPassword] = useState('');
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const currentUser = useSelector((state) => state.auth.login.currentUser);
+  console.log(currentUser);
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        // const token = localStorage.getItem('token');
-        const data = await getListUsers(user.access_token,instance);
-        console.log(data);
-        setUsers(data); 
-        setLoading(false); 
+        const res = await getListUsers();
+        setUsers(res.data);
+        setLoading(false);
       } catch (err) {
         setError(err.message || 'Không thể tải danh sách khách hàng');
         setLoading(false);
@@ -28,65 +28,83 @@ function AdminCustomer() {
     fetchUsers();
   }, []);
 
-    const handleDelete = async (id) => {
-        
-        try { 
-                 
-            await deleteUsers(user.access_token,id,instance);
-            setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
-            alert('Xóa thành công');
-        } catch(err) {
-            alert(err.message || 'Xóa khách hàng không thành công');
-        }
-      };
-  
-  
+  const handleOpenConfirm = (user) => {
+    setSelectedUser(user);
+    setConfirmOpen(true);
+  };
 
-  if (loading) {
-    return <p>Đang tải danh sách khách hàng...</p>;
-  }
+  const handleConfirmChangeRole = () => {
+    // Kiểm tra mật khẩu thật sự là mật khẩu của current admin
+    if (password === 'admin123') {
+      setUsers((prev) => prev.map((u) => (u.id === selectedUser.id ? { ...u, isAdmin: !u.isAdmin } : u)));
+      setConfirmOpen(false);
+      setPassword('');
+      alert('Cập nhật quyền thành công');
+    } else {
+      alert('Mật khẩu không đúng');
+    }
+  };
 
-  if (error) {
-    return <p>Lỗi: {error}</p>;
-  }
+  if (loading) return <p>Đang tải danh sách khách hàng...</p>;
+  if (error) return <p>Lỗi: {error}</p>;
 
   return (
     <div className="p-4">
-      <h1 className="text-[x-large] font-bold text-[#664545] mb-4">Khách hàng thành viên</h1>
+      <h1 className="mb-4 text-[x-large] font-bold text-[#664545]">Khách hàng thành viên</h1>
 
       <div className="overflow-x-auto text-sm">
-        {/* Bảng chính */}
-        <table className="table-auto border-collapse border border-gray-200 w-full rounded-lg overflow-hidden shadow-sm">
-          <thead className="bg-gray-50 text-gray-700 text-sm font-semibold">
+        <table className="w-full table-auto border-collapse overflow-hidden rounded-lg border border-gray-200 shadow-sm">
+          <thead className="bg-gray-50 text-sm font-semibold text-gray-700">
             <tr>
               <th className="border-y border-gray-200 px-4 py-3 text-center">STT</th>
               <th className="border-y border-gray-200 px-4 py-3 text-center">Tên khách hàng</th>
               <th className="border-y border-gray-200 px-4 py-3 text-center">Email</th>
               <th className="border-y border-gray-200 px-4 py-3 text-center">Số điện thoại</th>
-              <th className="border-y border-gray-200 px-4 py-3 text-center">Địa chỉ</th>
-              <th className="border-y border-gray-200 px-4 py-3 text-center">Hành động</th>
+              <th className="border-y border-gray-200 px-4 py-3 text-center">Phân quyền</th>
             </tr>
           </thead>
           <tbody>
             {users?.map((user, index) => (
-              <tr key={user.id} className="hover:bg-gray-100 transition-all text-gray-800">
-                <td className="border-y border-gray-200 text-center py-3">{index + 1}</td>
-                <td className="border-y border-gray-200 py-3 px-4 text-center">{user.name}</td>
-                <td className="border-y border-gray-200 py-3 px-4 text-center">{user.email}</td>
-                <td className="border-y border-gray-200 py-3 px-4 text-center">{user.phone}</td>
-                <td className="border-y border-gray-200 py-3 px-4 text-center">
-                  {user.address.full_address}
-                </td>
-                <td className="  border-y border-gray-200 py-3 px-4 text-center">
-                  <button className="bg-[rgb(102,69,69)] text-white border border-[rgb(102,69,69)] rounded px-3 py-1 hover:opacity-90 transition"
-                  onClick={() => handleDelete(user.id)}
-                  >Xóa</button>
+              <tr key={user.id} className="text-gray-800 transition-all hover:bg-gray-100">
+                <td className="border-y border-gray-200 py-3 text-center">{index + 1}</td>
+                <td className="border-y border-gray-200 px-4 py-3 text-center">{user.name}</td>
+                <td className="border-y border-gray-200 px-4 py-3 text-center">{user.email}</td>
+                <td className="border-y border-gray-200 px-4 py-3 text-center">{user.phone}</td>
+                <td className="border-y border-gray-200 px-4 py-3 text-center">
+                  <button
+                    className={`rounded px-3 py-1 text-white hover:opacity-90 ${
+                      user.isAdmin ? 'border-red-600 bg-red-600' : 'border-blue-600 bg-blue-600'
+                    }`}
+                    onClick={() => handleOpenConfirm(user)}
+                  >
+                    {user.isAdmin ? 'Admin' : 'User'}
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
+        <DialogTitle>Xác nhận thay đổi phân quyền</DialogTitle>
+        <DialogContent>
+          <TextField
+            type="password"
+            label="Nhập mật khẩu xác nhận"
+            fullWidth
+            variant="outlined"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmOpen(false)}>Hủy</Button>
+          <Button variant="contained" onClick={handleConfirmChangeRole}>
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
