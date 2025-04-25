@@ -18,6 +18,15 @@ export const getListOrders = async (token,instance) => {
     }
     }
   };
+  export const getOrders = async() => {
+    try {
+        const res = await response.get(`/api/orders/`);
+        return res;
+    } catch (err) {
+        console.error('Lỗi getOrder:', err.response?.data || err.message);
+        throw err;
+    }
+  }
 
   export const deleteOrders = async (token, id, instance) => {
     try{
