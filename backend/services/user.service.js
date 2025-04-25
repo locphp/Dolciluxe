@@ -10,12 +10,8 @@ exports.getAllUsers = async () => {
             email: user.email,
             phone: user.phone || null,
             avatar: user.avatar,
-            address: {
-                street: user.address?.street || null,
-                city: user.address?.city || null,
-                country: user.address?.country || null,
-            },
             isAdmin: user.isAdmin,
+            isActive: user.isActive,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
         }));
@@ -133,4 +129,51 @@ exports.deleteUserPermanently = async (userId) => {
     } catch (error) {
         throw new Error('Error permanently deleting user: ' + error.message);
     }
+};
+
+exports.toggleUserActive = async (userId, isActive) => {
+    const user = await User.findByIdAndUpdate(
+        userId,
+        { isActive, updatedAt: Date.now() },
+        { new: true }
+    ).select('-password');
+
+    if (!user) throw new Error('User not found');
+    return user;
+};
+
+exports.updateUserRoleWithAuth = async ({ adminId, adminPassword, targetUserId, isAdmin }) => {
+    const admin = await User.findById(adminId);
+    if (!admin) {
+        const err = new Error('Admin không tồn tại');
+        err.statusCode = 401;
+        throw err;
+    }
+
+    const isMatch = await admin.comparePassword(adminPassword);
+    if (!isMatch) {
+        const err = new Error('Mật khẩu không chính xác');
+        err.statusCode = 401;
+        throw err;
+    }
+
+    if (adminId.toString() === targetUserId) {
+        const err = new Error('Không thể thay đổi quyền của chính bạn');
+        err.statusCode = 400;
+        throw err;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+        targetUserId,
+        { isAdmin, updatedAt: Date.now() },
+        { new: true }
+    ).select('-password');
+
+    if (!updatedUser) {
+        const err = new Error('Người dùng không tồn tại');
+        err.statusCode = 404;
+        throw err;
+    }
+
+    return updatedUser;
 };
