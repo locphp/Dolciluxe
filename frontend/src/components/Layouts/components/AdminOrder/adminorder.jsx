@@ -1,171 +1,185 @@
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getListOrders,deleteOrders, OrderStatus, DeliveryStatus, PaymentStatus } from '~/api/apiOrder';
-import { loginSuccess } from '~/redux/authSlice';
-import { createInstance } from '~/redux/interceptors';
+import { useSelector } from 'react-redux';
+import { getOrders, updateOrderStatus } from '~/api/apiOrder';
+import { getListUsers, getAllAddress } from '~/api/apiUser';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, Typography } from '@mui/material';
+import { toast } from 'react-toastify';
 
 function AdminOrder() {
-    const [orders, setOrders] = useState([]); 
-    const [loading, setLoading] = useState(true); 
-    const [error, setError] = useState(null); 
-    // const [isPaid, setIsPaid] = useState(null);
-    const dispatch = useDispatch();
-    const user = useSelector(state => state.auth.login.currentUser); 
-    let instance = createInstance(user,dispatch,loginSuccess); 
+  const [orders, setOrders] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [addresses, setAddresses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [statusDialog, setStatusDialog] = useState({ open: false, orderId: null, newStatus: '' });
+  const user = useSelector((state) => state.auth.login.currentUser);
 
-    useEffect(() => {
-        const fetchOrders = async () => {
-          try {
-            // const token = localStorage.getItem('token');
-            const data = await getListOrders(user.access_token,instance);
-            setOrders(data); 
-            setLoading(false); 
-          } catch (err) {
-            setError(err.message || 'Không thể tải danh sách đơn hàng');
-            setLoading(false);
-          }
-        };
-    
-        fetchOrders();
-      }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [orderRes, userRes, addressRes] = await Promise.all([getOrders(), getListUsers(), getAllAddress()]);
 
-      console.log(user);
-      const handleDelete = async (id) => {
-        
-        try { 
-                 
-            await deleteOrders(user.access_token,id,instance);
-            setOrders((prevOrders) => prevOrders.filter((order) => order.id !== id));
-            alert('Xóa thành công');
-        } catch(err) {
-            alert(err.message || 'Xóa đơn hàng không thành công');
-        }
-      };
-
-      const handleOrderStatus = async (id, currentStatus) => {
-        
-        try {
-            const newStatus = currentStatus === "Đã thanh toán" ? "Đang xử lý" : "Đã thanh toán";
-           const updatedOrder = await OrderStatus(user.access_token,id,newStatus,instance);
-           setOrders((prevOrders) =>
-            prevOrders.map((order) =>
-                order.id === id ? { ...order, order_status: newStatus } : order
-            )
+        const updatedOrders = await Promise.all(
+          orderRes.data.map(async (order) => {
+            if (order.paymentMethod === 'VNPAY' && order.paymentStatus === 'paid') {
+              try {
+                const updateRes = await updateOrderStatus(order._id, 'processing');
+                return { ...order, orderStatus: updateRes.data.orderStatus };
+              } catch {
+                return order;
+              }
+            } else if (order.paymentMethod === 'VNPAY' && order.paymentStatus === 'pending') {
+              try {
+                const updateRes = await updateOrderStatus(order._id, 'pending');
+                return { ...order, orderStatus: updateRes.data.orderStatus };
+              } catch {
+                return order;
+              }
+            }
+            return order;
+          }),
         );
-        alert('Cập nhật trạng thái thành công');       
-         } catch (err) {
-            alert (err.message || 'Cập nhật thanh toán không thành công')
-        }
-      };
-      const handleDeliveryStatus = async (id, currentStatus) => {
-        
-        try {
-           const newStatus = currentStatus === "Đã giao hàng" ? "Đang xử lý" : "Đã giao hàng";
-           const updatedDelivery = await DeliveryStatus(user.access_token,id,newStatus,instance);
-           setOrders((prevOrders) =>
-            prevOrders.map((order) =>
-                order.id === id ? { ...order, shipping_status: newStatus } : order
-            )
-        );
-        alert('Cập nhật trạng thái thành công');       
-         } catch (err) {
-            alert (err.message || 'Cập nhật giao hàng không thành công')
-        }
-      };
 
-      const handlePaymentStatus = async (id, currentStatus) => {
-        try {
-           const newStatus = currentStatus === 0  ? 1 : 0;
-           const updatedPayment = await PaymentStatus(user.access_token,id,newStatus,instance);
-           setOrders((prevOrders) =>
-            prevOrders.map((order) =>
-                order.id === id ? { ...order, payment_info: { ...order.payment_info,  is_paid: newStatus }, } : order
-            ) 
-        );
-        alert('Cập nhật trạng thái thành công');       
-         } catch (err) {
-            alert (err.message || 'Cập nhật thanh toán không thành công')
-        }
-      };
-
-
-
-      if (loading) {
-        return <p>Đang tải danh sách đơn hàng...</p>;
+        setOrders(updatedOrders);
+        setUsers(userRes.data);
+        setAddresses(addressRes);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message || 'Không thể tải dữ liệu');
+        setLoading(false);
       }
-    
-      if (error) {
-        return <p>Lỗi: {error}</p>;
-      }
-      console.log(orders)
-    return (
-        <div className="p-4">
-            <h1 className="text-[x-large] font-bold text-[#664545] mb-4">Đơn hàng</h1>
+    };
 
-            <div className="overflow-x-auto text-sm">
-                {/* Bảng chính */}
-                <table className="table-auto border-collapse border border-gray-200 w-full rounded-lg overflow-hidden shadow-sm">
-                    <thead className="bg-gray-50 text-gray-700 text-sm font-semibold">
-                        <tr>
-                            <th className="border-y border-gray-200 px-4 py-3 text-center">STT</th>
-                            <th className="border-y border-gray-200 px-4 py-3 text-center">Thông tin khách hàng</th>
-                            <th className="border-y border-gray-200 px-4 py-3 text-center">Số điện thoại</th>
-                            <th className="border-y border-gray-200 px-4 py-3 text-center">Chi tiết sản phẩm</th>
-                            <th className="border-y border-gray-200 px-4 py-3 text-center">Thông tin thanh toán</th>
-                            <th className="border-y border-gray-200 px-4 py-3 text-center">Số tiền cần trả</th>
-                            <th className="border-y border-gray-200 px-4 py-3 text-center">Trạng thái đơn hàng</th>
-                            <th className="border-y border-gray-200 px-4 py-3 text-center">Trạng thái giao hàng</th>
-                            <th className="border-y border-gray-200 px-4 py-3 text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {orders?.map((order, index) => (
-                        <tr key={order.id} className="hover:bg-gray-100 transition-all text-gray-800">
-                            <td className="border-y border-gray-200 text-center py-3">{index + 1}</td>
-                            <td className="border-y border-gray-200 py-3 px-4 text-center">{order.name}</td>
-                            <td className="border-y border-gray-200 py-3 px-4 text-center">{order.phone}</td>
-                            <td className="border-y border-gray-200 py-3 px-4 text-center">
-                            {order?.order_items?.map((item, i) => (
-                                <div key={i}>
-                                <p>{item.name} - {item.variant} (x{item.buy_quantity})</p>
-                                </div>
-                            ))}
-                            </td>
-                            <td className="border-y border-gray-200 py-3 px-4 text-center">
-                            {order.payment_info.payment_method} - {order.payment_info.is_paid === 1 ? 'Đã thanh toán' : 'Chưa thanh toán'}
-                                <button className='bg-green-500 text-white border border-[rgb(102,69,69)] rounded px-3 py-1 hover:opacity-90 transition'
-                                    onClick={() => handlePaymentStatus(order.id, order.payment_info.is_paid)}
-                                >
-                                Cập nhật
-                                </button>
-                            </td>
-                            <td className="border-y border-gray-200 py-3 px-4 text-center">{order.total_price}</td>
-                            <td className="border-y border-gray-200 py-3 px-4 text-center">{order.order_status === 'Đã thanh toán' ? 'Đã thanh toán' : 'Đang xử lý'} 
-                                <button className="bg-green-500  text-white border border-[rgb(102,69,69)] rounded px-3 py-1 hover:opacity-90 transition"
-                                onClick={() => handleOrderStatus(order.id, order.order_status)}
-                                >
-                                    Cập nhật 
-                                </button>
-                            </td>
-                            <td className="border-y border-gray-200 px-4 text-center py-2">{order.shipping_status === 'Đã giao hàng' ? 'Đã giao hàng':'Đang xử lý' }
-                                <button className='bg-green-500  text-white border border-[rgb(102,69,69)] rounded px-3 py-1 hover:opacity-90 transition'
-                                onClick={() => handleDeliveryStatus(order.id, order.shipping_status)}
-                                >
-                                    Cập nhật
-                                </button>
-                            </td>
-                            <td className=" border-y border-gray-200 px-4 text-center py-2">
-                            <button className="bg-[rgb(102,69,69)] text-white border border-[rgb(102,69,69)] rounded px-3 py-1 hover:opacity-90 transition"
-                            onClick={() => handleDelete(order.id)}
-                            >Xóa</button>
-                            </td>
-                        </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    );
+    fetchData();
+  }, []);
+
+  const getUserInfo = (userId) => users.find((u) => u.id === userId);
+  const getUserDefaultAddress = (userId) =>
+    addresses.find((addr) => addr.user === userId && addr.isDefault) || addresses.find((addr) => addr.user === userId);
+  const handleUpdateStatus = (orderId, newStatus) => {
+    setStatusDialog({ open: true, orderId, newStatus });
+  };
+  const getReceiverFromOrder = (order) => {
+    if (order.address) {
+      return {
+        fullName: order.address.fullName,
+        phone: order.address.phone,
+        detail: order.address.detail,
+        ward: order.address.ward,
+        district: order.address.district,
+        province: order.address.province,
+      };
+    }
+    return getUserDefaultAddress(order.user);
+  };
+
+  const confirmUpdateStatus = async () => {
+    try {
+      const { orderId, newStatus } = statusDialog;
+      const res = await updateOrderStatus(orderId, newStatus);
+      setOrders((prev) => prev.map((o) => (o._id === orderId ? { ...o, orderStatus: res.data.orderStatus } : o)));
+      toast.success(`Đã chuyển trạng thái sang ${newStatus}`, {
+        position: 'bottom-right',
+        autoClose: 3000,
+        icon: '✅',
+      });
+    } catch (err) {
+      toast.error('Cập nhật trạng thái thất bại', {
+        position: 'bottom-right',
+        autoClose: 3000,
+      });
+    } finally {
+      setStatusDialog({ open: false, orderId: null, newStatus: '' });
+    }
+  };
+  const formatAddress = (receiver) =>
+    receiver ? `${receiver.detail}, ${receiver.ward}, ${receiver.district}, ${receiver.province}` : 'N/A';
+
+  if (loading) return <p>Đang tải danh sách đơn hàng...</p>;
+  if (error) return <p>Lỗi: {error}</p>;
+
+  return (
+    <div className="p-4">
+      <h1 className="mb-4 text-[x-large] font-bold text-[#664545]">Quản lý đơn hàng</h1>
+      <div className="overflow-x-auto text-sm">
+        {orders.length === 0 ? (
+          <p className="text-center text-gray-600">Chưa có đơn hàng nào.</p>
+        ) : (
+          <table className="w-full table-auto border-collapse overflow-hidden rounded-lg border border-gray-200 shadow-sm">
+            <thead className="bg-gray-50 text-sm font-semibold text-gray-700">
+              <tr>
+                <th className="border-y border-gray-200 px-4 py-3 text-center">STT</th>
+                <th className="border-y border-gray-200 px-4 py-3 text-center">Thông tin khách hàng</th>
+                <th className="border-y border-gray-200 px-4 py-3 text-center">Chi tiết đơn hàng</th>
+                <th className="border-y border-gray-200 px-4 py-3 text-center">Phương thức thanh toán</th>
+                <th className="border-y border-gray-200 px-4 py-3 text-center">Trạng thái đơn hàng</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map((order, index) => {
+                const userInfo = getUserInfo(order.user);
+                const receiver = getReceiverFromOrder(order);
+                return (
+                  <tr key={order._id} className="text-gray-800 transition-all hover:bg-gray-100">
+                    <td className="border-y border-gray-200 py-3 text-center">{index + 1}</td>
+                    <td className="border-y border-gray-200 px-4 py-3 text-left">
+                      <p className="font-medium">{userInfo?.name || 'N/A'}</p>
+                      <p>{userInfo?.phone || 'N/A'}</p>
+                      <p>{userInfo?.email || 'N/A'}</p>
+                    </td>
+                    <td className="border-y border-gray-200 px-4 py-3 text-left">
+                      {order.items.map((item, i) => (
+                        <p key={i}>
+                          {item.product?.productName} (x{item.quantity})
+                        </p>
+                      ))}
+                      <p className="mt-1 font-semibold">Tổng: {order.totalPrice.toLocaleString()}đ</p>
+                      <p>
+                        Trạng thái thanh toán:{' '}
+                        <span className={order.paymentStatus === 'paid' ? 'text-green-600' : 'text-red-500'}>
+                          {order.paymentStatus === 'paid' ? 'Đã thanh toán' : 'Chưa thanh toán'}
+                        </span>
+                      </p>
+                      <p className="mt-2 font-medium">Người nhận: {receiver?.fullName || 'N/A'}</p>
+                      <p>SĐT: {receiver?.phone || 'N/A'}</p>
+                      <p>Địa chỉ: {formatAddress(receiver)}</p>
+                    </td>
+                    <td className="border-y border-gray-200 px-4 py-3 text-center uppercase">{order.paymentMethod}</td>
+                    <td className="border-y border-gray-200 px-4 py-3 text-center">
+                      <select
+                        value={order.orderStatus}
+                        onChange={(e) => handleUpdateStatus(order._id, e.target.value)}
+                        className="rounded border px-2 py-1 text-sm shadow"
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="shipping">Shipping</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      <Dialog open={statusDialog.open} onClose={() => setStatusDialog({ open: false, orderId: null, newStatus: '' })}>
+        <DialogTitle>Xác nhận thay đổi trạng thái</DialogTitle>
+        <DialogContent>
+          <Typography>Bạn có chắc muốn thay đổi trạng thái đơn hàng thành "{statusDialog.newStatus}"?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setStatusDialog({ open: false, orderId: null, newStatus: '' })}>Hủy</Button>
+          <Button variant="contained" onClick={confirmUpdateStatus}>
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
 }
 
 export default AdminOrder;
