@@ -1,23 +1,6 @@
 import {response} from '~/services/axios'
 
-export const getListOrders = async (token,instance) => {
-    
-    try {
-      const res = await instance.get('/api/protected/orders', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log('Response từ API:', res.data);
-      return res.data; 
-    } catch (err) {
-    //   console.error('Lỗi API:', err.response?.data || err.message);
-    //   throw new Error(err.response?.data?.message || 'Lỗi khi lấy danh sách đơn hàng');
-    if(err.response){
-        console.error('Server error: ', err.response.data, err.response.status);
-        console.error('Request error: ', err.message);
-        throw err;
-    }
-    }
-  };
+
   export const getOrders = async() => {
     try {
         const res = await response.get(`/api/orders/`);
@@ -28,102 +11,43 @@ export const getListOrders = async (token,instance) => {
     }
   }
 
-  export const deleteOrders = async (token, id, instance) => {
-    try{
-        const res = await instance.delete(`/api/protected/order/${id}`, {
-            headers: {Authorization: `Bearer ${token}`},
-        });
-        console.log('Xóa thành công:', res.data);
-        return res.data;
-    } catch (err) {
-        if(err.response){
-            console.error('Server error: ', err.response.data, err.response.status);
-            console.error('Request error: ', err.message);
-            throw err;
-        }
-    }
-  }; 
 
-  export const OrderStatus = async (token, id, newStatus ,instance) => {
+  export const deleteOrders = async (id) => {
     try {
-        const res = await instance.patch(`/api/protected/order/order_status/${id}`, 
-            { order_status: newStatus },
-            {
-                headers: {Authorization: `Bearer ${token}`},
-            }
-           
-        );
-        console.log('Cập nhật trạng thái thành công:', res.data);
-        return res.data;
-    } catch (err){
-        if(err.response){
-            console.error('Server error: ', err.response.data, err.response.status);
-            console.error('Request error: ', err.message);
-            throw err;
-        } 
+        const res = await response.delete(`/api/orders/${id}`);
+        return res;
+    } catch (err) {
+        console.error('Lỗi deleteOrders:', err.response?.data || err.message);
+        throw err;
     }
   };
 
-  export const DeliveryStatus = async (token, id, newStatus ,instance) => {
+  export const updateOrderStatus = async (id, status) => {
     try {
-        const res = await instance.patch(`/api/protected/order/deliverystatus/${id}`, 
-            { shipping_status: newStatus },
-            {
-                headers: {Authorization: `Bearer ${token}`},
-            }
-           
-        );
-        console.log('Cập nhật trạng thái thành công:', res.data);
-        return res.data;
-    } catch (err){
-        if(err.response){
-            console.error('Server error: ', err.response.data, err.response.status);
-            console.error('Request error: ', err.message);
-            throw err;
-        } 
+        const res = await response.patch(`/api/orders/status/${id}`, {status});
+        return res;
+    } catch (err) {
+        console.error('Lỗi updateOrderStatus:', err.response?.data || err.message);
+        throw err;
     }
   };
 
-  export const PaymentStatus = async (token, id, newStatus, instance) => {
+  export const getOrderDetail = async (id) => {
     try {
-        const res = await instance.patch(`/api/protected/order/status/paid/${id}`, 
-            { 
-                payment_info: { 
-                    is_paid: newStatus 
-                } 
-            },
-            {
-                headers: { Authorization: `Bearer ${token}` },
-            }
-        );
-        console.log('Cập nhật trạng thái thành công:', res.data);
-        return res.data;
+        const res = await response.get(`/api/orders/${id}`);
+        return res;
     } catch (err) {
-        if (err.response) {
-            console.error('Server error: ', err.response.data, err.response.status);
-            console.error('Request error: ', err.message);
-            throw err;
-        }
-        console.error('Unexpected error: ', err.message);
+        console.error('Lỗi getOrderDetail:',err.response?.data || err.message);
         throw err;
     }
-};
+  };
 
-
-export const getListOrdersByUserId = async (token,instance, id) => { 
+  export const createOrder = async () => {
     try {
-      const res = await instance.get(`/api/protected/order/cus?customer_id=${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log('Response từ API:', res.data);
-      return res.data; 
+        const res = await response.post(`/api/orders/`);
+        return res;
     } catch (err) {
-    //   console.error('Lỗi API:', err.response?.data || err.message);
-    //   throw new Error(err.response?.data?.message || 'Lỗi khi lấy danh sách đơn hàng');
-    if(err.response){
-        console.error('Server error: ', err.response.data, err.response.status);
-        console.error('Request error: ', err.message);
-        throw err;
-    }
+        console.error('Lỗi createOrder:', err.response?.data || err.message);
+        throw err;    
     }
   };

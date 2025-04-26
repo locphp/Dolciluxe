@@ -1,6 +1,6 @@
 import { Table } from 'antd';
 import { useEffect, useState } from 'react';
-import { getListOrdersByUserId } from '~/api/apiOrder';
+import { getOrders } from '~/api/apiOrder';
 
 const AccountOrders = ({ currentUser, instance }) => {
   const [orders, setOrders] = useState([]);
@@ -8,7 +8,7 @@ const AccountOrders = ({ currentUser, instance }) => {
   useEffect(() => {
     const fetchOrderList = async () => {
       try {
-        const res = await getListOrdersByUserId(currentUser?.access_token, instance, currentUser.user.id);
+        const res = await getOrders(currentUser?.access_token, instance, currentUser.user.id);
 
         const data = res || [];
 
