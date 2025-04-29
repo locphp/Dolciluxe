@@ -158,7 +158,7 @@ export default function Address() {
                   </p>
                   {!addr.isDefault && (
                     <Button size="small" variant="outlined" onClick={() => handleSetDefault(addr._id)} className="mt-2">
-                      Địa chỉ mặc định
+                      Đặt làm địa chỉ mặc định
                     </Button>
                   )}
                 </div>
