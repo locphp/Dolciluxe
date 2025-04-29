@@ -50,11 +50,11 @@ response.interceptors.response.use(
         const refresh_token = localStorage.getItem('refresh_token');
 
         const res = await axios.post(`${BE_BASE_URL}/api/auth/refresh-token`, {
-          refresh_token, // tên biến thống nhất
+          refreshToken: refresh_token, // tên biến thống nhất
         });
 
-        if (res.data?.code === 200 && res.data.access_token) {
-          const newAccess = res.data.access_token;
+        if (res.data.code === 200 && res.data.accessToken) {
+          const newAccess = res.data.accessToken;
 
           // Lưu access_token mới
           localStorage.setItem('access_token', newAccess);
