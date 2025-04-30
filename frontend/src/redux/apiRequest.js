@@ -16,7 +16,7 @@ export const loginUser = async (dispatch, user, navigate, redirectPath = '/') =>
   dispatch(loginStart());
   try {
     // const res = await response.post('/api/public/login', user);
-    
+
     const res = await response.post('/api/auth/login', user);
     const { accessToken, refreshToken } = res;
     localStorage.setItem('access_token', accessToken);
@@ -50,8 +50,11 @@ export const loginUser = async (dispatch, user, navigate, redirectPath = '/') =>
 export const logOutUser = async (dispatch, token, navigate, redirectPath = '/auth?mode=signin') => {
   dispatch(logOutStart());
   try {
-    
+
     await response.post('/api/auth/logout', { refresh_token: token });
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('login_type');
     localStorage.setItem('loggedOut', 'true');
     sessionStorage.removeItem('googleSynced');
     dispatch(logOutSuccess());
@@ -123,10 +126,11 @@ export const registerUser = async (dispatch, user, navigator) => {
 //   }
 // };
 
-export const refreshToken = async (token) => {
+export const refreshToken = async (refreshToken) => {
   try {
-    const res = await response.post('/api/auth/refresh-token', { refresh_token: token });
-    return res.data;
+    const res = await response.post('/api/auth/refresh-token', { refreshToken: refreshToken });
+    console.log('Refresh token API response:', res);
+    return res;
   } catch (err) {
     console.log(err);
     return null;

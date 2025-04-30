@@ -3,7 +3,7 @@ const authService = require('../services/auth.service');
 exports.register = async (req, res) => {
     try {
         const { name, email, password, phone, address } = req.body;
-        const response = await authService.registerUser(name, email, password, phone, address);
+        const response = await authService.registerUser(name, email, password, phone);
         res.status(response.code).json({
             code: response.code,
             message: response.message,
@@ -26,7 +26,7 @@ exports.login = async (req, res) => {
 
 exports.logout = async (req, res) => {
     try {
-        await authService.logoutUser(req, res);
+        const response = await authService.logoutUser(req, res);
         res.status(response.code).json(response);
     } catch (error) {
         res.status(500).json({ code: 500, message: "Server error", error: error.message });

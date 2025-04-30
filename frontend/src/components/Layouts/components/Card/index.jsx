@@ -1,20 +1,16 @@
 import { Star } from '~/assets/icons';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart } from '~/redux/cartSlice';
 import { AddToCartContext } from '~/components/Layouts/DefaultLayout';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addCartItem } from '~/api/apiCart';
-import { createInstance } from '~/redux/interceptors';
-import { loginSuccess } from '~/redux/authSlice';
+import { addCartItem, fetchCart } from '~/redux/cartSlice'; // Sử dụng action từ cartSlice
 
 function Card({ image_link, product_name, description, price, index, id, categoryName, cake }) {
   const { triggerSuccessPopup } = useContext(AddToCartContext);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.login.currentUser);
-  const instance = createInstance(user, dispatch, loginSuccess);
 
   const handleAddToCart = async (cake) => {
     if (!user) {
@@ -22,20 +18,20 @@ function Card({ image_link, product_name, description, price, index, id, categor
       return;
     }
 
-    const newItem = {
-      product_id: cake._id,
-      type_id: cake.productType,
-      name: cake.productName,
-      price: cake.price,
-      image_link: cake.imageLink,
-      buy_quantity: 1,
-    };
-
-    dispatch(addToCart(newItem));
-    await addCartItem(user.access_token, instance, newItem);
-    triggerSuccessPopup();
+    try {
+      await dispatch(
+        addCartItem({
+          productId: cake._id,
+          quantity: 1
+        })
+      ).unwrap();
+      await dispatch(fetchCart()).unwrap();
+      triggerSuccessPopup();
+    } catch (error) {
+      console.error('Lỗi khi thêm vào giỏ hàng:', error);
+      // Có thể thêm thông báo lỗi ở đây nếu cần
+    }
   };
-
   return (
     <div key={index} className="img-scale m-5 h-[480px] w-[280px]">
       <Link to={`/detailed/${id}`} state={{ categoryName }}>

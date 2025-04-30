@@ -1,42 +1,27 @@
-import {response} from '~/services/axios'
-export const getCart = async (token, instance) => {
+import { response } from '~/services/axios'
+
+export const getCart = async (instance) => {
     try {
-        const res = await instance.get('/api/protected/cart', {
-            headers: {Authorization: `Bearer ${token}`}
-        })
-        return res.data
+        const res = await instance.get('/api/cart');
+        return res; // instance đã tự data hóa rồi, khỏi .data
     }
-    catch(err) {
-        if (err.response) 
-            console.error('Server error: ', err.response.message, err.response.status)
+    catch (err) {
+        if (err.response)
+            console.error('Server error: ', err.response.message, err.response.status);
         else
-            console.error('Request error: ', err.message)
+            console.error('Request error: ', err.message);
     }
 }
 
-export const updateCartItem = async (token, instance, item) => {
+export const updateCartItem = async (instance, item) => {
     try {
-        const res = await instance.put(`/api/protected/cart/update_cart`, item, {
-            headers: {Authorization: `Bearer ${token}`}
+        const res = await instance.put(`/api/cart`, item, {
+
         })
         console.log('Update OK!')
-        return res.data
+        return res
     }
-    catch(err) {
-        if (err.response)
-            console.error('Server error: ', err.response.message, err.response.status)
-        else
-            console.error('Request error: ', err.message)    
-    }
-}
-
-export const removeCartItem = async (token, instance, id, size ) => {
-    try {
-        await instance.delete(`/api/protected/cart/item?product_id=${id}&variant=${size}`, {
-            headers: {Authorization: `Bearer ${token}`}
-        })
-    }
-    catch(err) {
+    catch (err) {
         if (err.response)
             console.error('Server error: ', err.response.message, err.response.status)
         else
@@ -44,16 +29,42 @@ export const removeCartItem = async (token, instance, id, size ) => {
     }
 }
 
-export const addCartItem = async (token, instance, item) => {
+export const removeCartItem = async (instance, id) => {
     try {
-        const res = await instance.post('/api/protected/cart/additem', item, {
-            headers: {Authorization: `Bearer ${token}`}
+        await instance.delete(`/api/cart/${id}`, {
         })
-        console.log(res.data)
-        return res.data
     }
-    catch(err) {
-        if (err.response){
+    catch (err) {
+        if (err.response)
+            console.error('Server error: ', err.response.message, err.response.status)
+        else
+            console.error('Request error: ', err.message)
+    }
+}
+export const removeManyCartItem = async (instance, productIds) => {
+    debugger
+    try {
+        await instance.delete(`/api/cart/delete-many`, {
+            data: { productIds: productIds }
+        })
+    }
+    catch (err) {
+        if (err.response)
+            console.error('Server error: ', err.response.message, err.response.status)
+        else
+            console.error('Request error: ', err.message)
+    }
+}
+
+export const addCartItem = async (instance, item) => {
+    try {
+        const res = await instance.post('/api/cart', item, {
+        })
+        console.log(res)
+        return res
+    }
+    catch (err) {
+        if (err.response) {
             console.log(err)
             console.log(err.response)
             console.error('Server error: ', err.response.message, err.response.status)
@@ -66,11 +77,11 @@ export const addCartItem = async (token, instance, item) => {
 export const createOrder = async (token, instance, invoice) => {
     try {
         const res = await instance.post('/api/protected/order', invoice, {
-            headers: {Authorization: `Bearer ${token}`}
+            headers: { Authorization: `Bearer ${token}` }
         })
         return res.data
     }
-    catch(err) {
+    catch (err) {
         if (err.response)
             console.error('Server error: ', err.response.message, err.response.status)
         else

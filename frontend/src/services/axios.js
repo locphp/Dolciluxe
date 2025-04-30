@@ -23,9 +23,6 @@ response.interceptors.request.use((config) => {
 response.interceptors.response.use(
   (res) => res.data,
   async (err) => {
-    // console.log('Lỗi khi gọi API:', err?.response?.status);
-    // console.log('Token hiện tại:', localStorage.getItem('access_token'));
-    // console.log('Refresh token:', localStorage.getItem('refresh_token'));
     const originalConfig = err.config;
 
     // Nếu lỗi 401 (Unauthorized) và chưa retry
@@ -50,11 +47,11 @@ response.interceptors.response.use(
         const refresh_token = localStorage.getItem('refresh_token');
 
         const res = await axios.post(`${BE_BASE_URL}/api/auth/refresh-token`, {
-          refresh_token, // tên biến thống nhất
+          refreshToken: refresh_token, // tên biến thống nhất
         });
 
-        if (res.data?.code === 200 && res.data.access_token) {
-          const newAccess = res.data.access_token;
+        if (res.data.code === 200 && res.data.accessToken) {
+          const newAccess = res.data.accessToken;
 
           // Lưu access_token mới
           localStorage.setItem('access_token', newAccess);

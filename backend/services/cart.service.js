@@ -98,7 +98,7 @@ const deleteManyCartItem = async (userId, productIds) => {
 
     return {
         code: 200,
-        message: 'Delete items successfully',
+        message: 'Xóa thành công',
         data: updatedCart
     };
 };
