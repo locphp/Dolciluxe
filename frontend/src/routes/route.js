@@ -16,7 +16,8 @@ import DashBoardLayout from "~/components/Layouts/DashboardLayout";
 import AdminProduct from "~/pages/AdminProduct/product";
 import AdminOrder from "~/pages/AdminOrder/order";
 import AdminCustomer from "~/pages/AdminCustomer/customer";
-import Payment from "~/pages/Payment";
+import Payment from "~/components/Layouts/components/Payment";
+import ThankYou from "~/components/Layouts/components/Payment/COD";
 import EmailRecovery from "~/components/Layouts/components/Forgot Password/EmailRecovery";
 import EmailSent from "~/components/Layouts/components/Forgot Password/EmailSent";
 import NewPassword from "~/components/Layouts/components/Forgot Password/NewPassword";
@@ -35,6 +36,7 @@ const publicRoute = [
   { path: "/email/recovery", component: EmailRecovery },
   { path: "/email/message", component: EmailSent },
   { path: "/reset-password", component: NewPassword },
+  { path: "/thankyou", component: ThankYou },
 ]
 
 const privateRoute = [

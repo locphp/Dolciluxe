@@ -27,7 +27,7 @@ const useCake = (params) => {
   };
 
   const fetchCakes = async (typeId) => {
-    if (!typeId) return; // ✅ tránh gọi API rỗng
+    if (!typeId) return; // Không gọi nếu typeId rỗng
     try {
       const result = await getCake(typeId);
       setCakes(result?.data || []);
