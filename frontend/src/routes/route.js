@@ -16,10 +16,12 @@ import DashBoardLayout from "~/components/Layouts/DashboardLayout";
 import AdminProduct from "~/pages/AdminProduct/product";
 import AdminOrder from "~/pages/AdminOrder/order";
 import AdminCustomer from "~/pages/AdminCustomer/customer";
-import Payment from "~/pages/Payment";
+import Payment from "~/pages/Payment/PaymentSucess";
 import EmailRecovery from "~/components/Layouts/components/Forgot Password/EmailRecovery";
 import EmailSent from "~/components/Layouts/components/Forgot Password/EmailSent";
 import NewPassword from "~/components/Layouts/components/Forgot Password/NewPassword";
+import PaymentReturn from "~/components/Layouts/components/Payment/PaymentReturn";
+import PaymentSuccess from "~/components/Layouts/components/Payment/PaymentSucess";
 const publicRoute = [
   { path: "/", component: Home },
   { path: "/generator", component: GenImage },
@@ -30,11 +32,14 @@ const publicRoute = [
   { path: "/policy", component: Policy },
   { path: "/detailed/:id", component: DetailedCake },
   { path: "/condition", component: Condition },
-  { path: "/admin/login", component: AdminLogin, layout: null },
+  // { path: "/admin/login", component: AdminLogin, layout: null },
   { path: "/payment", component: Payment },
   { path: "/email/recovery", component: EmailRecovery },
   { path: "/email/message", component: EmailSent },
   { path: "/reset-password", component: NewPassword },
+  { path: "/payment-return", component: PaymentReturn },
+  { path: "/payment-success", component: PaymentSuccess },
+
 ]
 
 const privateRoute = [

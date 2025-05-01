@@ -11,13 +11,26 @@ const createPaymentUrl = async (req, res) => {
         paymentUrl
     });
 };
-
+const Order = require('../models/order.model');
 const vnpayReturn = async (req, res) => {
     try {
         const result = await paymentService.handleReturn(req.query);
 
         if (result.success) {
-            await sendOrderConfirmationEmail(result.orderId, result.transactionId);
+            await Order.findByIdAndUpdate(result.orderId, {
+                paymentStatus: 'paid',
+                paymentMethod: 'VNPAY',
+                orderStatus: 'processing',
+                paymentResult: {
+                  vnp_TransactionNo: result.transactionId,
+                  vnp_BankCode: result.bankCode,
+                  vnp_PayDate: result.payDate,
+                  vnp_ResponseCode: '00',
+                  vnp_Amount: (result.amount * 100).toString()
+                },
+                updatedAt: Date.now()
+              });
+            // await sendOrderConfirmationEmail(result.orderId, result.transactionId);
             return res.redirect(`${process.env.CLIENT_URL}/payment-success?orderId=${result.orderId}`);
         } else {
             return res.redirect(`${process.env.CLIENT_URL}/payment-fail`);
