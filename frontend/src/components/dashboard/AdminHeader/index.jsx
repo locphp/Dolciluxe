@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { CakewaiAdmin } from '~/assets/icons';
 import AdminAvatar from '~/assets/react.svg';
 import { logOutUser } from '~/redux/apiRequest';
-import { setCart } from '~/redux/cartSlice';
+import { resetCart } from '~/redux/cartSlice';
 import { persistor } from '~/redux/store';
 
 function AdminHeader() {
@@ -20,7 +20,7 @@ function AdminHeader() {
       localStorage.removeItem('refreshToken');
     }
     localStorage.removeItem('currentKey');
-    dispatch(setCart([]));
+    dispatch(resetCart([]));
     persistor.purge()
   };
   const items = [

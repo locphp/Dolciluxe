@@ -23,9 +23,6 @@ response.interceptors.request.use((config) => {
 response.interceptors.response.use(
   (res) => res.data,
   async (err) => {
-    // console.log('Lỗi khi gọi API:', err?.response?.status);
-    // console.log('Token hiện tại:', localStorage.getItem('access_token'));
-    // console.log('Refresh token:', localStorage.getItem('refresh_token'));
     const originalConfig = err.config;
 
     // Nếu lỗi 401 (Unauthorized) và chưa retry

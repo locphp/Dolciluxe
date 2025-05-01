@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
+const Cart = require("../models/cart.model");
 const sendMail = require('../utils/sendMail');
 
 // Generate Access Token
@@ -44,6 +45,11 @@ exports.registerUser = async (name, email, password, phone, address) => {
             address,
             avatar,
         });
+        await Cart.create({
+            user: user._id,
+            items: [],
+        });
+
 
         return { code: 201, message: "User registered successfully!", user: { avatar: user.avatar } };
     } catch (error) {
@@ -119,7 +125,7 @@ exports.logoutUser = async (req, res) => {
             secure: false,
         });
 
-        return res.status(200).json({ code: 200, message: 'Logout successful' });
+        return { code: 200, message: 'Logout successful' };
     } catch (error) {
         console.error('Logout service error:', error);
         return res.status(500).json({ code: 500, message: 'Logout failed', error: error.message });
