@@ -5,18 +5,20 @@ import { useCart } from './hooks';
 import CartTable from './CartTable';
 import CartActions from './CartActions';
 import CartModal from './CartModal';
+import { useNavigate } from 'react-router-dom';
 
 const { Text } = Typography;
 
 const Cart = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedItemIds, setSelectedItemIds] = useState([]);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState('');
 
   const user = useSelector((state) => state.auth.login.currentUser);
   const { cartItems, removeItem, removeMultipleItems, updateItemQuantity } = useCart(user);
-
+  const navigate = useNavigate();
   const renderEmptyCart = () => (
     <Empty
       image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -36,7 +38,18 @@ const Cart = () => {
 
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
+
+    // Tính toán selectedItemIds tương ứng
+    const newSelectedItemIds = cartItems
+      .filter(item => newSelectedRowKeys.includes(item.product._id))
+      .map(item => item._id);
+
+    setSelectedItemIds(newSelectedItemIds);
+    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
+    console.log('selectedItemIds changed: ', newSelectedItemIds);
   };
+
+
 
   const showModal = () => {
     setOpen(true);
@@ -49,6 +62,7 @@ const Cart = () => {
     try {
       await removeMultipleItems(selectedRowKeys);
       setSelectedRowKeys([]);
+      setSelectedItemIds([]);
       message.success('Xóa thành công');
     } catch (err) {
       console.error(err);
@@ -66,6 +80,7 @@ const Cart = () => {
   const handleQuantityChange = async (productId, quantity) => {
     try {
       await updateItemQuantity(productId, quantity);
+      message.success('Cập nhật thành công');
     } catch (error) {
       message.error('Cập nhật thất bại');
     }
@@ -81,7 +96,36 @@ const Cart = () => {
   };
 
   const handleCheckout = () => {
-    message.info('Tính năng thanh toán đang được phát triển');
+    if (cartItems.length === 0) {
+      message.error('Giỏ hàng trống');
+      return;
+    }
+    // Tạo unique state ID (để tránh cache)
+    const stateId = Date.now().toString(36) + Math.random().toString(36).substring(2);
+
+    // Lưu vào localStorage với key có prefix
+    localStorage.setItem(`checkoutState_${stateId}`, JSON.stringify({
+      cartItems,
+      selectedRowKeys,
+      selectedItemIds
+    }));
+
+
+    navigate(`/checkout?state=${stateId}`, {
+
+      state: {
+        cartItems: cartItems, // Truyền toàn bộ giỏ hàng
+        selectedItems: selectedItemIds.length > 0
+          ? cartItems.filter(item => selectedItemIds.includes(item._id))
+          : cartItems, // Nếu không chọn thì truyền tất cả
+        totalAmount: selectedItemIds.length > 0
+          ? selectedItemIds.reduce((sum, itemId) => {
+            const item = cartItems.find(cartItem => cartItem._id === itemId);
+            return sum + (item ? item.product.price * item.quantity : 0);
+          }, 0)
+          : cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
+      }
+    });
   };
 
   const rowSelection = {
@@ -98,6 +142,7 @@ const Cart = () => {
 
   const dataSource = cartItems.map((item) => ({
     key: item.product._id,
+    itemId: item._id,
     product: {
       name: item.product.productName,
       image: item.product.imageLink,

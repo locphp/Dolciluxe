@@ -74,11 +74,9 @@ export const addCartItem = async (instance, item) => {
     }
 }
 
-export const createOrder = async (token, instance, invoice) => {
+export const createOrder = async (instance, invoice) => {
     try {
-        const res = await instance.post('/api/protected/order', invoice, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
+        const res = await instance.post('/api/order', invoice, {})
         return res.data
     }
     catch (err) {
