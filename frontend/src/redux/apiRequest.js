@@ -129,7 +129,6 @@ export const registerUser = async (dispatch, user, navigator) => {
 export const refreshToken = async (refreshToken) => {
   try {
     const res = await response.post('/api/auth/refresh-token', { refreshToken: refreshToken });
-    console.log('Refresh token API response:', res);
     return res;
   } catch (err) {
     console.log(err);

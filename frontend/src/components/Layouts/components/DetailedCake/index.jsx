@@ -74,7 +74,7 @@ function DetailedCake() {
       return;
     }
 
-    navigate('/payment', {
+    navigate('/checkout', {
       state: {
         newItem: {
           product_id: cake._id,
