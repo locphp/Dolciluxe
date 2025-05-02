@@ -1,7 +1,11 @@
 import tessaCake from '~/assets/images/CakeBestSeller/tessacake.png';
 import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs';
-import { useEffect, useState } from 'react';
-import { getBlogs } from '~/api/apiBlog';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import newsfeed7 from '~/assets/images/newsfeed7.png';
+import newsfeed10 from '~/assets/images/newsfeed10.png';
+import newsfeed8 from '~/assets/images/newsfeed8.png';
 
 function Blog() {
   const handleDate = (field) => {
@@ -13,29 +17,52 @@ function Blog() {
     });
     return formattedDate;
   };
-  const [blogs, setBlogs] = useState([]);
-  useEffect(() => {
-    const fetchBlogApi = async () => {
-      try {
-        const res = await getBlogs();
-        setBlogs(res);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchBlogApi();
-  }, []);
+
+  // Danh sách newsfeed đã có, chỉ cần lấy 3 bài đầu tiên
+  const newsfeed = [
+    {
+      id: 'news8',
+      author: 'Cakewai',
+      date: '2025-02-01',
+      title: 'Cakewai - Tưng Bừng Khai Trương Chi Nhánh...',
+      desc: 'Cakewai xin chân thành cảm ơn sự quan tâm và ủng hộ từ quý khách hàng...',
+      image: newsfeed7,
+    },
+    {
+      id: 'news7',
+      title: 'Valentine Ngọt Ngào - Giảm Giá 50% Mừng Lễ Tình Nh...',
+      desc: 'Ngày 14/02 - ngày của tình nhân, hãy dành tặng cho người thương...',
+      date: '2025-02-01',
+      author: 'Gia Mẫn',
+      image: newsfeed10,
+    },
+    {
+      id: 'news1',
+      title: 'Cakewai Thông Báo Lịch Nghỉ Tết Nguyên Đán...',
+      desc: 'Cakewai: Thông Báo Lịch Nghỉ Tết Nguyên Đán 2025...',
+      date: '2025-01-05',
+      author: 'Cakewai',
+      image: newsfeed8,
+    },
+  ];
+
   return (
     <div className="Hot-event pb-[20rem] pt-4">
       <h1 className="text-center text-3xl font-bold text-primary lg:text-5xl">Sự kiện nổi bật</h1>
       <div className="Our-product lg:grid-custom-3 md:grid-custom-2 grid-custom-1 relative grid w-full justify-center gap-16 lg:gap-4">
-        {blogs?.map((blog, index) => (
+        {newsfeed.slice(0, 3).map((blog, index) => (
           <div className="img-scale my-10 h-[400px] w-[340px]" key={index}>
-            <a href="#">
-              <img src={blog.image_link} alt="" width="100%" height="100%" className="h-auto w-full rounded-t-xl" />
-            </a>
+            <Link to={`/news?mode=${blog.id}`}>
+              <img
+                src={blog.image}
+                alt={blog.title}
+                width="100%"
+                height="100%"
+                className="h-auto w-full rounded-t-xl"
+              />
+            </Link>
             <div className="rounded-b-xl bg-slate-100">
-              <div className="mx-6 py-5">
+              <div className="mx-6 flex h-[200px] flex-col justify-between py-5">
                 <div className="flex items-center">
                   <div className="flex gap-1">
                     <svg
@@ -51,20 +78,22 @@ function Blog() {
                     <span className="text-sm font-medium">{blog.author}</span>
                   </div>
                   <hr className="mx-4 w-[24px] border border-gray-400" />
-                  <p>{handleDate(blog.created_at)}</p>
+                  <p>{handleDate(blog.date)}</p>
                 </div>
-                <h3 className="line-clamp-2 text-xl font-semibold leading-6">{blog.title}</h3>
-                <p className="line-clamp-3 text-lg font-normal leading-6">{blog.short_description}</p>
+                <Link className="line-clamp-2 text-xl font-semibold leading-6" to={`/news?mode=${blog.id}`}>
+                  {blog.title}
+                </Link>
+                <p className="line-clamp-3 text-lg font-normal leading-6">{blog.desc}</p>
               </div>
             </div>
           </div>
         ))}
 
         <div className="absolute left-5 top-[50%] hidden -translate-x-0 translate-y-[50%] cursor-pointer rounded-full bg-black/20 p-2 text-2xl text-white">
-          <BsChevronCompactLeft size={30} onClick={() => prevSlide()} />
+          <BsChevronCompactLeft size={30} />
         </div>
         <div className="absolute right-5 top-[50%] hidden -translate-x-0 translate-y-[50%] cursor-pointer rounded-full bg-black/20 p-2 text-2xl text-white">
-          <BsChevronCompactRight size={30} onClick={() => nextSlide()} />
+          <BsChevronCompactRight size={30} />
         </div>
       </div>
     </div>

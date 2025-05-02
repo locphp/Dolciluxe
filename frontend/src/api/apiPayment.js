@@ -9,3 +9,15 @@ export const getPaymentReturn = async (queryString) => {
     throw err;
   }
 };
+
+
+export const createPaymentUrl = async (orderId) => {
+  try {
+    const res = await response.post('/api/payment/create-payment-url', { orderId });
+    console.log(res);
+    return res;
+  } catch (err) {
+    console.error('Lỗi createPaymentUrl:', err.response?.data || err.message);
+    throw err;
+  }
+};

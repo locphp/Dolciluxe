@@ -8,20 +8,20 @@ import { resetCart } from '~/redux/cartSlice';
 import { persistor } from '~/redux/store';
 
 function AdminHeader() {
-  const user = useSelector(state => state.auth.login.currentUser)
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const user = useSelector((state) => state.auth.login.currentUser);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleLogout = () => {
-    if (user?.refresh_token) logOutUser(dispatch, user?.refresh_token, navigate, '/admin/login');
+    if (user?.refresh_token) logOutUser(dispatch, user?.refresh_token, navigate, '/auth');
     else {
       const refresh_token = localStorage.getItem('refreshToken');
-      logOutUser(dispatch, refresh_token, navigate);
+      logOutUser(dispatch, refresh_token, navigate, '/auth');
       localStorage.removeItem('authToken');
       localStorage.removeItem('refreshToken');
     }
     localStorage.removeItem('currentKey');
     dispatch(resetCart([]));
-    persistor.purge()
+    persistor.purge();
   };
   const items = [
     {
@@ -34,8 +34,7 @@ function AdminHeader() {
     <div className="relative flex h-16 w-full items-center justify-between bg-[#f3d1dc]">
       {/* e3dcdc */}
       <div className="flex h-full w-60 items-center justify-center">
-        <CakewaiAdmin
-          className="mt-2" />
+        <CakewaiAdmin className="mt-2" />
       </div>
       <div className="flex h-full w-40 items-center justify-between p-3">
         Administrator

@@ -44,10 +44,15 @@ function AdminCustomer() {
     fetchUsers();
   }, []);
 
-  const handleToggleActive = async (user) => {
+  const handleToggleActive = async (userId, newActiveState) => {
     try {
-      const res = await toggleUserActive(user.id, !user.isActive);
-      setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, isActive: res.data.isActive } : u)));
+      const res = await toggleUserActive(userId, newActiveState);
+      setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, isActive: res.data.isActive } : u)));
+      toast.success(`Đã cập nhật trạng thái`, {
+        position: 'bottom-right',
+        autoClose: 3000,
+        icon: '✅',
+      });
     } catch (err) {
       alert('Không thể cập nhật trạng thái hoạt động');
     }
@@ -115,7 +120,7 @@ function AdminCustomer() {
                     {user.isAdmin ? 'Admin' : 'User'}
                   </span>
                 </td>
-                <td className="border-y border-gray-200 px-4 py-3 text-center">
+                {/* <td className="border-y border-gray-200 px-4 py-3 text-center">
                   <span
                     onClick={() => handleToggleActive(user)}
                     className={`cursor-pointer rounded px-3 py-1 text-sm font-medium text-white transition ${
@@ -124,6 +129,20 @@ function AdminCustomer() {
                   >
                     {user.isActive ? '✅ Đang hoạt động' : '⚠️ Vô hiệu hóa'}
                   </span>
+                </td> */}
+                <td className="border-y border-gray-200 px-4 py-3 text-center">
+                  <select
+                    value={user.isActive ? 'true' : 'false'}
+                    onChange={(e) => handleToggleActive(user.id, e.target.value === 'true')}
+                    className="cursor-pointer rounded px-3 py-1 text-sm font-medium text-black transition"
+                  >
+                    <option value="true" className="font-medium text-green-600">
+                      ✅ Đang hoạt động
+                    </option>
+                    <option value="false" className="font-medium text-red-500">
+                      ⚠️ Vô hiệu hóa
+                    </option>
+                  </select>
                 </td>
               </tr>
             ))}
@@ -132,7 +151,7 @@ function AdminCustomer() {
       </div>
 
       <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
-        <DialogTitle>Xác nhận thay đổi phân quyền</DialogTitle>
+        <DialogTitle>Xác nhận thay đổi phân quyền thành {selectedUser?.isAdmin ? 'User' : 'Admin'}</DialogTitle>
         <DialogContent>
           <div className="relative">
             <TextField

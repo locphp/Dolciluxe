@@ -50,10 +50,10 @@ function PaymentSuccess() {
         }
         extra={[
           <Button key="home" type="primary" onClick={() => navigate('/')}>
-            Về trang chủ
+            Quay lại trang chủ{' '}
           </Button>,
           <Button key="orders" onClick={() => navigate('/account/orders')}>
-            Xem đơn hàng
+            Xem đơn hàng của tôi
           </Button>,
         ]}
       />

@@ -51,7 +51,7 @@ export const GoogleCallBack = () => {
         navigate('/'); // điều hướng đến hồ sơ
       } catch (err) {
         // dispatch(logOutSuccess());
-        console.error('Google login failed', err);
+        // console.error('Google login failed', err);
         navigate('/');
       }
     };
