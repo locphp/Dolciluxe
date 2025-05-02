@@ -1,160 +1,218 @@
 import { useEffect, useState } from 'react';
-import { MenuItem, Select, TextField } from '@mui/material';
+import { Form, Select, Input } from 'antd';
 import addressData from './address.json';
 
-const AddressSelector = ({ defaultAddress = {}, onChange }) => {
-  const [selectedProvince, setSelectedProvince] = useState('');
-  const [selectedDistrict, setSelectedDistrict] = useState('');
-  const [selectedWard, setSelectedWard] = useState('');
-  const [wardPathWithType, setWardPathWithType] = useState('');
-  const [homeCode, setHomeCode] = useState('');
+const AddressSelector = ({ form, defaultAddress = {} }) => {
+  const [districts, setDistricts] = useState([]);
+  const [wards, setWards] = useState([]);
+  const [fullAddress, setFullAddress] = useState('');
 
+  // Lấy danh sách tỉnh/thành phố
+  const provinces = Object.values(addressData).map((data) => ({
+    value: data.name_with_type, // Sử dụng name_with_type thay vì name
+    label: data.name_with_type,
+  }));
+
+  // Khởi tạo giá trị mặc định
   useEffect(() => {
     if (defaultAddress && Object.keys(defaultAddress).length > 0) {
-      const provinceEntry = Object.entries(addressData).find(([, val]) => val.name === defaultAddress.province);
+      const provinceEntry = Object.values(addressData).find(
+        (val) => val.name_with_type === defaultAddress.province
+      );
+
       if (provinceEntry) {
-        const [pCode, pData] = provinceEntry;
-        const districtEntry = Object.entries(pData['quan-huyen']).find(([, d]) => d.name === defaultAddress.district);
+        const districtList = Object.values(provinceEntry['quan-huyen']).map((data) => ({
+          value: data.name_with_type,
+          label: data.name_with_type,
+        }));
+        setDistricts(districtList);
+
+        const districtEntry = Object.values(provinceEntry['quan-huyen']).find(
+          (d) => d.name_with_type === defaultAddress.district
+        );
+
         if (districtEntry) {
-          const [dCode, dData] = districtEntry;
-          const wardEntry = Object.entries(dData['xa-phuong']).find(([, w]) => w.name === defaultAddress.ward);
-          if (wardEntry) {
-            const [wCode, wData] = wardEntry;
-            setSelectedProvince(pCode);
-            setSelectedDistrict(dCode);
-            setSelectedWard(wCode);
-            setHomeCode(defaultAddress.detail || '');
-            setWardPathWithType(wData.path_with_type);
-          } else {
-            setSelectedProvince(pCode);
-            setSelectedDistrict(dCode);
-          }
-        } else {
-          setSelectedProvince(pCode);
+          const wardList = Object.values(districtEntry['xa-phuong']).map((data) => ({
+            value: data.name_with_type,
+            label: data.name_with_type,
+          }));
+          setWards(wardList);
+
+          // Set giá trị cho form
+          form.setFieldsValue({
+            province: defaultAddress.province,
+            district: defaultAddress.district,
+            ward: defaultAddress.ward,
+            detail: defaultAddress.detail || '',
+          });
+          updateFullAddress(defaultAddress);
         }
       }
     }
-  }, [defaultAddress]);
+  }, [defaultAddress, form]);
 
-  useEffect(() => {
-    const fullAddress =
-      selectedProvince &&
-      selectedDistrict &&
-      selectedWard &&
-      homeCode &&
-      `${homeCode}, ${wardPathWithType}, ${addressData[selectedProvince]['quan-huyen'][selectedDistrict].name}, ${addressData[selectedProvince].name}`;
+  // Cập nhật địa chỉ đầy đủ
+  const updateFullAddress = (address) => {
+    const addressParts = [
+      address.detail,
+      address.ward,
+      address.district,
+      address.province
+    ].filter(Boolean);
 
-    onChange?.({
-      province: addressData[selectedProvince]?.name || '',
-      district: addressData[selectedProvince]?.['quan-huyen'][selectedDistrict]?.name || '',
-      ward: addressData[selectedProvince]?.['quan-huyen'][selectedDistrict]?.['xa-phuong'][selectedWard]?.name || '',
-      detail: homeCode,
-      full_address: fullAddress || '',
-    });
-  }, [selectedProvince, selectedDistrict, selectedWard, homeCode]);
-
-  const provinces = Object.entries(addressData).map(([code, data]) => ({
-    value: code,
-    label: data.name,
-  }));
-
-  const getDistricts = () => {
-    if (!selectedProvince) return [];
-    return Object.entries(addressData[selectedProvince]['quan-huyen']).map(([code, data]) => ({
-      value: code,
-      label: data.name,
-    }));
+    const newFullAddress = addressParts.join(', ');
+    setFullAddress(newFullAddress);
+    form.setFieldsValue({ full_address: newFullAddress });
   };
 
-  const getWards = () => {
-    if (!selectedProvince || !selectedDistrict) return [];
-    return Object.entries(addressData[selectedProvince]['quan-huyen'][selectedDistrict]['xa-phuong']).map(
-      ([code, data]) => ({
-        value: code,
-        label: data.name,
-      }),
-    );
+  // Xử lý khi chọn tỉnh/thành phố
+  const handleProvinceChange = (value) => {
+    const province = Object.values(addressData).find(p => p.name_with_type === value);
+
+    form.setFieldsValue({
+      province: value,
+      district: undefined,
+      ward: undefined,
+      detail: ''
+    });
+
+    const districtList = Object.values(province['quan-huyen']).map((data) => ({
+      value: data.name_with_type,
+      label: data.name_with_type,
+    }));
+    setDistricts(districtList);
+    setWards([]);
+    updateFullAddress({
+      province: value
+    });
+  };
+
+  // Xử lý khi chọn quận/huyện
+  const handleDistrictChange = (value) => {
+    const provinceName = form.getFieldValue('province');
+    const province = Object.values(addressData).find(p => p.name_with_type === provinceName);
+    const district = Object.values(province['quan-huyen']).find(d => d.name_with_type === value);
+
+    form.setFieldsValue({
+      district: value,
+      ward: undefined,
+      detail: ''
+    });
+
+    const wardList = Object.values(district['xa-phuong']).map((data) => ({
+      value: data.name_with_type,
+      label: data.name_with_type,
+    }));
+    setWards(wardList);
+    updateFullAddress({
+      province: provinceName,
+      district: value
+    });
+  };
+
+  // Xử lý khi chọn phường/xã
+  const handleWardChange = (value) => {
+    form.setFieldsValue({ ward: value });
+    updateFullAddress({
+      province: form.getFieldValue('province'),
+      district: form.getFieldValue('district'),
+      ward: value
+    });
+  };
+
+  // Xử lý khi thay đổi số nhà/đường
+  const handleDetailChange = (e) => {
+    const detail = e.target.value;
+    form.setFieldsValue({ detail });
+    updateFullAddress({
+      ...form.getFieldsValue(['province', 'district', 'ward']),
+      detail
+    });
   };
 
   return (
-    <div className="space-y-4">
-      <Select
-        value={selectedProvince}
-        onChange={(e) => {
-          setSelectedProvince(e.target.value);
-          setSelectedDistrict('');
-          setSelectedWard('');
-          setWardPathWithType('');
-        }}
-        displayEmpty
-        fullWidth
-        size="small"
+    <>
+      <Form.Item
+        name="province"
+        label="Tỉnh/Thành phố"
+        rules={[{ required: true, message: 'Vui lòng chọn tỉnh/thành phố' }]}
       >
-        <MenuItem value="" disabled>
-          Chọn Tỉnh/Thành phố
-        </MenuItem>
-        {provinces.map((p) => (
-          <MenuItem key={p.value} value={p.value}>
-            {p.label}
-          </MenuItem>
-        ))}
-      </Select>
+        <Select
+          placeholder="Chọn Tỉnh/Thành phố"
+          onChange={handleProvinceChange}
+          options={provinces}
+          // showSearch
+          optionFilterProp="label"
+          allowClear
+        />
+      </Form.Item>
 
-      <Select
-        value={selectedDistrict}
-        onChange={(e) => {
-          setSelectedDistrict(e.target.value);
-          setSelectedWard('');
-          setWardPathWithType('');
-        }}
-        displayEmpty
-        disabled={!selectedProvince}
-        fullWidth
-        size="small"
+      <Form.Item
+        name="district"
+        label="Quận/Huyện"
+        rules={[{ required: true, message: 'Vui lòng chọn quận/huyện' }]}
       >
-        <MenuItem value="" disabled>
-          Chọn Quận/Huyện
-        </MenuItem>
-        {getDistricts().map((d) => (
-          <MenuItem key={d.value} value={d.value}>
-            {d.label}
-          </MenuItem>
-        ))}
-      </Select>
+        <Select
+          placeholder="Chọn Quận/Huyện"
+          onChange={handleDistrictChange}
+          options={districts}
+          disabled={!form.getFieldValue('province')}
+          // showSearch
+          optionFilterProp="label"
+          allowClear
+        />
+      </Form.Item>
 
-      <Select
-        value={selectedWard}
-        onChange={(e) => {
-          setSelectedWard(e.target.value);
-          const ward = addressData[selectedProvince]['quan-huyen'][selectedDistrict]['xa-phuong'][e.target.value];
-          setWardPathWithType(ward.path_with_type);
-        }}
-        displayEmpty
-        disabled={!selectedDistrict}
-        fullWidth
-        size="small"
+      <Form.Item
+        name="ward"
+        label="Phường/Xã"
+        rules={[{ required: true, message: 'Vui lòng chọn phường/xã' }]}
       >
-        <MenuItem value="" disabled>
-          Chọn Phường/Xã
-        </MenuItem>
-        {getWards().map((w) => (
-          <MenuItem key={w.value} value={w.value}>
-            {w.label}
-          </MenuItem>
-        ))}
-      </Select>
+        <Select
+          placeholder="Chọn Phường/Xã"
+          onChange={handleWardChange}
+          options={wards}
+          disabled={!form.getFieldValue('district')}
+          // showSearch
+          optionFilterProp="label"
+          allowClear
+        />
+      </Form.Item>
 
-      {wardPathWithType && <div className="text-sm text-gray-500">{wardPathWithType}</div>}
+      <Form.Item
+        name="detail"
+        label="Số nhà, tên đường"
+        rules={[{ required: true, message: 'Vui lòng nhập địa chỉ chi tiết' }]}
+      >
+        <Input.TextArea
+          placeholder="Ví dụ: Số 1, đường ABC, tòa nhà XYZ"
+          rows={2}
+          allowClear
+          onChange={handleDetailChange}
+        />
+      </Form.Item>
 
-      <TextField
-        fullWidth
-        multiline
-        rows={2}
-        label="Tên đường, Tòa nhà, Số nhà"
-        value={homeCode}
-        onChange={(e) => setHomeCode(e.target.value)}
-      />
-    </div>
+      {/* Trường ẩn lưu địa chỉ đầy đủ */}
+      <Form.Item name="full_address" hidden>
+        <Input />
+      </Form.Item>
+
+      {/* Hiển thị địa chỉ đầy đủ */}
+      {fullAddress && (
+        <div className="ant-form-item">
+          <div className="ant-form-item-label">
+            <label>Địa chỉ đầy đủ:</label>
+          </div>
+          <div className="ant-form-item-control">
+            <div className="ant-form-item-control-input">
+              <div className="ant-form-item-control-input-content">
+                <p className="text-gray-600">{fullAddress}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

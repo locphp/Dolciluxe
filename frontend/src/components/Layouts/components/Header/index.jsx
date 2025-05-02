@@ -13,9 +13,9 @@ import { persistor } from '~/redux/store';
 import { getCart } from '~/api/apiCart';
 import { createInstance } from '~/redux/interceptors';
 import { loginSuccess } from '~/redux/authSlice';
-import { setCart } from '~/redux/cartSlice';
 import { updateCartItem } from '~/api/apiCart';
 import { AddToCartContext } from '../../DefaultLayout';
+import CartPopover from '../Cart/CartPopover';
 
 function Header() {
   const navigate = useNavigate();
@@ -57,17 +57,17 @@ function Header() {
       localStorage.removeItem('authToken');
       localStorage.removeItem('refreshToken');
     }
-    dispatch(setCart([]));
+    // dispatch(resetCart([]));
     persistor.purge();
   };
 
   useEffect(() => {
     const fetchCart = async () => {
       if (user) {
-        const res = await getCart(user?.access_token, instance);
+        const res = await getCart(instance);
         if (res) {
-          dispatch(setCart(res?.items));
-          setOriginalList(res?.items);
+          // dispatch(setCart(res?.data.items));
+          setOriginalList(res?.data.items);
         }
       }
     };
@@ -130,27 +130,7 @@ function Header() {
 
         <div className="flex gap-6">
           {/* Cart Logo */}
-
-          <div className="relative">
-            <Cart className="navbar-icon" onClick={viewCart} />
-            <span className="absolute bottom-3 left-4 rounded-full bg-fourth px-2.5 text-sm text-slate-100">
-              {list?.length}
-            </span>
-          </div>
-
-          <Drawer
-            title={<span style={{ fontSize: '20px', color: '#664545' }}>Giỏ hàng</span>}
-            onClose={onClose}
-            open={open}
-          >
-            {list?.length > 0 ? (
-              <ListItems list={list} />
-            ) : (
-              <>
-                <h1 className="m-6">Thông tin giỏ hàng sẽ xuất hiện ở đây</h1>
-              </>
-            )}
-          </Drawer>
+          <CartPopover />
           {/* User Logo */}
           {user ? (
             <UserTooltip onClick={() => setIsLogout(true)} currentUser={user} />

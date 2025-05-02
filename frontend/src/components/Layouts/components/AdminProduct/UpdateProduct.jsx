@@ -15,43 +15,40 @@ const UpdateProductModal = (props) => {
     const [quantity, setQuantity] = useState("");
     const [description, setDescription] = useState("");
     const [productType, setProductType] = useState(null);
+    const [uploading, setUploading] = useState(false);
 
     // Handle image upload
-    const handleImageUpload = async (options) => {
-            const { file, onSuccess, onError } = options;
-            setUploading(true);
-            
-            const formData = new FormData();
-            formData.append('file', file);
-    
-            try {
-                const response = await axios.post('http://localhost:8080/upload', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
+    const handleImageUpload = async (file) => {
+        setUploading(true);
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await axios.post('http://localhost:8080/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            if (response.data && response.data.imageUrl) {
+                setImageFile(response.data.imageUrl);
+                notification.success({
+                    message: "Thành công",
+                    description: "Đã tải ảnh lên thành công.",
                 });
-                
-                if (response.data && response.data.imageUrl) {
-                    setImageFile(response.data.imageUrl);
-                    onSuccess("ok", file);
-                    notification.success({
-                        message: "Thành công",
-                        description: "Đã tải ảnh lên thành công.",
-                    });
-                } else {
-                    throw new Error("Không nhận được URL hình ảnh từ server");
-                }
-            } catch (error) {
-                onError(error);
-                notification.error({
-                    message: "Lỗi tải ảnh lên",
-                    description: error.message || "Không thể tải hình ảnh lên.",
-                });
-                console.error("Image upload error:", error);
-            } finally {
-                setUploading(false);
+            } else {
+                throw new Error("Không nhận được URL hình ảnh từ server");
             }
-        };
+        } catch (error) {
+            notification.error({
+                message: "Lỗi tải ảnh lên",
+                description: error.message || "Không thể tải hình ảnh lên.",
+            });
+            console.error("Image upload error:", error);
+        } finally {
+            setUploading(false);
+        }
+    };
 
     // Fetch data when modal opens
     useEffect(() => {
@@ -60,12 +57,7 @@ const UpdateProductModal = (props) => {
                 try {
                     const res = await getCakeById(dataUpdate._id);
                     if (res && res.data) {
-                        // Log data for debugging
-                        console.log("Dữ liệu bánh:", res.data);
-                        
-                        // Extract data
                         const { _id, productName, imageFile, price, quantity, description, productType } = res.data;
-                        
                         setId(_id);
                         setProductName(productName || "");
                         setImageFile(imageFile || "");
@@ -87,7 +79,6 @@ const UpdateProductModal = (props) => {
         if (isModalUpdateOpen) {
             fetchCakeData();
         } else {
-            // Reset form when closing modal without saving
             setId("");
             setProductName("");
             setImageFile("");
@@ -98,7 +89,6 @@ const UpdateProductModal = (props) => {
         }
     }, [isModalUpdateOpen, dataUpdate]);
 
-    // Handle form submission
     const handleSubmitBtn = async () => {
         if (!productName || !imageFile || !price || !quantity || !description || !productType) {
             notification.error({
@@ -183,7 +173,7 @@ const UpdateProductModal = (props) => {
                         customRequest={({ file }) => handleImageUpload(file)}
                         showUploadList={false}
                     >
-                        <Button icon={<UploadOutlined />}>Tải ảnh lên</Button>
+                        <Button icon={<UploadOutlined />} loading={uploading}>Tải ảnh lên</Button>
                     </Upload>
                 </div>
 

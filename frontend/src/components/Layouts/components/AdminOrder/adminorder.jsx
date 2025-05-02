@@ -18,20 +18,20 @@ function AdminOrder() {
     const fetchData = async () => {
       try {
         const [orderRes, userRes, addressRes] = await Promise.all([getOrders(), getListUsers(), getAllAddress()]);
-
+        console.log(orderRes);
         const updatedOrders = await Promise.all(
           orderRes.data.map(async (order) => {
             if (order.paymentMethod === 'VNPAY' && order.paymentStatus === 'paid') {
               try {
-                const updateRes = await updateOrderStatus(order._id, 'processing');
-                return { ...order, orderStatus: updateRes.data.orderStatus };
+                const updateRes = await updatepaymentStatus(order._id, 'processing');
+                return { ...order, paymentStatus: updateRes.data.paymentStatus };
               } catch {
                 return order;
               }
             } else if (order.paymentMethod === 'VNPAY' && order.paymentStatus === 'pending') {
               try {
-                const updateRes = await updateOrderStatus(order._id, 'pending');
-                return { ...order, orderStatus: updateRes.data.orderStatus };
+                const updateRes = await updatepaymentStatus(order._id, 'pending');
+                return { ...order, paymentStatus: updateRes.data.paymentStatus };
               } catch {
                 return order;
               }

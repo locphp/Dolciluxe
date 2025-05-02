@@ -2,20 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { getAllAddress, createAddress, updateAddress, deleteAddress } from '~/api/apiUser';
 import AddressSelector from './AddressSelector';
 import {
+  Card,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-  CircularProgress,
-  IconButton,
-  FormControlLabel,
+  Modal,
+  Form,
+  Input,
   Checkbox,
-} from '@mui/material';
-import { toast } from 'react-toastify';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+  List,
+  Tag,
+  Popconfirm,
+  message,
+  Space,
+  Typography
+} from 'antd';
+import {
+  EditOutlined,
+  DeleteOutlined,
+  PlusOutlined,
+  EnvironmentOutlined
+} from '@ant-design/icons';
+
+const { Text } = Typography;
 
 const initialForm = {
   fullName: '',
@@ -31,18 +38,17 @@ const initialForm = {
 export default function Address() {
   const [addresses, setAddresses] = useState([]);
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState(initialForm);
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [editId, setEditId] = useState(null);
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
   const fetchAddresses = async () => {
     try {
       const res = await getAllAddress();
       setAddresses(res || []);
     } catch (err) {
-      toast.error('Lỗi khi tải danh sách địa chỉ', { position: 'bottom-right', autoClose: 3000 });
+      message.error('Lỗi khi tải danh sách địa chỉ');
     }
   };
 
@@ -52,10 +58,10 @@ export default function Address() {
 
   const handleOpen = (address = null) => {
     if (address) {
-      setForm(address);
+      form.setFieldsValue(address);
       setEditId(address._id);
     } else {
-      setForm(initialForm);
+      form.resetFields();
       setEditId(null);
     }
     setOpen(true);
@@ -63,16 +69,8 @@ export default function Address() {
 
   const handleClose = () => {
     setOpen(false);
-    setForm(initialForm);
+    form.resetFields();
     setEditId(null);
-  };
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setForm({
-      ...form,
-      [name]: type === 'checkbox' ? checked : value,
-    });
   };
 
   const handleSetDefault = async (id) => {
@@ -85,152 +83,191 @@ export default function Address() {
         ),
       );
       await updateAddress(id, { isDefault: true });
-      toast.success('Đã cập nhật địa chỉ mặc định', { position: 'bottom-right', autoClose: 3000 });
+      message.success('Đã cập nhật địa chỉ mặc định');
       fetchAddresses();
     } catch (err) {
-      toast.error('Không thể cập nhật địa chỉ mặc định', { position: 'bottom-right', autoClose: 3000 });
+      message.error('Không thể cập nhật địa chỉ mặc định');
     }
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
     try {
-      if (form.isDefault) {
+      const values = await form.validateFields();
+      setLoading(true);
+
+      if (values.isDefault) {
         await Promise.all(
           addresses.map((addr) => addr.isDefault && updateAddress(addr._id, { ...addr, isDefault: false })),
         );
       }
 
       if (editId) {
-        await updateAddress(editId, form);
-        toast.success('Cập nhật địa chỉ thành công', { position: 'bottom-right', autoClose: 3000 });
+        await updateAddress(editId, values);
+        message.success('Cập nhật địa chỉ thành công');
       } else {
-        await createAddress(form);
-        toast.success('Thêm địa chỉ mới thành công', { position: 'bottom-right', autoClose: 3000 });
+        await createAddress(values);
+        message.success('Thêm địa chỉ mới thành công');
       }
+
       fetchAddresses();
       handleClose();
     } catch (err) {
-      toast.error('Lỗi khi lưu địa chỉ', { position: 'bottom-right', autoClose: 3000 });
+      console.error(err);
+      if (!err.errorFields) {
+        message.error('Lỗi khi lưu địa chỉ');
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  const confirmDelete = async () => {
+  const handleDelete = async (id) => {
+    setConfirmLoading(true);
     try {
-      await deleteAddress(deleteId);
-      toast.success('Đã xóa địa chỉ', { position: 'bottom-right', autoClose: 3000 });
+      await deleteAddress(id);
+      message.success('Đã xóa địa chỉ');
       fetchAddresses();
     } catch (err) {
-      toast.error('Địa chỉ mặc định, không thể xóa', { position: 'bottom-right', autoClose: 3000 });
+      message.error('Không thể xóa địa chỉ mặc định');
     } finally {
-      setConfirmOpen(false);
-      setDeleteId(null);
+      setConfirmLoading(false);
     }
   };
 
   return (
-    <div className="space-y-4 p-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold">Địa chỉ giao hàng</h2>
-        <button
-          className="rounded-[6px] border-[none] bg-[#664545] p-[10px] text-[1rem] text-white hover:bg-[#7a4f4f] active:bg-[#523636]"
+    <div className="p-4">
+      <div className="flex items-center justify-between mb-6">
+        <Text strong className="text-xl">Địa chỉ giao hàng</Text>
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
           onClick={() => handleOpen()}
         >
           Thêm địa chỉ
-        </button>
+        </Button>
       </div>
 
       {addresses.length === 0 ? (
-        <p>Chưa có địa chỉ nào.</p>
+        <Card>
+          <Text className="text-gray-500">Chưa có địa chỉ nào.</Text>
+        </Card>
       ) : (
-        <div className="grid gap-4">
-          {addresses.map((addr) => (
-            <div key={addr._id} className="rounded-lg border p-4 shadow-md">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="font-medium">
-                    {addr.fullName} - {addr.phone} {addr.isDefault && <span className="text-blue-500">(Mặc định)</span>}
-                  </p>
-                  <p className="mb-2">
-                    {addr.full_address || `${addr.detail}, ${addr.ward}, ${addr.district}, ${addr.province}`}
-                  </p>
+        <List
+          dataSource={[...addresses].sort((a, b) => b.isDefault - a.isDefault)} // Sắp xếp địa chỉ mặc định lên đầu
+          renderItem={(addr) => (
+            <List.Item className="!p-0 !border-b">
+              <div className={`flex items-center w-full p-4 hover:bg-gray-50 ${addr.isDefault ? 'bg-blue-50' : ''}`}>
+                {/* Phần thông tin chính */}
+                <div className="flex items-center flex-1 min-w-0">
+                  <EnvironmentOutlined className={`mr-3 ${addr.isDefault ? 'text-blue-500' : 'text-gray-500'}`} />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 truncate">
+                      <Text strong className="truncate max-w-[120px]">
+                        {addr.fullName}
+                      </Text>
+                      <Text type="secondary">|</Text>
+                      <Text className="text-gray-600 truncate max-w-[100px]">
+                        {addr.phone}
+                      </Text>
+                      {addr.isDefault && (
+                        <Tag color="blue" className="ml-2 flex-shrink-0">
+                          Mặc định
+                        </Tag>
+                      )}
+                    </div>
+                    <Text ellipsis className="text-gray-600 mt-1">
+                      {addr.full_address || `${addr.detail}, ${addr.ward}, ${addr.district}, ${addr.province}`}
+                    </Text>
+                  </div>
+                </div>
+
+                {/* Phần nút hành động */}
+                <div className="flex items-center gap-2 ml-4 flex-shrink-0">
                   {!addr.isDefault && (
                     <Button size="small" variant="outlined" onClick={() => handleSetDefault(addr._id)} className="mt-2">
                       Đặt làm địa chỉ mặc định
                     </Button>
                   )}
-                </div>
-                <div className="space-x-2">
-                  <IconButton onClick={() => handleOpen(addr)}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => {
-                      setDeleteId(addr._id);
-                      setConfirmOpen(true);
-                    }}
+
+                  <Button
+                    type="text"
+                    icon={<EditOutlined />}
+                    onClick={() => handleOpen(addr)}
+                    className="text-gray-500 hover:text-primary"
+                  />
+
+                  <Popconfirm
+                    title="Xóa địa chỉ này?"
+                    onConfirm={() => handleDelete(addr._id)}
+                    okText="Xóa"
+                    cancelText="Hủy"
+                    disabled={addr.isDefault} // Vô hiệu hóa xóa nếu là địa chỉ mặc định
                   >
-                    <DeleteIcon />
-                  </IconButton>
+                    <Button
+                      type="text"
+                      icon={<DeleteOutlined />}
+                      className={`text-gray-500 hover:text-red-500 ${addr.isDefault ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      danger
+                      disabled={addr.isDefault}
+                    />
+                  </Popconfirm>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            </List.Item>
+          )}
+        />
       )}
 
-      <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth key={editId || 'new'}>
-        <DialogTitle>{editId ? 'Cập nhật địa chỉ' : 'Thêm địa chỉ mới'}</DialogTitle>
-        <p></p>
-        <DialogContent className="space-y-4">
-          <TextField
+      <Modal
+        title={editId ? 'Cập nhật địa chỉ' : 'Thêm địa chỉ mới'}
+        open={open}
+        onCancel={handleClose}
+        footer={[
+          <Button key="back" onClick={handleClose}>
+            Hủy
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={loading}
+            onClick={handleSubmit}
+          >
+            Lưu
+          </Button>,
+        ]}
+        width={700}
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          initialValues={initialForm}
+        >
+          <Form.Item
             name="fullName"
             label="Họ và tên"
-            fullWidth
-            size="small"
-            multiline
-            value={form.fullName}
-            onChange={handleChange}
-          />
-          <TextField
+            rules={[{ required: true, message: 'Vui lòng nhập họ tên' }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
             name="phone"
             label="Số điện thoại"
-            fullWidth
-            multiline
-            size="small"
-            value={form.phone}
-            onChange={handleChange}
-          />
-          <AddressSelector defaultAddress={form} onChange={(value) => setForm({ ...form, ...value })} />
-          <FormControlLabel
-            control={<Checkbox name="isDefault" checked={form.isDefault} onChange={handleChange} />}
-            label="Đặt làm địa chỉ mặc định"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Hủy</Button>
-          <button
-            onClick={handleSubmit}
-            className="w-[4rem] rounded-[6px] border-[none] bg-[#664545] p-[10px] text-[1rem] text-white hover:bg-[#7a4f4f] active:bg-[#523636]"
-            disabled={loading}
+            rules={[{ required: true, message: 'Vui lòng nhập số điện thoại' }]}
           >
-            {loading ? <CircularProgress size={24} /> : 'Lưu'}
-          </button>
-        </DialogActions>
-      </Dialog>
+            <Input />
+          </Form.Item>
 
-      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
-        <DialogTitle>Xác nhận xóa</DialogTitle>
-        <DialogContent>Bạn có chắc muốn xóa địa chỉ này không?</DialogContent>
-        <DialogActions>
-          <Button onClick={() => setConfirmOpen(false)}>Hủy</Button>
-          <Button onClick={confirmDelete} color="error">
-            Xóa
-          </Button>
-        </DialogActions>
-      </Dialog>
+          <AddressSelector form={form} />
+
+          <Form.Item
+            name="isDefault"
+            valuePropName="checked"
+          >
+            <Checkbox>Đặt làm địa chỉ mặc định</Checkbox>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 }

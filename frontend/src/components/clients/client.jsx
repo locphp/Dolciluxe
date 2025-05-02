@@ -34,6 +34,9 @@ const customThemeTooltip = {
 };
 export function UserTooltip({ onClick, currentUser }) {
   // console.log('👉 currentUser trong UserTooltip:', currentUser);
+  // console.log('👉 currentUser admin trong UserTooltip:', currentUser?.data?.isAdmin);
+  // console.log('👉 currentUser admin trong UserTooltip:', currentUser?.isAdmin);
+
   return (
     <Tooltip
       theme={customThemeTooltip}
@@ -46,6 +49,11 @@ export function UserTooltip({ onClick, currentUser }) {
             <Link to="/account/orders">
               <li className="px-3 py-2 hover:text-fourth">Lịch sử mua hàng</li>
             </Link>
+            {(currentUser?.data?.isAdmin || currentUser?.isAdmin) && (
+              <Link to="/admin/dashboard">
+                <li className="rounded-tl-lg rounded-tr-lg px-3 py-2 hover:text-fourth">Công cụ quản lí</li>
+              </Link>
+            )}
             <button onClick={() => onClick()}>
               <li className="rounded-bl-lg rounded-br-lg px-3 py-2 hover:text-fourth">Đăng xuất</li>
             </button>

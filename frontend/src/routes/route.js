@@ -21,6 +21,10 @@ import ThankYou from "~/components/Layouts/components/Payment/COD";
 import EmailRecovery from "~/components/Layouts/components/Forgot Password/EmailRecovery";
 import EmailSent from "~/components/Layouts/components/Forgot Password/EmailSent";
 import NewPassword from "~/components/Layouts/components/Forgot Password/NewPassword";
+import PaymentReturn from "~/components/Layouts/components/Payment/PaymentReturn";
+import PaymentSuccess from "~/components/Layouts/components/Payment/PaymentSucess";
+import ThankYou from "~/components/Layouts/components/Payment/COD";
+import Checkout from "~/components/Layouts/components/Checkout";
 const publicRoute = [
   { path: "/", component: Home },
   { path: "/generator", component: GenImage },
@@ -31,12 +35,18 @@ const publicRoute = [
   { path: "/policy", component: Policy },
   { path: "/detailed/:id", component: DetailedCake },
   { path: "/condition", component: Condition },
-  { path: "/admin/login", component: AdminLogin, layout: null },
+  // { path: "/admin/login", component: AdminLogin, layout: null },
   { path: "/payment", component: Payment },
   { path: "/email/recovery", component: EmailRecovery },
   { path: "/email/message", component: EmailSent },
   { path: "/reset-password", component: NewPassword },
+  { path: "/payment-return", component: PaymentReturn },
+  { path: "/payment-success", component: PaymentSuccess },
   { path: "/thankyou", component: ThankYou },
+  {
+    path: '/checkout',
+    component: Checkout,
+  }
 ]
 
 const privateRoute = [

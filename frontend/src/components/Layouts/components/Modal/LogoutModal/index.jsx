@@ -2,7 +2,7 @@ import { RiErrorWarningLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logOutUser } from '~/redux/apiRequest';
-import { setCart } from '~/redux/cartSlice';
+import { resetCart } from '~/redux/cartSlice';
 import { persistor } from '~/redux/store';
 function LogoutModal({ isLogout }) {
   const dispatch = useDispatch();
@@ -11,7 +11,7 @@ function LogoutModal({ isLogout }) {
   const handleLogout = () => {
     logOutUser(dispatch, user.refresh_token, navigate);
     isLogout(false);
-    dispatch(setCart([]));
+    dispatch(resetCart([]));
     persistor.purge();
   };
   return (
