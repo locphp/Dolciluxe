@@ -68,9 +68,6 @@ export const changePasswordUser = async ( data ) => {
   }
 };
 
-
-
-
 export const getListUsers = async () => {
   try {
     const res = await response.get('/api/users/');

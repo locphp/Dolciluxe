@@ -1,4 +1,3 @@
-
 import {response} from '~/services/axios'
 
 export const getCake = (typeId) => {
@@ -13,25 +12,33 @@ export const getAllCakes = () => {
     return response.get('/api/public/products/');
 };
 
-export const createCake = (product_name, image_link, description, product_type_id) => {
+export const createCake = (productData) => {
+    // Convert to backend format if needed
     const data = {
-        product_name,
-        image_link,
-        description,
-        product_type_id,
+        productName: productData.productName,
+        imageLink: productData.imageLink,
+        description: productData.description,
+        productType: productData.productType,
+        quantity: Number(productData.quantity),
+        price: Number(productData.price)
     };
-    return response.post('/api/public/product', data)
-}
+    return response.post('/api/public/product', data);
+};
 
+// API soft delete frontend
 export const deleteCake = (id) => {
-    return response.delete(`/api/public/product/${id}`)
-}
+    return response.delete(`/api/public/product/soft-delete/${id}`); // Giữ nguyên route này
+  };
+  
 
-export const updateCake = (_id, product_name, image_link, description, product_type_id) => {
+
+export const updateCake = (_id, product_name, image_link, price, quantity, description, product_type_id) => {
     const data = {
         _id,
         product_name,
         image_link,
+        price,
+        quantity,
         description,
         product_type_id,
     };

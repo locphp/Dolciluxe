@@ -44,13 +44,13 @@ const AdminProduct = () => {
 
   const handleDeleteCake = async (id) => {
     try {
-      const res = await deleteCake(id);
-      if (!res.data) {
+      const res = await deleteCake(id);  // Gọi API soft delete
+      if (res.code === 200) {
         notification.success({
           message: 'Xóa sản phẩm',
           description: 'Xóa sản phẩm thành công',
         });
-        fetchCakes();
+        fetchCakes(); // Tải lại danh sách sản phẩm
       } else {
         notification.error({
           message: 'Lỗi',
@@ -64,6 +64,8 @@ const AdminProduct = () => {
       });
     }
   };
+  
+  
 
   const columns = [
     {
@@ -140,18 +142,20 @@ const AdminProduct = () => {
   style={{ cursor: 'pointer', color: 'orange' }}
 />
 
-          <Popconfirm
-            title="Xóa sản phẩm"
-            description="Bạn chắc chắn xóa sản phẩm này?"
-            onConfirm={() => handleDeleteCake(record._id)}
-            okText="Yes"
-            cancelText="No"
-            placement="left"
-            okButtonProps={{ style: { backgroundColor: '#664545' } }}
-            cancelButtonProps={{ style: { color: '#664545', borderColor: '#664545' } }}
-          >
-            <DeleteOutlined style={{ cursor: 'pointer', color: 'red' }} />
-          </Popconfirm>
+<Popconfirm
+  title="Xóa sản phẩm"
+  description="Bạn chắc chắn xóa sản phẩm này?"
+  onConfirm={() => handleDeleteCake(record._id)} // Gọi hàm xử lý xóa khi nhấn Yes
+  okText="Yes"
+  cancelText="No"
+  placement="left"
+  okButtonProps={{ style: { backgroundColor: '#664545' } }}
+  cancelButtonProps={{ style: { color: '#664545', borderColor: '#664545' } }}
+>
+  <DeleteOutlined style={{ cursor: 'pointer', color: 'red' }} />
+</Popconfirm>
+
+
         </div>
       ),
     },
