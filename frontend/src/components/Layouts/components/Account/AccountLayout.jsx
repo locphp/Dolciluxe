@@ -4,6 +4,8 @@ import BreadCrumb from '~/components/Layouts/components/Breadcrumb';
 import { useSelector } from 'react-redux';
 import { createInstance } from '~/redux/interceptors';
 import { loginSuccess } from '~/redux/authSlice';
+import { useLocation } from 'react-router-dom';
+
 const AccountLayout = () => {
   const [currentKey, setCurrentKey] = useState('profile');
 
@@ -31,18 +33,27 @@ const AccountLayout = () => {
     },
   };
 
+  const location = useLocation();
+
   useEffect(() => {
-    const savedKey = localStorage.getItem('currentKey');
-    if (savedKey && menuMapping[savedKey]) {
-      setCurrentKey(savedKey);
-      const menu = menuMapping[savedKey];
-      setBreadcrumbItems([
-        { title: 'Trang chủ', link: '/' },
-        { title: menu.title, link: menu.link },
-      ]);
-      setPageTitle(menu.title);
-    }
-  }, []);
+    const path = location.pathname;
+    let matchedKey = 'profile'; // default
+
+    // So khớp URL với menuMapping
+    Object.keys(menuMapping).forEach((key) => {
+      if (menuMapping[key].link === path) {
+        matchedKey = key;
+      }
+    });
+
+    setCurrentKey(matchedKey);
+    const menu = menuMapping[matchedKey];
+    setBreadcrumbItems([
+      { title: 'Trang chủ', link: '/' },
+      { title: menu.title, link: menu.link },
+    ]);
+    setPageTitle(menu.title);
+  }, [location.pathname]); // chạy mỗi khi URL thay đổi
 
   const handleUpdateContent = (key) => {
     const menu = menuMapping[key];

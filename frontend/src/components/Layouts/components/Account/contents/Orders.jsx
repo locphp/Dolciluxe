@@ -1,7 +1,7 @@
 import { Table, Button } from 'antd';
 import { useEffect, useState } from 'react';
 import { getOrders } from '~/api/apiOrder';
-
+import { createPaymentUrl } from '~/api/apiPayment';
 const AccountOrders = ({ currentUser, instance }) => {
   const [orders, setOrders] = useState([]);
 
@@ -42,10 +42,16 @@ const AccountOrders = ({ currentUser, instance }) => {
     fetchOrderList();
   }, [currentUser, instance]);
 
-  const handlePayment = (orderId) => {
-    // Chuyển hướng đến trang thanh toán
-    console.log('Thanh toán cho order id:', orderId);
-    // window.location.href = `/payment/${orderId}`; // sau này gắn link vào đây
+  const handlePayment = async (orderId) => {
+    try {
+      const { paymentUrl } = await createPaymentUrl(orderId); // Gọi API tạo URL thanh toán
+      console.log('url:', paymentUrl);
+      if (paymentUrl) {
+        window.location.href = paymentUrl; // Chuyển hướng đến trang thanh toán
+      }
+    } catch (err) {
+      console.error('Lỗi thanh toán:', err);
+    }
   };
 
   const columns = [

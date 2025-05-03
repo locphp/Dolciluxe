@@ -9,9 +9,14 @@ export const getCakeById = (id) => {
     return response.get(`/api/public/product/${id}`)
 }
 
-export const getAllCakes = () => {
-    return response.get('/api/public/products/');
-};
+export const getAllCakes = async () => {
+    try {
+        const res = await response.get(`/api/products/`);
+        return res;
+      } catch (err) {
+        console.error('Lỗi getOrder:', err.response?.data || err.message);
+        throw err;
+      }};
 
 export const createCake = (product_name, image_link, description, product_type_id) => {
     const data = {

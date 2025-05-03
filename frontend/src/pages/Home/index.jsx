@@ -5,10 +5,10 @@ import { GoogleCallBack } from '~/components/Layouts/components/GoogleCallBack/G
 import { useLocation } from 'react-router-dom';
 
 function Home() {
-  GoogleCallBack()
-  const location = useLocation()
-  const searchParams = new URLSearchParams(location.search)
-  const category = searchParams.get('mode') || 'default'
+  GoogleCallBack();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const category = searchParams.get('mode') || 'default';
   return (
     <>
       <Slider />

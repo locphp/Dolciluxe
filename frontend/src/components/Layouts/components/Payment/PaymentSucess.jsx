@@ -35,13 +35,12 @@ const PaymentSuccess = () => {
         title="Thanh toán thành công!"
         subTitle="Đơn hàng của bạn đã được xử lý thành công"
         extra={[
-          <Button
-            type="primary"
-            key="home"
-            onClick={() => navigate('/')}
-          >
-            Về trang chủ
-          </Button>
+          <Button key="home" type="primary" onClick={() => navigate('/')}>
+            Quay lại trang chủ{' '}
+          </Button>,
+          <Button key="orders" onClick={() => navigate('/account/orders')}>
+            Xem đơn hàng của tôi
+          </Button>,
         ]}
       />
     </div>
