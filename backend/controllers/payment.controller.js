@@ -35,7 +35,7 @@ const vnpayReturn = async (req, res) => {
 
             })
         }
-        } else {
+        else {
             return res.status(400).json({
                 success: false,
                 message: 'Payment failed',
