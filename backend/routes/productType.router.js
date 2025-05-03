@@ -6,7 +6,7 @@ const {
     createProductType,
     updateProductType,
     deleteProductType
-} = require('../controllers/producttype.controller');
+} = require('../controllers/productType.controller');
 
 productType.get('/', getAllProductTypes);
 productType.get('/:id', getProductTypeById);

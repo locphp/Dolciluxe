@@ -1,6 +1,5 @@
 const paymentService = require('../services/payment.service');
 const { sendOrderConfirmationEmail } = require('../utils/sendOrderConfirmationEmail');
-// const Order = require('../models/order.model');
 
 const createPaymentUrl = async (req, res) => {
     const { orderId } = req.body;
@@ -17,19 +16,6 @@ const vnpayReturn = async (req, res) => {
         const result = await paymentService.handleReturn(req.query);
 
         if (result.success) {
-//             await Order.findByIdAndUpdate(result.orderId, {
-//                 paymentStatus: 'paid',
-//                 paymentMethod: 'VNPAY',
-//                 orderStatus: 'processing',
-//                 paymentResult: {
-//                     vnp_TransactionNo: result.transactionId,
-//                     vnp_BankCode: result.bankCode,
-//                     vnp_PayDate: result.payDate,
-//                     vnp_ResponseCode: '00',
-//                     vnp_Amount: (result.amount * 100).toString()
-//                 },
-//                 updatedAt: Date.now()
-//             });
             await sendOrderConfirmationEmail(result.orderId, result.transactionId);
             return res.status(200).json({
                 success: true,
@@ -48,6 +34,7 @@ const vnpayReturn = async (req, res) => {
                 }
 
             })
+        }
         } else {
             return res.status(400).json({
                 success: false,
