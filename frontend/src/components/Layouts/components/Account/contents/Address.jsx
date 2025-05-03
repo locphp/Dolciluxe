@@ -184,13 +184,8 @@ export default function Address() {
                 {/* Phần nút hành động */}
                 <div className="flex items-center gap-2 ml-4 flex-shrink-0">
                   {!addr.isDefault && (
-                    <Button
-                      type="link"
-                      size="small"
-                      onClick={() => handleSetDefault(addr._id)}
-                      className="text-primary whitespace-nowrap"
-                    >
-                      Đặt mặc định
+                    <Button size="small" variant="outlined" onClick={() => handleSetDefault(addr._id)} className="mt-2">
+                      Đặt làm địa chỉ mặc định
                     </Button>
                   )}
 

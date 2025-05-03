@@ -44,13 +44,13 @@ const AdminProduct = () => {
 
   const handleDeleteCake = async (id) => {
     try {
-      const res = await deleteCake(id);
-      if (!res.data) {
+      const res = await deleteCake(id); // Gọi API soft delete
+      if (res.code === 200) {
         notification.success({
           message: 'Xóa sản phẩm',
           description: 'Xóa sản phẩm thành công',
         });
-        fetchCakes();
+        fetchCakes(); // Tải lại danh sách sản phẩm
       } else {
         notification.error({
           message: 'Lỗi',
@@ -84,7 +84,7 @@ const AdminProduct = () => {
     {
       title: 'Tên sản phẩm',
       dataIndex: 'productName',
-    },   
+    },
     {
       title: 'Giá sản phẩm',
       dataIndex: 'price',
@@ -98,7 +98,7 @@ const AdminProduct = () => {
     {
       title: 'Mô tả',
       dataIndex: 'description',
-      width: 250, 
+      width: 250,
       render: (text) => (
         <div style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
           {text}
@@ -110,35 +110,35 @@ const AdminProduct = () => {
       render: (_, record) => (
         <div style={{ display: 'flex', gap: '20px' }}>
           <EditOutlined
-  onClick={async () => {
-    try {
-      const res = await getCakeById(record._id);  // Gọi API lấy chi tiết sản phẩm
-      if (res.code === 200) {
-        setDataUpdate({
-          ...res.data,
-          productName: res.data.product_name,       // Map lại key cho đồng bộ
-          imageLink: res.data.image_link,
-          description: res.data.description,
-          price: res.data.price,
-          quantity: res.data.quantity,
-          productTypeId: res.data.product_type_id,
-        });
-        setIsModalUpdateOpen(true);
-      } else {
-        notification.error({
-          message: 'Lỗi',
-          description: 'Không lấy được chi tiết sản phẩm',
-        });
-      }
-    } catch (error) {
-      notification.error({
-        message: 'Lỗi',
-        description: 'Không lấy được chi tiết sản phẩm',
-      });
-    }
-  }}
-  style={{ cursor: 'pointer', color: 'orange' }}
-/>
+            onClick={async () => {
+              try {
+                const res = await getCakeById(record._id); // Gọi API lấy chi tiết sản phẩm
+                if (res.code === 200) {
+                  setDataUpdate({
+                    ...res.data,
+                    productName: res.data.product_name,
+                    imageLink: res.data.image_link,
+                    description: res.data.description,
+                    price: res.data.price,
+                    quantity: res.data.quantity,
+                    productTypeId: res.data.product_type_id,
+                  });
+                  setIsModalUpdateOpen(true);
+                } else {
+                  notification.error({
+                    message: 'Lỗi',
+                    description: 'Không lấy được chi tiết sản phẩm',
+                  });
+                }
+              } catch (error) {
+                notification.error({
+                  message: 'Lỗi',
+                  description: 'Không lấy được chi tiết sản phẩm',
+                });
+              }
+            }}
+            style={{ cursor: 'pointer', color: 'orange' }}
+          />
 
           <Popconfirm
             title="Xóa sản phẩm"
