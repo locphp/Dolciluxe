@@ -139,7 +139,9 @@ export const refreshToken = async (refreshToken) => {
 export const googleLoginUser = async (dispatch) => {
   dispatch(loginStart());
   try {
-    const res = await response.get('/api/auth/google');
+    const res = await response.get('/api/auth/google', {
+      withCredentials: true,
+    });
     const { user, access_token, refresh_token } = res.data;
 
     localStorage.setItem('access_token', access_token);
