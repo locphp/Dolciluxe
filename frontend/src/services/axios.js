@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BE_BASE_URL = 'http://localhost:8080';
+const BE_BASE_URL = process.env.BACKEND_URL || 'http://localhost:8080';
 
 const response = axios.create({
   baseURL: BE_BASE_URL,
