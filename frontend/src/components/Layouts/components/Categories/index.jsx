@@ -18,15 +18,13 @@ const theme = createTheme({
 function Categories() {
   const [searchParams] = useSearchParams();
   const mode = searchParams.get('mode');
-  const { cakes, categoryName } = useCake(mode);
+  const { cakes = [], categoryName } = useCake(mode || 'default');
   const [sortOption, setSortOption] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const { list } = useSelector((state) => state.cart);
 
   // Lọc theo tên sản phẩm
-  const filteredCakes = cakes.filter((cake) =>
-    cake.productName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredCakes = cakes.filter((cake) => cake.productName.toLowerCase().includes(searchTerm.toLowerCase()));
 
   // Sắp xếp theo giá
   const sortedCakes = [...filteredCakes].sort((a, b) => {
@@ -50,7 +48,7 @@ function Categories() {
     <div className="mt-16 w-full bg-white">
       <div className="mx-[5rem]">
         {/* Đường dẫn breadcrumb */}
-        <div className="flex h-11 items-center text-primary ml-[32px] pt-[43px]">
+        <div className="ml-[32px] flex h-11 items-center pt-[43px] text-primary">
           <div>
             <a href="/">Trang chủ </a>
             <span>&gt;&gt;</span>
@@ -68,9 +66,7 @@ function Categories() {
         </div>
 
         {/* Tiêu đề */}
-        <h1 className="text-center text-5xl font-bold capitalize leading-[72px]">
-          {categoryName}
-        </h1>
+        <h1 className="text-center text-5xl font-bold capitalize leading-[72px]">{categoryName}</h1>
         <p className="py-5 text-center text-sm font-bold leading-4">
           Bánh truyền thống là một trong những loại bánh đã đưa tên tuổi chúng tôi có được ngày hôm nay, đây là một
           trong <br />
@@ -78,18 +74,18 @@ function Categories() {
         </p>
 
         {/* Thanh tìm kiếm + bộ lọc */}
-        <div className="flex justify-end items-center gap-4 mx-4 mb-4">
+        <div className="mx-4 mb-4 flex items-center justify-end gap-4">
           <input
             type="text"
             placeholder="Tìm theo tên bánh..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="border px-3 py-2 rounded-md w-[200px] focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-[200px] rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
           />
           <select
             value={sortOption}
             onChange={(e) => setSortOption(e.target.value)}
-            className="border px-3 py-2 rounded-md hover:bg-[#f5f5f5] transition-colors duration-200"
+            className="rounded-md border px-3 py-2 transition-colors duration-200 hover:bg-[#f5f5f5]"
           >
             <option value="">Chọn bộ lọc</option>
             <option value="Giá từ thấp đến cao">Giá từ thấp đến cao</option>

@@ -5,6 +5,7 @@ const { verifyToken, verifyAdmin } = require('../middleware/auth.middleware');
 
 // User
 router.post('/', verifyToken, orderController.createOrder);
+router.post('/buy-now', verifyToken, orderController.createBuyNowOrder);
 router.get('/', verifyToken, orderController.getOrders);
 router.get('/:orderId', verifyToken, orderController.getOrderDetail);
 

@@ -44,7 +44,7 @@ function DefaultLayout({ children }) {
 
   const triggerSuccessPopup = () => {
     setSuccessPopup(true);
-    setTimeout(() => setSuccessPopup(false), 2000);
+    setTimeout(() => setSuccessPopup(false), 1500);
   };
 
   useEffect(() => {

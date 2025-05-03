@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import { getCake } from '~/api/apiCakes';
-
+import { getCake, getAllCakes } from '~/api/apiCakes';
 const useCake = (params) => {
   const [cakes, setCakes] = useState([]);
   const categories = [
-    { typeId: '', name: 'Tất cả sản phẩm', title: '' },
+    { typeId: null, name: 'Tất cả sản phẩm', title: '' },
     { typeId: '67de79685a1a07a80a724780', name: 'Bánh sinh nhật', title: '' },
     { typeId: '67de79685a1a07a80a724782', name: 'Bánh truyền thống', title: '' },
     { typeId: '67de79685a1a07a80a724783', name: 'Cookies and Mini Cakes', title: '' },
@@ -26,21 +25,42 @@ const useCake = (params) => {
     }
   };
 
+  // const fetchCakes = async (typeId) => {
+  //   if (!typeId) return; // Không gọi nếu typeId rỗng
+  //   try {
+  //     const result = await getCake(typeId);
+  //     setCakes(result?.data || []);
+  //   } catch (error) {
+  //     console.error('Failed to fetch cakes:', error);
+  //     setCakes([]);
+  //   }
+  // };
   const fetchCakes = async (typeId) => {
-    if (!typeId) return; // ✅ tránh gọi API rỗng
     try {
-      const result = await getCake(typeId);
+      let result;
+      if (!typeId) {
+        // Nếu typeId là null hoặc undefined: lấy tất cả sản phẩm
+        result = await getAllCakes();
+      } else {
+        // Nếu có typeId: lấy theo loại
+        result = await getCake(typeId);
+      }
       setCakes(result?.data || []);
     } catch (error) {
       console.error('Failed to fetch cakes:', error);
       setCakes([]);
     }
   };
+  
+  
 
   useEffect(() => {
     const index = getTypeOfCakes(params);
-    fetchCakes(categories[index].typeId);
+    const selectedCategory = categories[index] || categories[0]; // fallback là "Tất cả sản phẩm"
+    fetchCakes(selectedCategory.typeId); // gọi luôn, dù typeId null cũng fetchAll
   }, [params]);
+  
+  
 
   const index = getTypeOfCakes(params);
   return { cakes, categoryName: categories[index]?.name };

@@ -11,17 +11,25 @@ import {
 } from './authSlice';
 import { response } from '~/services/axios';
 import { toast } from 'react-toastify';
+
 export const loginUser = async (dispatch, user, navigate, redirectPath = '/') => {
   dispatch(loginStart());
   try {
     // const res = await response.post('/api/public/login', user);
+
     const res = await response.post('/api/auth/login', user);
+    const { accessToken, refreshToken } = res;
+    localStorage.setItem('access_token', accessToken);
+    localStorage.setItem('refresh_token', refreshToken);
+    localStorage.setItem('login_type', 'normal');
     localStorage.removeItem('loggedOut');
     sessionStorage.removeItem('googleSynced');
+    localStorage.setItem('login_type', 'normal');
     dispatch(loginSuccess(res));
     toast.success('Đăng nhập thành công', {
       position: 'bottom-right',
     });
+    // console.log('Res login:', res);
     navigate(redirectPath);
   } catch (err) {
     dispatch(loginFail());
@@ -42,8 +50,11 @@ export const loginUser = async (dispatch, user, navigate, redirectPath = '/') =>
 export const logOutUser = async (dispatch, token, navigate, redirectPath = '/auth?mode=signin') => {
   dispatch(logOutStart());
   try {
-    
+
     await response.post('/api/auth/logout', { refresh_token: token });
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('login_type');
     localStorage.setItem('loggedOut', 'true');
     sessionStorage.removeItem('googleSynced');
     dispatch(logOutSuccess());
@@ -115,10 +126,10 @@ export const registerUser = async (dispatch, user, navigator) => {
 //   }
 // };
 
-export const refreshToken = async (token) => {
+export const refreshToken = async (refreshToken) => {
   try {
-    const res = await response.post('/api/auth/refresh-token', { refresh_token: token });
-    return res.data;
+    const res = await response.post('/api/auth/refresh-token', { refreshToken: refreshToken });
+    return res;
   } catch (err) {
     console.log(err);
     return null;
@@ -133,6 +144,7 @@ export const googleLoginUser = async (dispatch) => {
 
     localStorage.setItem('access_token', access_token);
     localStorage.setItem('refresh_token', refresh_token);
+    localStorage.setItem('login_type', 'google');
 
     dispatch(loginSuccess({ user, access_token, refresh_token }));
   } catch (err) {

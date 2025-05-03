@@ -3,11 +3,8 @@ import { NavLink, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { getCake, getCakeById } from '~/api/apiCakes';
 import Card from '../Card';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart } from '~/redux/cartSlice';
 import { AddToCartContext } from '../../DefaultLayout';
-import { loginSuccess } from '~/redux/authSlice';
-import { createInstance } from '~/redux/interceptors';
-import { addCartItem } from '~/api/apiCart';
+import { addCartItem, fetchCart } from '~/redux/cartSlice';
 
 function DetailedCake() {
   const [cake, setCake] = useState({});
@@ -21,7 +18,6 @@ function DetailedCake() {
 
   const user = useSelector((state) => state.auth.login.currentUser);
   const { triggerSuccessPopup } = useContext(AddToCartContext);
-  const instance = createInstance(user, dispatch, loginSuccess);
   const { categoryName } = location.state || {};
 
   useEffect(() => {
@@ -35,14 +31,10 @@ function DetailedCake() {
       const res = await getCakeById(id);
       const cakeData = res.data;
       setCake(cakeData);
-  
-      console.log("Chi tiết bánh:", cakeData);
-  
+
       const productTypeId = cakeData?.productType?._id || cakeData?.product_type_id;
       if (productTypeId) {
         const resAlike = await getCake(productTypeId);
-        console.log("Tất cả bánh cùng loại:", resAlike.data);
-  
         const filteredAlike = resAlike.data.filter(
           (item) => String(item._id) !== String(cakeData._id)
         );
@@ -50,39 +42,59 @@ function DetailedCake() {
       }
     } catch (err) {
       console.error('Lỗi khi tải dữ liệu chi tiết bánh:', err);
+      message.error('Không thể tải thông tin sản phẩm');
     }
-  };  
-
-  const handleAddToCart = async () => {
-    if (!user) return navigate('/auth?mode=signin');
-
-    const newItem = {
-      product_id: cake._id,
-      type_id: cake.productType,
-      name: cake.productName,
-      price: cake.price,
-      image_link: cake.imageLink,
-      buy_quantity: quantity,
-    };
-
-    dispatch(addToCart(newItem));
-    await addCartItem(user.access_token, instance, newItem);
-    triggerSuccessPopup();
   };
 
-  const handleBuyNow = () => {
-    if (!user) return navigate('/auth?mode=signin');
+  const handleAddToCart = async () => {
+    if (!user) {
+      navigate('/auth?mode=signin');
+      return;
+    }
 
-    const newItem = {
-      product_id: cake._id,
-      type_id: cake.productType,
-      name: cake.productName,
-      price: cake.price,
-      image_link: cake.imageLink,
-      buy_quantity: quantity,
-    };
+    try {
+      await dispatch(
+        addCartItem({
+          productId: cake._id,
+          quantity: quantity
+        })
+      ).unwrap();
 
-    navigate('/payment', { state: { newItem } });
+      dispatch(fetchCart());
+      triggerSuccessPopup();
+    } catch (error) {
+      console.error('Lỗi khi thêm vào giỏ hàng:', error);
+      message.error(error.message || 'Thêm vào giỏ hàng thất bại');
+    }
+  };
+
+  const handleBuyNow = async () => {
+    if (!user) {
+      navigate('/auth?mode=signin');
+      return;
+    }
+    try {
+      await dispatch(
+        addCartItem({
+          productId: cake._id,
+          quantity: quantity
+        })
+      ).unwrap();
+      dispatch(fetchCart());
+
+      navigate('/cart', {
+        state: {
+          autoSelectedKey: cake._id, // Truyền productId của sản phẩm vừa thêm
+          isBuyNow: true // Đánh dấu là mua ngay
+        }
+      });
+      console.log(cake._id)
+    } catch (error) {
+      console.error('Lỗi khi thêm vào giỏ hàng:', error);
+      message.error(error.message || 'Thêm vào giỏ hàng thất bại');
+
+    }
+
   };
 
   return (
@@ -145,7 +157,7 @@ function DetailedCake() {
 
               <button
                 onClick={handleBuyNow}
-                className="h-[65px] w-[260px] rounded-lg bg-primary text-2xl font-semibold text-white"
+                className="h-[65px] w-[260px] rounded-lg bg-primary text-2xl font-semibold text-white hover:bg-opacity-90 transition-colors"
               >
                 Mua ngay
               </button>
@@ -171,6 +183,8 @@ function DetailedCake() {
                 image_link={item.imageLink}
                 id={item._id}
                 price={item.price}
+                categoryName={categoryName}
+                cake={item}
               />
             ))}
           </div>

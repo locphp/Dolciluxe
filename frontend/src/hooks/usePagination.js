@@ -13,8 +13,10 @@ function usePagination(data) {
     );
     const params = Object.fromEntries(searchParams.entries())['mode'];
     useEffect(() => {
-        setCurrentPage(1)
-    }, [params])
+        const pageFromParams = Math.max(parseInt(searchParams.get("page"), 10) || 1, 1);
+        setCurrentPage(Math.min(pageFromParams, maxPage));  // đồng bộ từ URL
+    }, [searchParams, maxPage]);
+    
     // Đồng bộ hóa currentPage với query parameters
     useEffect(() => {
         const params = Object.fromEntries(searchParams.entries()); // Lấy tất cả query params hiện có

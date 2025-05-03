@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart } from '~/redux/cartSlice';
+// import { addToCart } from '~/redux/cartSlice';
 import { CloseIcon } from '~/assets/icons';
 import { createInstance } from '~/redux/interceptors';
 import { loginSuccess } from '~/redux/authSlice';
@@ -22,13 +22,13 @@ function AddToCart({ content, close }) {
     }
     const newItem = {
       product_id: content._id,
-        type_id: content.product_type_id,
-        name: content.product_name,
-        variant: selected.variant_features,
-        discount: selected.discount,
-        price: selected.price,
-        image_link: content.image_link,
-        buy_quantity: quantity,
+      type_id: content.product_type_id,
+      name: content.product_name,
+      variant: selected.variant_features,
+      discount: selected.discount,
+      price: selected.price,
+      image_link: content.image_link,
+      buy_quantity: quantity,
     }
     dispatch(
       addToCart(newItem),
@@ -94,7 +94,7 @@ function AddToCart({ content, close }) {
             </div>
           </div>
         </div>
-        <CloseIcon className='absolute top-3 right-4 cursor-pointer' onClick={() =>close(true)}/>
+        <CloseIcon className='absolute top-3 right-4 cursor-pointer' onClick={() => close(true)} />
       </div>
     </div>
   );

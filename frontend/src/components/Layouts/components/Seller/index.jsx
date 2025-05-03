@@ -3,7 +3,7 @@ import useCake from '~/hooks/useCake';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import Card from '../Card';
-import { FaLongArrowAltRight } from "react-icons/fa";
+import { FaLongArrowAltRight } from 'react-icons/fa';
 function Seller({ params }) {
   const responsive = {
     desktop: {
@@ -40,7 +40,7 @@ function Seller({ params }) {
           additionalTransfrom={0}
           arrows
           centerMode={false}
-          className="py-4"
+          className="px-11 py-4"
           containerClass="container-with-dots"
           dotListClass=""
           draggable
@@ -55,11 +55,11 @@ function Seller({ params }) {
           {cakes.map((cake, index) => (
             <Card
               key={index}
-              image_link={cake.image_link}
-              product_name={cake.product_name}
+              image_link={cake.imageLink}
+              product_name={cake.productName}
               description={cake.description}
               id={cake._id}
-              price={cake.product_variant[0].price}
+              price={cake.price}
               categoryName={categoryName}
               cake={cake}
             />
@@ -85,7 +85,7 @@ function Seller({ params }) {
           </p>
           <a href="/category" className="ml-4 flex items-center gap-2">
             <span>Xem thêm</span>
-            <FaLongArrowAltRight className=' translate-y-1/6'/>
+            <FaLongArrowAltRight className="translate-y-1/6" />
           </a>
         </div>
       </div>

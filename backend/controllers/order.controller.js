@@ -15,6 +15,26 @@ const createOrder = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 };
+const createBuyNowOrder = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { productId, quantity, addressId, paymentMethod } = req.body;
+
+        const order = await orderService.createBuyNowOrder(userId, {
+            productId,
+            quantity,
+            addressId,
+            paymentMethod
+        });
+
+        res.status(201).json({
+            message: 'Buy Now order created successfully',
+            data: order
+        });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
 
 const getOrders = async (req, res) => {
     try {
@@ -54,6 +74,7 @@ const deleteOrder = async (req, res) => {
 
 module.exports = {
     createOrder,
+    createBuyNowOrder,
     getOrders,
     getOrderDetail,
     updateOrderStatus,

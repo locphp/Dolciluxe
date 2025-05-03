@@ -3,7 +3,7 @@ const authService = require('../services/auth.service');
 exports.register = async (req, res) => {
     try {
         const { name, email, password, phone, address } = req.body;
-        const response = await authService.registerUser(name, email, password, phone, address);
+        const response = await authService.registerUser(name, email, password, phone);
         res.status(response.code).json({
             code: response.code,
             message: response.message,
@@ -26,14 +26,14 @@ exports.login = async (req, res) => {
 
 exports.logout = async (req, res) => {
     try {
-        await authService.logoutUser(req, res);
+        const response = await authService.logoutUser(req, res);
         res.status(response.code).json(response);
     } catch (error) {
         res.status(500).json({ code: 500, message: "Server error", error: error.message });
     }
-  };
-  
-  
+};
+
+
 
 exports.refreshToken = async (req, res) => {
     try {
@@ -66,7 +66,7 @@ exports.refreshToken = async (req, res) => {
 exports.googleCallback = async (req, res) => {
     try {
         const response = await authService.loginWithGoogle(req.user);
-
+        req.session.user = response.data;
         res.redirect(`${process.env.CLIENT_URL}/`);
     } catch (error) {
         res.redirect(`${process.env.CLIENT_URL}/login-failed`);
@@ -94,3 +94,19 @@ exports.forgotPassword = async (req, res) => {
     await authService.forgotPassword(email);
     res.status(200).json({ message: 'Đã gửi mail reset mật khẩu' });
 }
+
+exports.resetPassword = async (req, res) => {
+    try {
+        const { token, newPassword, confirmPassword } = req.body;
+
+        const result = await authService.resetPassword(token, newPassword, confirmPassword);
+        res.status(result.code).json({
+            message: result.message,
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Lỗi máy chủ',
+            error: error.message,
+        });
+    }
+};
