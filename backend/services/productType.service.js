@@ -1,4 +1,4 @@
-const ProductType = require('../models/producttype.model');
+const ProductType = require('../models/productType.model');
 const Product = require('../models/product.model');
 
 // Get all product types
