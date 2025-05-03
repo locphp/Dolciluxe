@@ -23,7 +23,9 @@ import NewPassword from "~/components/Layouts/components/Forgot Password/NewPass
 import PaymentReturn from "~/components/Layouts/components/Payment/PaymentReturn";
 import PaymentSuccess from "~/components/Layouts/components/Payment/PaymentSucess";
 import ThankYou from "~/components/Layouts/components/Payment/COD";
-import Checkout from "~/components/Layouts/components/Checkout";
+import Checkout from "~/components/Layouts/components/Checkout/Checkout";
+import OrderSuccess from "~/components/Layouts/components/Payment/COD";
+// import Checkout from "~/components/Layouts/components/Checkout";
 const publicRoute = [
   { path: "/", component: Home },
   { path: "/generator", component: GenImage },
@@ -41,7 +43,7 @@ const publicRoute = [
   { path: "/reset-password", component: NewPassword },
   { path: "/payment-return", component: PaymentReturn },
   { path: "/payment-success", component: PaymentSuccess },
-  { path: "/thankyou", component: ThankYou },
+  { path: "/order-success", component: OrderSuccess },
   {
     path: '/checkout',
     component: Checkout,

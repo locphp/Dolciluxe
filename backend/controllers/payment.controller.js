@@ -22,22 +22,56 @@ const vnpayReturn = async (req, res) => {
                 paymentMethod: 'VNPAY',
                 orderStatus: 'processing',
                 paymentResult: {
-                  vnp_TransactionNo: result.transactionId,
-                  vnp_BankCode: result.bankCode,
-                  vnp_PayDate: result.payDate,
-                  vnp_ResponseCode: '00',
-                  vnp_Amount: (result.amount * 100).toString()
+                    vnp_TransactionNo: result.transactionId,
+                    vnp_BankCode: result.bankCode,
+                    vnp_PayDate: result.payDate,
+                    vnp_ResponseCode: '00',
+                    vnp_Amount: (result.amount * 100).toString()
                 },
                 updatedAt: Date.now()
-              });
+            });
             // await sendOrderConfirmationEmail(result.orderId, result.transactionId);
-            return res.redirect(`${process.env.CLIENT_URL}/payment-success?orderId=${result.orderId}`);
+            return res.status(200).json({
+                success: true,
+                message: 'Payment successful',
+                data: {
+                    orderId: result.orderId,
+                    transactionId: result.transactionId,
+                    amount: result.amount,
+                    paymentMethod: 'VNPAY',
+                    payDate: result.payDate,
+                },
+                meta: {
+                    returnUrl: `${process.env.CLIENT_URL}/payment-success?orderId=${result.orderId}`,
+                    // signature: generateSignature(result.orderId, result.vnp_Amount),
+                    // clientNote: 'Vui lòng không chia sẻ thông tin thanh toán'
+                }
+
+            })
         } else {
-            return res.redirect(`${process.env.CLIENT_URL}/payment-fail`);
+            return res.status(400).json({
+                success: false,
+                message: 'Payment failed',
+                data: null,
+                meta: {
+                    returnUrl: `${process.env.CLIENT_URL}/payment-fail`,
+                    // signature: generateSignature(result.orderId, result.vnp_Amount),
+                    // clientNote: 'Vui lòng không chia sẻ thông tin thanh toán'
+                }
+            })
         }
     } catch (error) {
         console.log(error);
-        return res.redirect(`${process.env.CLIENT_URL}/payment-fail`);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            data: null,
+            meta: {
+                returnUrl: `${process.env.CLIENT_URL}/payment-fail`,
+                // signature: generateSignature(result.orderId, result.vnp_Amount),
+                // clientNote: 'Vui lòng không chia sẻ thông tin thanh toán'
+            }
+        })
     }
 };
 

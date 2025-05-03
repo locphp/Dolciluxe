@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCartTotal } from '~/redux/selectors';
 import { getAllAddress, createAddress, updateAddress } from '~/api/apiUser';
 import AddressSelector from '../Account/contents/AddressSelector';
 import { Card, Radio, Button, Modal, Form, Input, Checkbox, Divider, Space, Tag, message } from 'antd';
@@ -17,7 +16,7 @@ import { createOrder } from '~/api/apiOrder';
 import { loginSuccess } from '~/redux/authSlice';
 import { createInstance } from '~/redux/interceptors';
 
-const Checkout = () => {
+const Checkout1 = () => {
   const cartItems = useSelector(selectCartItems);
   const { state } = useLocation();
   const dispatch = useDispatch();
@@ -109,8 +108,6 @@ const Checkout = () => {
       // Gọi API tạo đơn hàng
       const response = await createOrder(instance, orderData);
       const paymentURL = response.paymentUrl || null;
-      console.log(paymentURL)
-      debugger
       const params = new URLSearchParams(location.search);
       localStorage.removeItem(`checkoutState_${params.get('state')}`);
 
@@ -299,12 +296,6 @@ const Checkout = () => {
                     </span>
                   </div>
                 </Card>
-                {/* Thông báo nhận điều khoản, nhấn vào link "Điều khoản Dolciluxe" sẽ navigate đến http://localhost:5173/condition?mode=condition */}
-
-
-
-
-
                 <Divider />
                 <div className='flex flex-col sm:flex-row justify-between items-center mt-4 mb-6 gap-3'>
                   <div className="flex flex-wrap items-center justify-center sm:justify-start text-sm text-gray-600 text-center sm:text-left">
@@ -451,4 +442,4 @@ const Checkout = () => {
     </div>
   );
 };
-export default Checkout;
+export default Checkout1;

@@ -2,6 +2,7 @@ const Order = require('../models/order.model');
 const Cart = require('../models/cart.model');
 const Address = require('../models/address.model');
 const paymentService = require('../services/payment.service')
+const Product = require('../models/product.model');
 
 const createOrder = async (userId, { cartItemIds, addressId, paymentMethod }) => {
     const cart = await Cart.findOne({ user: userId }).populate('items.product');
@@ -53,6 +54,57 @@ const createOrder = async (userId, { cartItemIds, addressId, paymentMethod }) =>
     }
     throw new Error('Invalid payment method');
 };
+
+const createBuyNowOrder = async (userId, { productId, quantity, addressId, paymentMethod }) => {
+    // 1. Kiểm tra sản phẩm
+    const product = await Product.findById(productId);
+    if (!product) throw new Error('Product not found');
+    // if (product.stock < quantity) throw new Error('Insufficient stock');
+
+    // 2. Kiểm tra địa chỉ
+    const address = await Address.findById(addressId);
+    if (!address) throw new Error('Address not found');
+
+    // 3. Tạo order item
+    const orderItem = {
+        product: productId,
+        quantity,
+        price: product.price
+    };
+
+    // 4. Tính tổng tiền
+    const totalPrice = product.price * quantity;
+
+    // 5. Tạo đơn hàng
+    const newOrder = await Order.create({
+        user: userId,
+        items: [orderItem],
+        address,
+        paymentMethod,
+        totalPrice,
+        paymentStatus: paymentMethod === 'COD' ? 'pending' : 'pending',
+        orderStatus: 'pending',
+        isBuyNow: true // Đánh dấu đơn hàng mua ngay
+    });
+
+    //  Cập nhật tồn kho (nếu cần)
+    // product.stock -= quantity;
+    // await product.save();
+
+    // 7. Xử lý thanh toán
+    if (paymentMethod === 'VNPAY') {
+        const paymentUrl = await paymentService.createPaymentUrl(newOrder._id, userId);
+        return {
+            order: newOrder,
+            paymentUrl
+        };
+    }
+
+    return {
+        order: newOrder,
+        paymentUrl: null
+    };
+};
 const getOrders = async (userId) => {
     const orders = await Order.find({ user: userId }).populate('items.product').populate('address');
     return { code: 200, message: 'Get orders successfully', data: orders };
@@ -85,6 +137,7 @@ const deleteOrder = async (orderId) => {
 
 module.exports = {
     createOrder,
+    createBuyNowOrder,
     getOrders,
     getOrderDetail,
     updateOrderStatus,
