@@ -30,7 +30,7 @@ const vnpayReturn = async (req, res) => {
                 },
                 updatedAt: Date.now()
             });
-            // await sendOrderConfirmationEmail(result.orderId, result.transactionId);
+            await sendOrderConfirmationEmail(result.orderId, result.transactionId);
             return res.status(200).json({
                 success: true,
                 message: 'Payment successful',
