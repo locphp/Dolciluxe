@@ -29,7 +29,7 @@ import OrderSuccess from "~/components/Layouts/components/Payment/COD";
 // import Checkout from "~/components/Layouts/components/Checkout";
 const publicRoute = [
   { path: "/", component: Home },
-  { path: "/generator", component: GenImage },
+  // { path: "/generator", component: GenImage },
   { path: "/about", component: About },
   { path: "/news", component: News },
   { path: "/category", component: Category },

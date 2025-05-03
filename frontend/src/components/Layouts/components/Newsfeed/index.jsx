@@ -99,11 +99,11 @@ function Newsfeed() {
   };
   return (
     <div className="my-24 flex flex-col items-center justify-center px-7 text-black text-primary md:px-10 lg:px-28">
-      <div className="w-full text-left">
+      {/* <div className="w-full text-left">
         <a href="/">Trang chủ </a>
         <span>&gt;&gt;</span>
         <a href="/news"> Tin tức </a>
-      </div>
+      </div> */}
       <h1 className="font-inter mb-10 text-center text-4xl font-extrabold leading-none text-black">Tin tức</h1>
 
       <div className="grid w-full grid-cols-1 place-items-center items-stretch justify-center gap-8 md:grid-cols-2 lg:grid-cols-3">

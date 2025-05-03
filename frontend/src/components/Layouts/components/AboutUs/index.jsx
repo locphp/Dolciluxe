@@ -4,12 +4,12 @@ import about_3 from '~/assets/images/about_3.jpg';
 import { Link } from 'react-router-dom';
 function AboutUs() {
   return (
-    <div className="mx-full font-inter mt-28 w-full items-center overflow-hidden text-black text-primary">
-      <div className="mx-4 sm:mx-10 lg:mx-28">
+    <div className="mx-full font-inter mt-12 w-full items-center overflow-hidden text-black text-primary">
+      {/* <div className="mx-4 sm:mx-10 lg:mx-28">
         <Link to="/">Trang chủ </Link>
         <span>&gt;&gt;</span>
         <Link to="/about"> Về chúng tôi </Link>
-      </div>
+      </div> */}
       <div
         className="img-scale mt-5 h-[200px] sm:h-[300px] w-full overflow-hidden bg-cover bg-center"
         style={{ backgroundImage: `url(${about_1})` }}
