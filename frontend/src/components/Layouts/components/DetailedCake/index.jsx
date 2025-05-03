@@ -68,24 +68,33 @@ function DetailedCake() {
     }
   };
 
-  const handleBuyNow = () => {
+  const handleBuyNow = async () => {
     if (!user) {
       navigate('/auth?mode=signin');
       return;
     }
+    try {
+      await dispatch(
+        addCartItem({
+          productId: cake._id,
+          quantity: quantity
+        })
+      ).unwrap();
+      dispatch(fetchCart());
 
-    navigate('/checkout', {
-      state: {
-        newItem: {
-          product_id: cake._id,
-          type_id: cake.productType,
-          name: cake.productName,
-          price: cake.price,
-          image_link: cake.imageLink,
-          buy_quantity: quantity,
+      navigate('/cart', {
+        state: {
+          autoSelectedKey: cake._id, // Truyền productId của sản phẩm vừa thêm
+          isBuyNow: true // Đánh dấu là mua ngay
         }
-      }
-    });
+      });
+      console.log(cake._id)
+    } catch (error) {
+      console.error('Lỗi khi thêm vào giỏ hàng:', error);
+      message.error(error.message || 'Thêm vào giỏ hàng thất bại');
+
+    }
+
   };
 
   return (
