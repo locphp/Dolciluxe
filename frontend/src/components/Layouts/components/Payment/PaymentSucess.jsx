@@ -1,53 +1,39 @@
-import { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import { getOrderDetail } from '~/api/apiOrder';
-import { Button, Result } from 'antd';
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Result, Button, message } from 'antd';
 
-function PaymentSuccess() {
-  const [searchParams] = useSearchParams();
-  const orderId = searchParams.get('orderId');
-  const [order, setOrder] = useState(null);
+const PaymentSuccess = () => {
+  const location = useLocation();
   const navigate = useNavigate();
+  const query = new URLSearchParams(location.search);
+  const token = query.get('token');
 
   useEffect(() => {
-    const fetchOrder = async () => {
-      try {
-        const res = await getOrderDetail(orderId);
-        console.log('res:', res.data);
-        setOrder(res.data);
-      } catch (err) {
-        console.error('Lỗi khi lấy thông tin đơn hàng:', err);
-      }
-    };
+    const authData = JSON.parse(localStorage.getItem('paymentAuth'));
 
-    if (orderId) fetchOrder();
-  }, [orderId]);
+    // Kiểm tra token hợp lệ
+    const isValid = (
+      authData &&
+      authData.token === token &&
+      authData.expires > Date.now()
+    );
+
+    if (!isValid) {
+      navigate('/', { replace: true });
+      message.error('Token không hợp lệ hoặc đã hết hạn!');
+    } else {
+      // Xóa token sau khi xác thực
+      localStorage.removeItem('paymentAuth');
+    }
+  }, [token, navigate]);
 
   return (
-    <div className="my-16 ml-12 flex flex-col items-center justify-center text-center">
+    <div className="payment-success-page">
+      {/* Nội dung trang thành công */}
       <Result
         status="success"
         title="Thanh toán thành công!"
-        subTitle={
-          order ? (
-            <>
-              <p>
-                <b>Mã đơn hàng:</b> {order._id}
-              </p>
-              <p>
-                <b>Ngày đặt:</b> {new Date(order.createdAt).toLocaleString()}
-              </p>
-              <p>
-                <b>Mã giao dịch:</b> {order.paymentResult?.vnp_TransactionNo || 'Không có'}
-              </p>
-              <p>
-                <b>Tổng thanh toán:</b> {order.totalPrice.toLocaleString()} VNĐ
-              </p>
-            </>
-          ) : (
-            'Đang tải chi tiết đơn hàng...'
-          )
-        }
+        subTitle="Đơn hàng của bạn đã được xử lý thành công"
         extra={[
           <Button key="home" type="primary" onClick={() => navigate('/')}>
             Quay lại trang chủ{' '}
@@ -59,6 +45,6 @@ function PaymentSuccess() {
       />
     </div>
   );
-}
+};
 
 export default PaymentSuccess;

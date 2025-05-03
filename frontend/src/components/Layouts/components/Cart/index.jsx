@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Typography, Flex, message, Empty } from 'antd';
 import { useCart } from './hooks';
 import CartTable from './CartTable';
 import CartActions from './CartActions';
 import CartModal from './CartModal';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const { Text } = Typography;
 
@@ -15,26 +15,24 @@ const Cart = () => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState('');
+  const location = useLocation();
 
   const user = useSelector((state) => state.auth.login.currentUser);
   const { cartItems, removeItem, removeMultipleItems, updateItemQuantity } = useCart(user);
   const navigate = useNavigate();
-  const renderEmptyCart = () => (
-    <Empty
-      image={Empty.PRESENTED_IMAGE_SIMPLE}
-      description={
-        <span style={{ fontSize: '16px' }}>Bạn chưa có sản phẩm nào trong giỏ hàng</span>
-      }
-    >
-      <Button
-        type="primary"
-        onClick={() => navigate('/products')} // Điều hướng đến trang sản phẩm
-        style={{ marginTop: '20px' }}
-      >
-        Xem sản phẩm
-      </Button>
-    </Empty>
-  );
+
+  useEffect(() => {
+    if (!location.state?.autoSelectedKey || !location.state?.isBuyNow) return;
+    if (!cartItems || cartItems.length === 0) return;
+
+    const productId = location.state.autoSelectedKey;
+    const targetItem = cartItems.find(item => item.product._id === productId);
+
+    if (targetItem) {
+      setSelectedRowKeys([productId]);
+      setSelectedItemIds([targetItem._id]);
+    }
+  }, [location.state, cartItems]);
 
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -114,6 +112,7 @@ const Cart = () => {
     navigate(`/checkout?state=${stateId}`, {
 
       state: {
+
         cartItems: cartItems, // Truyền toàn bộ giỏ hàng
         selectedItems: selectedItemIds.length > 0
           ? cartItems.filter(item => selectedItemIds.includes(item._id))
