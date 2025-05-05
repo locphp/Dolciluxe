@@ -6,18 +6,18 @@ const AntdProvider = ({ children }) => {
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: '#ff6b81',
+          colorPrimary: '#664545',
           colorLinkHover: '#e2556e',
-          // activeBorderColor: '#ff6b81',
-          // hoverBorderColor: '#ff6b81',
+          // activeBorderColor: '#664545',
+          // hoverBorderColor: '#664545',
           // hoverBgColor: '#fff0f2',
-          // colorPrimaryHover: '#ff6b81',
-          // colorPrimaryActive: '#ff6b81',
-          // activeBorderColor: '#ff6b81',
+          // colorPrimaryHover: '#664545',
+          // colorPrimaryActive: '#664545',
+          // activeBorderColor: '#664545',
         },
         components: {
           Button: {
-            colorPrimary: '#ff6b81',
+            colorPrimary: '#664545',
             colorPrimaryHover: '#ff4f67',
           },
           Table: {
@@ -26,10 +26,10 @@ const AntdProvider = ({ children }) => {
             rowSelectedHoverBg: '#ffe6ea',
           },
           Input: {
-            // colorPrimary: '#ff6b81',
-            // colorPrimaryHover: '#ff6b81',
-            // colorPrimaryActive: '#ff6b81',
-            borderColor: '#ff6b81',
+            // colorPrimary: '#664545',
+            // colorPrimaryHover: '#664545',
+            // colorPrimaryActive: '#664545',
+            borderColor: '#664545',
             borderRadius: 4,
           },
         },

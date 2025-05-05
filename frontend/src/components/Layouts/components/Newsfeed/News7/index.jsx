@@ -51,12 +51,12 @@ function Newsfeed7() {
               class="mx-auto my-5 block w-full max-w-[600px]"
             />
             <p class="text-center text-lg">
-              💌 Valentine này, gửi trọn yêu thương cùng những chiếc bánh ngọt ngào từ Cakewai!
+              💌 Valentine này, gửi trọn yêu thương cùng những chiếc bánh ngọt ngào từ Dolciluxe!
             </p>
 
             <p class="mt-4">
               Ngày 14/02 - ngày của tình yêu, hãy dành tặng cho người thương những chiếc bánh thơm ngon như một lời yêu
-              thương ngọt ngào. Cakewai hân hạnh mang đến chương trình ưu đãi hấp dẫn:
+              thương ngọt ngào. Dolciluxe hân hạnh mang đến chương trình ưu đãi hấp dẫn:
             </p>
 
             <div class="mt-6 rounded-lg bg-pink-100 p-4">
@@ -75,7 +75,7 @@ function Newsfeed7() {
             </div>
 
             <p class="mt-6 text-center text-lg font-semibold">
-              🎀 Đừng bỏ lỡ cơ hội thể hiện tình cảm với nửa kia của bạn bằng những chiếc bánh tình yêu từ Cakewai!
+              🎀 Đừng bỏ lỡ cơ hội thể hiện tình cảm với nửa kia của bạn bằng những chiếc bánh tình yêu từ Dolciluxe!
             </p>
 
             <div class="mt-6 text-center">
@@ -83,12 +83,12 @@ function Newsfeed7() {
                 📅 Thời gian: <span class="text-red-600">Từ 10/02 - 14/02</span>
               </p>
               <p class="text-lg font-semibold">
-                📍 Địa điểm: <span class="text-red-600">Tất cả cửa hàng Cakewai & đặt hàng online</span>
+                📍 Địa điểm: <span class="text-red-600">Tất cả cửa hàng Dolciluxe & đặt hàng online</span>
               </p>
             </div>
 
             <p class="mt-6 text-center text-xl font-bold text-red-500">
-              ❤️ Hãy để Cakewai cùng bạn tạo nên những khoảnh khắc ngọt ngào trong mùa Valentine này! ❤️{' '}
+              ❤️ Hãy để Dolciluxe cùng bạn tạo nên những khoảnh khắc ngọt ngào trong mùa Valentine này! ❤️{' '}
             </p>
           </div>
           <div>
@@ -111,17 +111,17 @@ function Newsfeed7() {
               </li>
               <li className="hover:text-slate-900 hover:underline">
                 <Link to="/news?mode=news5">
-                  Bầu trời châu âu được ra mắt hoành tráng với sự kết hợp đa văn hòa từ nhà Cakewai.
+                  Bầu trời châu âu được ra mắt hoành tráng với sự kết hợp đa văn hòa từ nhà Dolciluxe.
                 </Link>
               </li>
               <li className="hover:text-slate-900 hover:underline">
                 <Link to="/news?mode=news6">
                   {' '}
-                  Cakewai - Đặt bánh teabreak cho sự kiện, hội thảo, hội nghị... Tại TP.Hồ Chí Minh.
+                  Dolciluxe - Đặt bánh teabreak cho sự kiện, hội thảo, hội nghị... Tại TP.Hồ Chí Minh.
                 </Link>
               </li>
               <li className="hover:text-slate-900 hover:underline">
-                <Link to="/news?mode=news8"> Cakewai - Tưng bừng khai trương chi nhánh Võ Văn Ngân.</Link>
+                <Link to="/news?mode=news8"> Dolciluxe - Tưng bừng khai trương chi nhánh Võ Văn Ngân.</Link>
               </li>
             </ul>
           </div>

@@ -72,7 +72,7 @@ const sendOrderConfirmationEmail = async (orderId, transactionId) => {
             border-bottom: 1px solid #eeeeee;
         }
         .header h2 {
-            color: #ff6b81;
+            color: #664545;
             margin-bottom: 0;
         }
         .order-info {

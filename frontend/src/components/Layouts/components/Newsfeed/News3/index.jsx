@@ -48,7 +48,7 @@ function Newsfeed3() {
               ngọt.
             </div>
             <div className="my-2">
-              Cakewai hiểu rõ được điều đó, đội ngũ thiết kế và sản xuất luôn sáng tạo không ngừng để mang đến những
+              Dolciluxe hiểu rõ được điều đó, đội ngũ thiết kế và sản xuất luôn sáng tạo không ngừng để mang đến những
               chiếc bánh kem độc đáo sánh tựa như vẻ đẹp ngọc ngà son sắc của các cô gái.
             </div>
             <img
@@ -68,13 +68,13 @@ function Newsfeed3() {
               className="mx-auto my-5 block w-full max-w-[600px]"
             />
             <div className="my-5">
-              Nắm rõ các mưu cầu đó - Cakewai cho ra mắt bộ sưu tập bánh kem 20/10 đầy tinh tế với mong muốn giúp đỡ bạn
+              Nắm rõ các mưu cầu đó - Dolciluxe cho ra mắt bộ sưu tập bánh kem 20/10 đầy tinh tế với mong muốn giúp đỡ bạn
               bày tỏ những lời yêu thương qua những chiếc bánh ngọt dịu kì.
             </div>
             <div>------------</div>
             <div className="my-5 italic">Nhân ngày Phụ Nữ Việt Nam </div>
             <div>
-              Nhà Cakewai xin gửi lời chúc yêu thương và sức khỏe đến với chị, em phụ nữ thành công trong công việc,
+              Nhà Dolciluxe xin gửi lời chúc yêu thương và sức khỏe đến với chị, em phụ nữ thành công trong công việc,
               hạnh phúc trong tình yêu và trọn vẹn trong cuộc sống.
             </div>
           </div>
@@ -84,7 +84,7 @@ function Newsfeed3() {
             </h1>
             <ul className="ml-4 list-disc sm:ml-10">
               <li className="hover:text-slate-900 hover:underline">
-                <Link to="/news?mode=news1">Cakewai Thông Báo Lịch Nghỉ Tết Nguyên Đán 2024.</Link>
+                <Link to="/news?mode=news1">Dolciluxe Thông Báo Lịch Nghỉ Tết Nguyên Đán 2024.</Link>
               </li>
               <li className="hover:text-slate-900 hover:underline">
                 <Link to="/news?mode=news2">Mẫu bánh kem mừng 20/11 ngày Nhà Giáo Việt Nam.</Link>
@@ -96,20 +96,20 @@ function Newsfeed3() {
               </li>
               <li className="hover:text-slate-900 hover:underline">
                 <Link to="/news?mode=news5">
-                  Bầu trời châu âu được ra mắt hoành tráng với sự kết hợp đa văn hòa từ nhà Cakewai.
+                  Bầu trời châu âu được ra mắt hoành tráng với sự kết hợp đa văn hòa từ nhà Dolciluxe.
                 </Link>
               </li>
               <li className="hover:text-slate-900 hover:underline">
                 <Link to="/news?mode=news6">
                   {' '}
-                  Cakewai - Đặt bánh teabreak cho sự kiện, hội thảo, hội nghị... Tại TP.Hồ Chí Minh.
+                  Dolciluxe - Đặt bánh teabreak cho sự kiện, hội thảo, hội nghị... Tại TP.Hồ Chí Minh.
                 </Link>
               </li>
               <li className="hover:text-slate-900 hover:underline">
                 <Link to="/news?mode=news7"> Valentine Ngọt Ngào - Giảm Giá 50% Mừng Lễ Tình Nhân!</Link>
               </li>
               <li className="hover:text-slate-900 hover:underline">
-                <Link to="/news?mode=news8"> Cakewai - Tưng bừng khai trương chi nhánh Võ Văn Ngân.</Link>
+                <Link to="/news?mode=news8"> Dolciluxe - Tưng bừng khai trương chi nhánh Võ Văn Ngân.</Link>
               </li>
             </ul>
           </div>

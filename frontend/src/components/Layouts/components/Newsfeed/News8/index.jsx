@@ -23,7 +23,7 @@ function Newsfeed8() {
       <div className="flex justify-center text-lg">
         <div className="font-inter my-5 flex h-auto max-w-[900px] flex-col space-y-2 overflow-hidden break-words rounded-xl border-2 bg-[#E8E1E1] px-5 py-5">
           <h1 className="font-inter mb-10 text-center text-2xl font-extrabold leading-none text-black sm:text-3xl lg:text-4xl">
-            Cakewai - Tưng bừng khai trương chi nhánh Võ Văn Ngân.
+            Dolciluxe - Tưng bừng khai trương chi nhánh Võ Văn Ngân.
           </h1>
           <div className="inline-flex space-x-4 sm:space-x-8">
             <div className="flex items-center">
@@ -32,7 +32,7 @@ function Newsfeed8() {
                 alt=""
                 className="mr-1 inline-flex h-6 w-6 sm:h-8 sm:w-8"
               />
-              <span>Cakewai</span>
+              <span>Dolciluxe</span>
             </div>
             <div className="flex items-center">
               <img src="./src/assets/images/calendar.svg" alt="" className="mr-1 inline-flex h-6 w-6 sm:h-8 sm:w-8" />
@@ -42,7 +42,7 @@ function Newsfeed8() {
           <hr className="mx-auto my-5 h-[2px] w-full border border-t-2 border-gray-400 bg-gray-400 sm:w-[850px]" />
           <div class="text-black">
             <h2 class="mb-4 text-center text-2xl font-bold text-red-600">
-              🎉 Cakewai - Tưng Bừng Khai Trương Chi Nhánh Võ Văn Ngân! 🎉
+              🎉 Dolciluxe - Tưng Bừng Khai Trương Chi Nhánh Võ Văn Ngân! 🎉
             </h2>
             <p class="text-center text-lg">
               📍 <span class="font-semibold">Địa điểm mới - Trải nghiệm mới!</span>
@@ -76,7 +76,7 @@ function Newsfeed8() {
             </div>
 
             <p class="mt-6 text-center text-lg font-semibold">
-              🎈 Đừng bỏ lỡ cơ hội trải nghiệm không gian mới, hương vị mới và những ưu đãi tuyệt vời từ Cakewai!
+              🎈 Đừng bỏ lỡ cơ hội trải nghiệm không gian mới, hương vị mới và những ưu đãi tuyệt vời từ Dolciluxe!
             </p>
 
             <div class="mt-6 text-center">
@@ -113,13 +113,13 @@ function Newsfeed8() {
               </li>
               <li className="hover:text-slate-900 hover:underline">
                 <Link to="/news?mode=news5">
-                  Bầu trời châu âu được ra mắt hoành tráng với sự kết hợp đa văn hòa từ nhà Cakewai.
+                  Bầu trời châu âu được ra mắt hoành tráng với sự kết hợp đa văn hòa từ nhà Dolciluxe.
                 </Link>
               </li>
               <li className="hover:text-slate-900 hover:underline">
                 <Link to="/news?mode=news6">
                   {' '}
-                  Cakewai - Đặt bánh teabreak cho sự kiện, hội thảo, hội nghị... Tại TP.Hồ Chí Minh.
+                  Dolciluxe - Đặt bánh teabreak cho sự kiện, hội thảo, hội nghị... Tại TP.Hồ Chí Minh.
                 </Link>
               </li>
               <li className="hover:text-slate-900 hover:underline">

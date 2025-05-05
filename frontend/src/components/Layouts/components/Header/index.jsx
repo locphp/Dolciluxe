@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { UserTooltip } from '~/components/clients/client';
 import { Drawer } from 'antd';
 import { ChevronDown } from 'lucide-react';
-import { Cakewai, Cart, UserProfile } from '~/assets/icons';
+import { Dolciluxe, Cart, UserProfile } from '~/assets/icons';
 import ListItems from '../ListItems';
 import { logOutUser } from '~/redux/apiRequest';
 import { persistor } from '~/redux/store';
@@ -83,7 +83,7 @@ function Header() {
     <header className="fixed top-0 z-[100] h-16 w-full bg-fifth">
       <div className="mx-10 flex h-full items-center justify-between gap-4 text-primary lg:mx-20">
         <Link to="/">
-          <Cakewai className="mt-2" />
+          <Dolciluxe className="mt-2" />
         </Link>
         <ul className="hidden gap-12 px-4 text-base uppercase lg:flex">
           <li className={pathname === '/' ? 'menu-active' : 'menu-navbar'}>

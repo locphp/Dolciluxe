@@ -1,7 +1,7 @@
 'use client';
 import { Button, Card, Checkbox, Label, TextInput } from 'flowbite-react';
 import { toast } from 'react-toastify';
-import { Cakewai } from '~/assets/icons';
+import { Dolciluxe } from '~/assets/icons';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useState } from 'react';
 import { loginUser } from '~/redux/apiRequest';
@@ -29,7 +29,7 @@ function AdminLogin() {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#f3d1dc]">
       <Card className="w-[400px] flex-col bg-slate-100">
-        <Cakewai className="mx-auto" />
+        <Dolciluxe className="mx-auto" />
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div>
             <div className="mb-2 block">
