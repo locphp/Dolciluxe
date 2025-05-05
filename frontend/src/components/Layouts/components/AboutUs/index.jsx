@@ -25,7 +25,7 @@ function AboutUs() {
               Câu chuyện
             </Link>
             <div className=" my-5 text-xs sm:text-sm text-white">
-              Cakewai được thành lập vào năm 2024, bắt nguồn từ tình yêu dành cho đất Việt cùng với bánh ngọt và cộng
+              Dolciluxe được thành lập vào năm 2024, bắt nguồn từ tình yêu dành cho đất Việt cùng với bánh ngọt và cộng
               đồng nơi đây. Ngay từ những ngày đầu tiên, mục tiêu của chúng mình là có thể phục vụ và góp phần phát
               triển cộng đồng bằng cách siết chặt thêm sự kết nối và sự gắn bó giữa người với người.
             </div>
@@ -48,8 +48,8 @@ function AboutUs() {
               Dịch vụ
             </Link>
             <div className="my-5 text-xs sm:text-sm text-white">
-              Cakewai là không gian của chúng mình nên mọi thứ ở đây đều vì sự thoải mái của chúng mình. Đừng giữ trong
-              lòng, hãy chia sẻ với chúng mình điều bạn mong muốn để cùng nhau giúp Cakewai trở nên tuyệt vời hơn.
+              Dolciluxe là không gian của chúng mình nên mọi thứ ở đây đều vì sự thoải mái của chúng mình. Đừng giữ trong
+              lòng, hãy chia sẻ với chúng mình điều bạn mong muốn để cùng nhau giúp Dolciluxe trở nên tuyệt vời hơn.
             </div>
           </div>
         </div>
@@ -70,7 +70,7 @@ function AboutUs() {
               Lời cam kết
             </Link>
             <div className="my-5 text-xs sm:text-sm text-white">
-              Cakewai cam kết mang đến cho khách hàng những chiếc bánh ngọt tinh tế, tươi ngon và chất lượng nhất. Chúng
+              Dolciluxe cam kết mang đến cho khách hàng những chiếc bánh ngọt tinh tế, tươi ngon và chất lượng nhất. Chúng
               tôi hiểu rằng mỗi chiếc bánh không chỉ là món ăn mà còn là tâm tư, tình cảm gửi gắm đến người nhận.
             </div>
           </div>

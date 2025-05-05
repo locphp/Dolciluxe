@@ -22,7 +22,7 @@ function Newsfeed6() {
       <div className="flex justify-center text-lg">
         <div className="font-inter my-5 flex h-auto max-w-[900px] flex-col space-y-2 overflow-hidden break-words rounded-xl border-2 bg-[#E8E1E1] px-5 py-5">
           <h1 className="font-inter mb-10 text-center text-2xl font-extrabold leading-none text-black sm:text-3xl lg:text-4xl">
-            Cakewai - Đặt bánh teabreak cho sự kiện, hội thảo, hội nghị... Tại TP.Hồ Chí Minh.
+            Dolciluxe - Đặt bánh teabreak cho sự kiện, hội thảo, hội nghị... Tại TP.Hồ Chí Minh.
           </h1>
           <div className="inline-flex space-x-4 sm:space-x-8">
             <div className="flex items-center">
@@ -41,7 +41,7 @@ function Newsfeed6() {
           <hr className="mx-auto my-5 h-[2px] w-full border border-t-2 border-gray-400 bg-gray-400 sm:w-[850px]" />
           <div className="text-black">
             <div className="my-5 font-bold">
-              Cakewai cung cấp: Bánh sinh nhật, bánh minicake, bánh sự kiện, tiệc buffet bánh ngọt, tiệc bánh ngọt khai
+              Dolciluxe cung cấp: Bánh sinh nhật, bánh minicake, bánh sự kiện, tiệc buffet bánh ngọt, tiệc bánh ngọt khai
               trương, bánh coockies,... liên hệ hotline để được tư vấn: 0912476521
             </div>
             <div>
@@ -60,7 +60,7 @@ function Newsfeed6() {
               hàng,... Bạn là đơn vị tổ chức sự kiện. Bạn cần tham khảo những dòng bánh ngọt trong bữa tiệc sắp tới.
             </div>
             <div className="my-5">
-              Cakewai xin gửi đến quý khách hàng thực đơn tiệc teabreak vô cùng đa dạng và phong phú. Mong quý khách
+              Dolciluxe xin gửi đến quý khách hàng thực đơn tiệc teabreak vô cùng đa dạng và phong phú. Mong quý khách
               hàng có thể lựa chọn những loại bánh phù hợp nhất cho mình.
             </div>
             <img
@@ -100,7 +100,7 @@ function Newsfeed6() {
               className="mx-auto my-5 block w-full max-w-[600px]"
             />
             <div className="my-5">
-              Nhà Cakewai cung cấp đầy đủ các loại bánh như su kem, coockie, macaron, socola, tiramisu,...
+              Nhà Dolciluxe cung cấp đầy đủ các loại bánh như su kem, coockie, macaron, socola, tiramisu,...
             </div>
           </div>
           <div>
@@ -109,7 +109,7 @@ function Newsfeed6() {
             </h1>
             <ul className="ml-4 list-disc sm:ml-10">
               <li className="hover:text-slate-900 hover:underline">
-                <Link to="/news?mode=news1">Cakewai Thông Báo Lịch Nghỉ Tết Nguyên Đán 2024.</Link>
+                <Link to="/news?mode=news1">Dolciluxe Thông Báo Lịch Nghỉ Tết Nguyên Đán 2024.</Link>
               </li>
               <li className="hover:text-slate-900 hover:underline">
                 <Link to="/news?mode=news2">Mẫu bánh kem mừng 20/11 ngày Nhà Giáo Việt Nam.</Link>
@@ -127,14 +127,14 @@ function Newsfeed6() {
               <li className="hover:text-slate-900 hover:underline">
                 <Link to="/news?mode=news5">
                   {' '}
-                  Bầu trời châu âu được ra mắt hoành tráng với sự kết hợp đa văn hòa từ nhà Cakewai.
+                  Bầu trời châu âu được ra mắt hoành tráng với sự kết hợp đa văn hòa từ nhà Dolciluxe.
                 </Link>
               </li>
               <li className="hover:text-slate-900 hover:underline">
                 <Link to="/news?mode=news7"> Valentine Ngọt Ngào - Giảm Giá 50% Mừng Lễ Tình Nhân!</Link>
               </li>
               <li className="hover:text-slate-900 hover:underline">
-                <Link to="/news?mode=news8"> Cakewai - Tưng bừng khai trương chi nhánh Võ Văn Ngân.</Link>
+                <Link to="/news?mode=news8"> Dolciluxe - Tưng bừng khai trương chi nhánh Võ Văn Ngân.</Link>
               </li>
             </ul>
           </div>

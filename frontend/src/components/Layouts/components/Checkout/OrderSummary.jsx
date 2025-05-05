@@ -15,7 +15,7 @@ const OrderSummary = ({ totalAmount, handleOrder, loading }) => (
         </div>
         <div className="flex justify-between text-lg font-semibold">
             <span>Tổng thanh toán:</span>
-            <span className="text-[30px] font-bold text-[#ff6b81]">
+            <span className="text-[30px] font-bold text-[#664545]">
                 {totalAmount.toLocaleString('vi-VN')}₫
             </span>
         </div>
@@ -25,7 +25,7 @@ const OrderSummary = ({ totalAmount, handleOrder, loading }) => (
                 Khi nhấn 'Đặt hàng', bạn xác nhận rằng bạn đồng ý với
                 <Link
                     to="/condition?mode=condition"
-                    className="text-[#ff6b81] font-semibold hover:underline ml-1 whitespace-nowrap"
+                    className="text-[#664545] font-semibold hover:underline ml-1 whitespace-nowrap"
                 >
                     Điều khoản Dolciluxe
                 </Link>

@@ -31,7 +31,7 @@ function Newsfeed4() {
                 alt=""
                 className="mr-1 inline-flex h-6 w-6 sm:h-8 sm:w-8"
               />
-              <span>Cakewai</span>
+              <span>Dolciluxe</span>
             </div>
             <div className="flex items-center">
               <img src="./src/assets/images/calendar.svg" alt="" className="mr-1 inline-flex h-6 w-6 sm:h-8 sm:w-8" />
@@ -147,7 +147,7 @@ function Newsfeed4() {
               </h1>
               <ul className="ml-4 list-disc sm:ml-10">
                 <li className="hover:text-slate-900 hover:underline">
-                  <Link to="/news?mode=news1">Cakewai Thông Báo Lịch Nghỉ Tết Nguyên Đán 2024.</Link>
+                  <Link to="/news?mode=news1">Dolciluxe Thông Báo Lịch Nghỉ Tết Nguyên Đán 2024.</Link>
                 </li>
                 <li className="hover:text-slate-900 hover:underline">
                   <Link to="/news?mode=news2">Mẫu bánh kem mừng 20/11 ngày Nhà Giáo Việt Nam.</Link>
@@ -159,20 +159,20 @@ function Newsfeed4() {
                 </li>
                 <li className="hover:text-slate-900 hover:underline">
                   <Link to="/news?mode=news5">
-                    Bầu trời châu âu được ra mắt hoành tráng với sự kết hợp đa văn hòa từ nhà Cakewai.
+                    Bầu trời châu âu được ra mắt hoành tráng với sự kết hợp đa văn hòa từ nhà Dolciluxe.
                   </Link>
                 </li>
                 <li className="hover:text-slate-900 hover:underline">
                   <Link to="/news?mode=news6">
                     {' '}
-                    Cakewai - Đặt bánh teabreak cho sự kiện, hội thảo, hội nghị... Tại TP.Hồ Chí Minh.
+                    Dolciluxe - Đặt bánh teabreak cho sự kiện, hội thảo, hội nghị... Tại TP.Hồ Chí Minh.
                   </Link>
                 </li>
                 <li className="hover:text-slate-900 hover:underline">
                   <Link to="/news?mode=news7"> Valentine Ngọt Ngào - Giảm Giá 50% Mừng Lễ Tình Nhân!</Link>
                 </li>
                 <li className="hover:text-slate-900 hover:underline">
-                  <Link to="/news?mode=news8"> Cakewai - Tưng bừng khai trương chi nhánh Võ Văn Ngân.</Link>
+                  <Link to="/news?mode=news8"> Dolciluxe - Tưng bừng khai trương chi nhánh Võ Văn Ngân.</Link>
                 </li>
               </ul>
             </div>

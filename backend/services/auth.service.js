@@ -215,14 +215,14 @@ exports.forgotPassword = async (email) => {
       color: #333;
       text-align: center;
   ">
-    <h2 style="color: #ff6b81;">Đặt lại mật khẩu DolciLuxe</h2>
+    <h2 style="color: #664545;">Đặt lại mật khẩu DolciLuxe</h2>
     <p>Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn.</p>
     <p>Nhấn vào nút bên dưới để tiếp tục:</p>
     <a href="${resetURL}" target="_blank" style="
         display: inline-block;
         margin-top: 20px;
         padding: 12px 25px;
-        background-color: #ff6b81;
+        background-color: #664545;
         color: white;
         text-decoration: none;
         font-weight: bold;

@@ -32,7 +32,7 @@ const CartActions = ({
                 <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <Text>Tổng cộng ({selectedCount} sản phẩm):</Text>
-                        <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#ff6b81' }}>
+                        <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#664545' }}>
                             {totalAmount}
                         </Text>
                     </div>
@@ -42,8 +42,8 @@ const CartActions = ({
                             !hasSelected
                                 ? { width: '200px' }
                                 : {
-                                    backgroundColor: '#ff6b81',
-                                    borderColor: '#ff6b81',
+                                    backgroundColor: '#664545',
+                                    borderColor: '#664545',
                                     width: '200px',
                                 }
                         }

@@ -20,14 +20,14 @@ function Info1() {
         <div className="my-5 ml-20 max-w-4xl text-left">
           <h1 className="text-5xl font-bold text-black">CÂU CHUYỆN</h1>
           <div className="text-bg my-5 text-black">
-            Cakewai được thành lập vào năm 2024, bắt nguồn từ tình yêu dành cho đất Việt cùng với bánh ngọt và cộng đồng
+            Dolciluxe được thành lập vào năm 2024, bắt nguồn từ tình yêu dành cho đất Việt cùng với bánh ngọt và cộng đồng
             nơi đây. Ngay từ những ngày đầu tiên, mục tiêu của chúng mình là có thể phục vụ và góp phần phát triển cộng
             đồng bằng cách siết chặt thêm sự kết nối và sự gắn bó giữa người với người.
           </div>
           <div className="text-bg text-black">
-            Bên cạnh việc mang đến những chiếc bánh ngọt ngào và hương vị truyền thống, Cakewai luôn đặt chất lượng và
+            Bên cạnh việc mang đến những chiếc bánh ngọt ngào và hương vị truyền thống, Dolciluxe luôn đặt chất lượng và
             tình cảm vào từng sản phẩm. Chúng mình tin rằng mỗi chiếc bánh không chỉ là món ăn mà còn là một thông điệp
-            gửi gắm tình yêu và sự quan tâm. Với mỗi sản phẩm ra đời, Cakewai mong muốn sẽ mang lại niềm vui, sự ấm áp,
+            gửi gắm tình yêu và sự quan tâm. Với mỗi sản phẩm ra đời, Dolciluxe mong muốn sẽ mang lại niềm vui, sự ấm áp,
             và tạo thêm nhiều khoảnh khắc gắn kết cho mọi người.
           </div>
         </div>

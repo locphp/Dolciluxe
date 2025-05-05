@@ -236,7 +236,7 @@ const Checkout1 = () => {
                           <div>
                             <p className="text-lg font-medium">{item.product.productName}</p>
                             <p className="text-gray-500">Đơn giá:&ensp;
-                              <span className="text-[#ff6b81] font-semibold">
+                              <span className="text-[#664545] font-semibold">
                                 {item.product.price.toLocaleString('vi-VN')}₫
                               </span>
                             </p>
@@ -245,7 +245,7 @@ const Checkout1 = () => {
                         </div>
                         <div className="text-right">
                           <p>Tổng tiền ({item.quantity} sản phẩm)</p>
-                          <p className="text-lg font-semibold text-[#ff6b81]">
+                          <p className="text-lg font-semibold text-[#664545]">
                             {(item.product.price * item.quantity).toLocaleString('vi-VN')}₫
                           </p>
                         </div>
@@ -291,7 +291,7 @@ const Checkout1 = () => {
                   <div className="flex justify-between text-lg font-semibold">
                     <span>Tổng thanh toán:</span>
 
-                    <span className="text-[30px] font-bold text-[#ff6b81]">
+                    <span className="text-[30px] font-bold text-[#664545]">
                       {totalAmount.toLocaleString('vi-VN')}₫
                     </span>
                   </div>
@@ -302,7 +302,7 @@ const Checkout1 = () => {
                     Khi nhấn 'Đặt hàng', bạn xác nhận rằng bạn đồng ý với
                     <Link
                       to="/condition?mode=condition"
-                      className="text-[#ff6b81] font-semibold hover:underline ml-1 whitespace-nowrap"
+                      className="text-[#664545] font-semibold hover:underline ml-1 whitespace-nowrap"
                     >
                       Điều khoản Dolciluxe
                     </Link>

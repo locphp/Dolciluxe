@@ -20,19 +20,19 @@ function Info2() {
         <div className="my-5 ml-20 max-w-4xl text-left">
           <h1 className="text-5xl font-bold text-black">DỊCH VỤ</h1>
           <div className="text-bg mb-2 mt-5 text-black">
-            Cakewai là không gian của chúng mình nên mọi thứ ở đây đều vì sự thoải mái của chúng mình. Đừng giữ trong
-            lòng, hãy chia sẻ với chúng mình điều bạn mong muốn để cùng nhau giúp Cakewai trở nên tuyệt vời hơn.
+            Dolciluxe là không gian của chúng mình nên mọi thứ ở đây đều vì sự thoải mái của chúng mình. Đừng giữ trong
+            lòng, hãy chia sẻ với chúng mình điều bạn mong muốn để cùng nhau giúp Dolciluxe trở nên tuyệt vời hơn.
           </div>
           <div className="text-bg mb-2 text-black">
-            Tại Cakewai, mỗi dịch vụ và sản phẩm đều được tạo nên với sự chân thành và tâm huyết. Chúng mình không ngừng
+            Tại Dolciluxe, mỗi dịch vụ và sản phẩm đều được tạo nên với sự chân thành và tâm huyết. Chúng mình không ngừng
             lắng nghe và đổi mới để mang lại trải nghiệm tốt nhất cho khách hàng. Mỗi phản hồi của bạn là động lực để
-            chúng mình hoàn thiện hơn từng ngày, từ chất lượng bánh đến cách phục vụ. Đến với Cakewai, bạn sẽ cảm nhận
-            được không gian gần gũi, nơi mà mọi người có thể tận hưởng những khoảnh khắc ý nghĩa bên nhau. Cakewai không
+            chúng mình hoàn thiện hơn từng ngày, từ chất lượng bánh đến cách phục vụ. Đến với Dolciluxe, bạn sẽ cảm nhận
+            được không gian gần gũi, nơi mà mọi người có thể tận hưởng những khoảnh khắc ý nghĩa bên nhau. Dolciluxe không
             chỉ là nơi để thưởng thức bánh ngọt, mà còn là nơi lan tỏa sự sẻ chia và niềm vui.
           </div>
           <div className="text-bg mb-2 font-bold text-black">Đừng ngần ngại chia sẽ ý kiến của bạn tại:</div>
           <div className="text-bg text-black">
-            Email: <span className="text-red-300">cakewai@gmail.com</span>
+            Email: <span className="text-red-300">dolciluxe@gmail.com</span>
           </div>
           <div className="text-bg text-black">
             Phone: <span className="text-red-300">0912476521</span>

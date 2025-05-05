@@ -88,7 +88,7 @@ const CartPopover = () => {
                                             {item.product.productName}
                                         </Text>
                                     </div>
-                                    <Text strong style={{ color: '#ff6b81' }}>
+                                    <Text strong style={{ color: '#664545' }}>
                                         {new Intl.NumberFormat('vi-VN', {
                                             style: 'currency',
                                             currency: 'VND'
@@ -116,8 +116,8 @@ const CartPopover = () => {
                             type="primary"
                             size="small"
                             style={{
-                                backgroundColor: '#ff6b81',
-                                borderColor: '#ff6b81',
+                                backgroundColor: '#664545',
+                                borderColor: '#664545',
                             }}
                             onClick={() => navigate('/cart')}
                         >
@@ -134,8 +134,8 @@ const CartPopover = () => {
                 type="primary"
                 onClick={() => navigate('/auth?mode=signin')}
                 style={{
-                    backgroundColor: '#ff6b81',
-                    borderColor: '#ff6b81',
+                    backgroundColor: '#664545',
+                    borderColor: '#664545',
                 }}
             >
                 Đăng nhập
@@ -158,7 +158,7 @@ const CartPopover = () => {
                 offset={[6, 0]}
                 overflowCount={10}
                 style={{
-                    backgroundColor: '#ff6b81',
+                    backgroundColor: '#ff0000',
                     color: 'white',
                     fontWeight: 'bold',
                     boxShadow: '0 0 0 1px #fff' // Viền trắng để nổi bật

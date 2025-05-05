@@ -22,10 +22,10 @@ function Blog() {
   const newsfeed = [
     {
       id: 'news8',
-      author: 'Cakewai',
+      author: 'Dolciluxe',
       date: '2025-02-01',
-      title: 'Cakewai - Tưng Bừng Khai Trương Chi Nhánh...',
-      desc: 'Cakewai xin chân thành cảm ơn sự quan tâm và ủng hộ từ quý khách hàng...',
+      title: 'Dolciluxe - Tưng Bừng Khai Trương Chi Nhánh...',
+      desc: 'Dolciluxe xin chân thành cảm ơn sự quan tâm và ủng hộ từ quý khách hàng...',
       image: newsfeed7,
     },
     {
@@ -38,10 +38,10 @@ function Blog() {
     },
     {
       id: 'news1',
-      title: 'Cakewai Thông Báo Lịch Nghỉ Tết Nguyên Đán...',
-      desc: 'Cakewai: Thông Báo Lịch Nghỉ Tết Nguyên Đán 2025...',
+      title: 'Dolciluxe Thông Báo Lịch Nghỉ Tết Nguyên Đán...',
+      desc: 'Dolciluxe: Thông Báo Lịch Nghỉ Tết Nguyên Đán 2025...',
       date: '2025-01-05',
-      author: 'Cakewai',
+      author: 'Dolciluxe',
       image: newsfeed8,
     },
   ];
@@ -49,7 +49,7 @@ function Blog() {
   return (
     <div className="Hot-event pb-[20rem] pt-4">
       <h1 className="text-center text-3xl font-bold text-primary lg:text-5xl">Sự kiện nổi bật</h1>
-      <div className="Our-product lg:grid-custom-3 md:grid-custom-2 grid-custom-1 relative grid w-full justify-center gap-16 lg:gap-4">
+      <div className="Our-product lg:grid-custom-3 md:grid-custom-2 grid-custom-1 relative grid w-full justify-center gap-16 lg:gap-24">
         {newsfeed.slice(0, 3).map((blog, index) => (
           <div className="img-scale my-10 h-[400px] w-[340px]" key={index}>
             <Link to={`/news?mode=${blog.id}`}>

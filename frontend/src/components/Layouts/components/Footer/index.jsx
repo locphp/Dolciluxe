@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
-import { Cakewai, EmailIcon, Facebook, Instagram, Location, Telephone, Tiktok, Youtube } from '~/assets/icons';
+import { Dolciluxe, EmailIcon, Facebook, Instagram, Location, Telephone, Tiktok, Youtube } from '~/assets/icons';
 function Footer() {
   return (
     <footer className="relative grid grid-custom-4 lg:h-[416px] h-[660px] w-full justify-evenly border-t-2 bg-fifth text-black">
       <div className="lg:col-span-1 col-span-4 items-center lg:py-10 py-4 lg:mx-0 mx-auto">
         <Link to="/">
-          <Cakewai className="lg:mt-12 mt-4 mx-auto lg:mx-0"/>
+          <Dolciluxe className="lg:mt-12 mt-4 mx-auto lg:mx-0"/>
         </Link>
         <div className="mt-2">
           <h2 className="text-xl text-[#3D3D3D]">Luôn lắng nghe, luôn thấu hiểu</h2>
@@ -71,7 +71,7 @@ function Footer() {
           </li>
           <li>
             <EmailIcon className="mb-1 mr-2 inline-flex"/>
-            cakewai@gmail.com
+            dolciluxevn@gmail.com
           </li>
           <li>
             <Telephone className="mb-1 mr-2 inline-flex"/>
@@ -96,7 +96,7 @@ function Footer() {
 
       <div className="lg:col-span-1 col-span-4 lg:absolute inset-x-0 bottom-0 mx-auto mt-1 lg:flex lg:w-[60%] lg:items-end items-center justify-center border-t-2 py-4">
         
-          <div className="text-[#B4B9C9]"> Copyright © 2024 CAKEWAI | All Rights Reserved | </div>{' '}
+          <div className="text-[#B4B9C9]"> Copyright © 2025 DOLCILUXE | All Rights Reserved | </div>{' '}
 
           <div className='text-center'>
             <Link to="/condition?mode=condition" className="ml-1 text-[#353E5C] underline hover:text-[#9E6B6B]">
