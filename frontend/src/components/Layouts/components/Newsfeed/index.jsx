@@ -14,10 +14,10 @@ import newsfeed14 from '~/assets/images/newsfeed14.png';
 const newsItems = [
   {
     id: 'news8',
-    title: 'Cakewai - Tưng Bừng Khai Trương Chi Nhánh...',
-    desc: 'Cakewai xin chân thành cảm ơn sự quan tâm và ủng hộ từ quý khách hàng...',
+    title: 'Dolciluxe - Tưng Bừng Khai Trương Chi Nhánh...',
+    desc: 'Dolciluxe xin chân thành cảm ơn sự quan tâm và ủng hộ từ quý khách hàng...',
     date: '2025-02-01',
-    author: 'Cakewai',
+    author: 'Dolciluxe',
     image: newsfeed7,
   },
   {
@@ -30,10 +30,10 @@ const newsItems = [
   },
   {
     id: 'news1',
-    title: 'Cakewai Thông Báo Lịch Nghỉ Tết Nguyên Đán...',
-    desc: 'Cakewai: Thông Báo Lịch Nghỉ Tết Nguyên Đán 2025...',
+    title: 'Dolciluxe Thông Báo Lịch Nghỉ Tết Nguyên Đán...',
+    desc: 'Dolciluxe: Thông Báo Lịch Nghỉ Tết Nguyên Đán 2025...',
     date: '2025-01-05',
-    author: 'Cakewai',
+    author: 'Dolciluxe',
     image: newsfeed8,
   },
   {
@@ -57,21 +57,21 @@ const newsItems = [
     title: 'Tưng bừng đắm chìm vào không gian huyền ảo cùng...',
     desc: 'Bánh Passion Mousse Cheesecake là sự kết hợp tuyệt vời giữa vị chua ngọt...',
     date: '2024-07-29',
-    author: 'Cakewai',
+    author: 'Dolciluxe',
     image: newsfeed11,
   },
   {
     id: 'news5',
     title: 'Bầu trời châu âu được ra mắt hoành tráng với...',
-    desc: 'Nhà Cakewai đã vô cùng tâm đắc và trau chuốt khi ra mắt bộ sưu tập mới...',
+    desc: 'Nhà Dolciluxe đã vô cùng tâm đắc và trau chuốt khi ra mắt bộ sưu tập mới...',
     date: '2024-04-12',
     author: 'Gia Mẫn',
     image: newsfeed12,
   },
   {
     id: 'news6',
-    title: 'Cakewai - Đặt bánh teabreak cho sự kiện, hội thảo,...',
-    desc: 'Cakewai cung cấp: Bánh sinh nhật, bánh minicake, bánh sự kiện...',
+    title: 'Dolciluxe - Đặt bánh teabreak cho sự kiện, hội thảo,...',
+    desc: 'Dolciluxe cung cấp: Bánh sinh nhật, bánh minicake, bánh sự kiện...',
     date: '2024-01-03',
     author: 'Gia Mẫn',
     image: newsfeed13,

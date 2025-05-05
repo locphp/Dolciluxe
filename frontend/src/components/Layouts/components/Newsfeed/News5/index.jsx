@@ -22,7 +22,7 @@ function Newsfeed5() {
       <div className="flex justify-center text-lg">
         <div className="font-inter my-5 flex h-auto max-w-[900px] flex-col space-y-2 overflow-hidden break-words rounded-xl border-2 bg-[#E8E1E1] px-5 py-5">
           <h1 className="font-inter mb-10 text-center text-2xl font-extrabold leading-none text-black sm:text-3xl lg:text-4xl">
-            Bầu trời châu âu được ra mắt hoành tráng với sự kết hợp đa văn hòa từ nhà Cakewai.
+            Bầu trời châu âu được ra mắt hoành tráng với sự kết hợp đa văn hòa từ nhà Dolciluxe.
           </h1>
           <div className="inline-flex space-x-4 sm:space-x-8">
             <div className="flex items-center">
@@ -41,7 +41,7 @@ function Newsfeed5() {
           <hr className="mx-auto my-5 h-[2px] w-full border border-t-2 border-gray-400 bg-gray-400 sm:w-[850px]" />
           <div className="text-black">
             <div className="my-5">
-              Nhà Cakewai đã vô cùng tâm đắc và trau chuốt khi đã chính thức cho ra mắt bộ sưu tập mới đầy màu sắc và
+              Nhà Dolciluxe đã vô cùng tâm đắc và trau chuốt khi đã chính thức cho ra mắt bộ sưu tập mới đầy màu sắc và
               mang tính biểu tượng đến từ Châu Âu và La Tinh.{' '}
             </div>
             <div className="my-2">
@@ -54,7 +54,7 @@ function Newsfeed5() {
               hằng ngày. Đồng thời trong các dịp lễ lớn hoặc các buổi tiệc thì những chiếc bánh sẽ được bày biện để phục
               vụ thực khách thay lời yêu thương.
             </div>
-            <div>Cakewai xin giới thiệu một số sản phẩm gửi đến quý khách hàng tham khảo!!!</div>
+            <div>Dolciluxe xin giới thiệu một số sản phẩm gửi đến quý khách hàng tham khảo!!!</div>
             <img
               src="./src/assets/images/eur_1.png"
               alt=""
@@ -74,7 +74,7 @@ function Newsfeed5() {
               className="mx-auto my-5 block w-full max-w-[600px]"
             />
             <div className="my-5">
-              Với sự cập nhật mới này, Cakewai hứa hẹn sẽ mang đến một luồng gió mới về mặt trải nghiệm đến quý khách
+              Với sự cập nhật mới này, Dolciluxe hứa hẹn sẽ mang đến một luồng gió mới về mặt trải nghiệm đến quý khách
               hàng.
             </div>
             <img
@@ -84,8 +84,8 @@ function Newsfeed5() {
               className="mx-auto my-5 block w-full max-w-[600px]"
             />
             <div className="my-5">
-              Bằng cả sự nhiệt huyết với nghề, nhà Cakewai rất mong nhận được sự ủng hộ và hưởng ứng vô cùng quý giá của
-              Cakewai-ers.
+              Bằng cả sự nhiệt huyết với nghề, nhà Dolciluxe rất mong nhận được sự ủng hộ và hưởng ứng vô cùng quý giá của
+              Dolciluxe-ers.
             </div>
           </div>
           <div>
@@ -94,7 +94,7 @@ function Newsfeed5() {
             </h1>
             <ul className="ml-4 list-disc sm:ml-10">
               <li className="hover:text-slate-900 hover:underline">
-                <Link to="/news?mode=news1">Cakewai Thông Báo Lịch Nghỉ Tết Nguyên Đán 2024.</Link>
+                <Link to="/news?mode=news1">Dolciluxe Thông Báo Lịch Nghỉ Tết Nguyên Đán 2024.</Link>
               </li>
               <li className="hover:text-slate-900 hover:underline">
                 <Link to="/news?mode=news2">Mẫu bánh kem mừng 20/11 ngày Nhà Giáo Việt Nam.</Link>
@@ -112,14 +112,14 @@ function Newsfeed5() {
               <li className="hover:text-slate-900 hover:underline">
                 <Link to="/news?mode=news6">
                   {' '}
-                  Cakewai - Đặt bánh teabreak cho sự kiện, hội thảo, hội nghị... Tại TP.Hồ Chí Minh.
+                  Dolciluxe - Đặt bánh teabreak cho sự kiện, hội thảo, hội nghị... Tại TP.Hồ Chí Minh.
                 </Link>
               </li>
               <li className="hover:text-slate-900 hover:underline">
                 <Link to="/news?mode=news7"> Valentine Ngọt Ngào - Giảm Giá 50% Mừng Lễ Tình Nhân!</Link>
               </li>
               <li className="hover:text-slate-900 hover:underline">
-                <Link to="/news?mode=news8"> Cakewai - Tưng bừng khai trương chi nhánh Võ Văn Ngân.</Link>
+                <Link to="/news?mode=news8"> Dolciluxe - Tưng bừng khai trương chi nhánh Võ Văn Ngân.</Link>
               </li>
             </ul>
           </div>

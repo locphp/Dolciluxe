@@ -101,7 +101,7 @@ function GenImage() {
           Tạo bánh với CakewAI
         </h1>
         <p className="text-center text-base font-normal leading-[32px] sm:text-lg sm:leading-[48px] lg:text-xl lg:leading-[64px]">
-          Cakewai - Làm bạn với AI
+          Dolciluxe - Làm bạn với AI
         </p>
         <div className="mx-auto max-w-screen-lg rounded-3xl border border-black lg:px-[3rem]">
           <div className="m-4 flex flex-col gap-6 sm:m-6 lg:flex-row lg:gap-10">
@@ -199,7 +199,7 @@ function GenImage() {
           {image && (
             <div className="flex p-4">
               <p className="text-sm font-medium text-green-400 sm:text-base">
-                Tạo bánh thành công! Nếu quý khách muốn đặt bánh này, vui lòng liên hệ với Cakewai qua zalo 0966.888888
+                Tạo bánh thành công! Nếu quý khách muốn đặt bánh này, vui lòng liên hệ với Dolciluxe qua zalo 0966.888888
                 để được nhân viên tư vấn chi tiết!
               </p>
             </div>
@@ -208,10 +208,10 @@ function GenImage() {
         <div className="py-8">
           <div className="mx-auto px-4">
             <h1 className="mb-6 text-center text-4xl font-bold text-gray-800">
-              Biến Ý Tưởng Thành Tác Phẩm Nghệ Thuật Với <span className="text-pink-500">Cakewai AI</span>
+              Biến Ý Tưởng Thành Tác Phẩm Nghệ Thuật Với <span className="text-pink-500">Dolciluxe AI</span>
             </h1>
             <p className="mb-8 text-center text-lg text-gray-600">
-              Chỉ cần nhập ý tưởng, Cakewai sẽ giúp bạn tạo ra những hình ảnh bánh độc đáo trong vài giây. Dành cho
+              Chỉ cần nhập ý tưởng, Dolciluxe sẽ giúp bạn tạo ra những hình ảnh bánh độc đáo trong vài giây. Dành cho
               người làm nội dung, thợ làm bánh, hay bất kỳ ai đam mê sáng tạo.
             </p>
 
@@ -219,7 +219,7 @@ function GenImage() {
               <div>
                 <h2 className="mb-4 text-2xl font-semibold text-gray-700">Tạo Ảnh Bánh Từ Ý Tưởng Với AI</h2>
                 <p className="mb-4 text-gray-600">
-                  Cakewai sử dụng công nghệ AI tiên tiến để chuyển đổi mô tả văn bản thành hình ảnh bánh chất lượng cao.
+                  Dolciluxe sử dụng công nghệ AI tiên tiến để chuyển đổi mô tả văn bản thành hình ảnh bánh chất lượng cao.
                   Từ những thiết kế đơn giản đến những chi tiết phức tạp, tất cả đều trong tầm tay bạn.
                 </p>
                 <ul className="list-inside list-disc text-gray-600">
@@ -230,11 +230,11 @@ function GenImage() {
                 </ul>
               </div>
               <div>
-                <img src={imageCake} alt="Cakewai" className="mx-auto size-[20rem] rounded-full" />
+                <img src={imageCake} alt="Dolciluxe" className="mx-auto size-[20rem] rounded-full" />
               </div>
             </div>
             <div className="mt-12 text-center">
-              <h2 className="mb-4 text-2xl font-semibold text-gray-800">Cách Sử Dụng Cakewai</h2>
+              <h2 className="mb-4 text-2xl font-semibold text-gray-800">Cách Sử Dụng Dolciluxe</h2>
               <div className="grid gap-6 text-left md:grid-cols-3">
                 <div className="rounded-lg bg-white p-6 shadow-md">
                   <h3 className="mb-2 text-lg font-bold text-pink-500">1. Nhập Ý Tưởng</h3>
@@ -261,7 +261,7 @@ function GenImage() {
             </div>
 
             <div className="mt-12 text-center">
-              <h2 className="mb-6 text-2xl font-semibold text-gray-800">Lý Do Nên Chọn Cakewai</h2>
+              <h2 className="mb-6 text-2xl font-semibold text-gray-800">Lý Do Nên Chọn Dolciluxe</h2>
               <div className="grid gap-8 md:grid-cols-3">
                 <div className="text-center">
                   <h3 className="mb-2 text-lg font-bold text-pink-500">Dành Cho Người Làm Nội Dung</h3>

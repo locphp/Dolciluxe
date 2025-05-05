@@ -19,7 +19,7 @@ const ProductList = ({ selectedItems }) => (
                         <div>
                             <p className="text-lg font-medium">{item.product.productName}</p>
                             <p className="text-gray-500">Đơn giá:&ensp;
-                                <span className="text-[#ff6b81] font-semibold">
+                                <span className="text-[#664545] font-semibold">
                                     {item.product.price.toLocaleString('vi-VN')}₫
                                 </span>
                             </p>
@@ -28,7 +28,7 @@ const ProductList = ({ selectedItems }) => (
                     </div>
                     <div className="text-right">
                         <p>Tổng tiền ({item.quantity} sản phẩm)</p>
-                        <p className="text-lg font-semibold text-[#ff6b81]">
+                        <p className="text-lg font-semibold text-[#664545]">
                             {(item.product.price * item.quantity).toLocaleString('vi-VN')}₫
                         </p>
                     </div>

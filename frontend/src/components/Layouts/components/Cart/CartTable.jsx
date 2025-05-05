@@ -58,7 +58,7 @@ const CartTable = ({ dataSource, rowSelection, onQuantityChange, onRemoveItem })
             title: 'Số tiền',
             dataIndex: 'total',
             render: (text) => (
-                <Text style={{ color: '#ff6b81', fontWeight: 'bold', fontSize: 16 }}>
+                <Text style={{ color: '#664545', fontWeight: 'bold', fontSize: 16 }}>
                     {text}
                 </Text>
             ),

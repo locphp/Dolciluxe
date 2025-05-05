@@ -94,7 +94,7 @@ function Categories() {
         </div>
 
         {/* Danh sách bánh */}
-        <div className="product lg:grid-custom-3 md:grid-custom-2 grid-custom-1 relative grid w-full justify-evenly">
+        <div className="product lg:grid-custom-4 md:grid-custom-2 grid-custom-1 relative grid w-full justify-evenly">
           {sortedCakesPerPage.currentData().map((cake, index) => (
             <Card
               key={index}
