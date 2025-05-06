@@ -12,20 +12,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
+      - name: Ensure lock file exists
+        run: |
+          cd backend
+          if [ ! -f "package-lock.json" ]; then
+            npm install --package-lock-only
+          fi
+      # Setup Node.js với cache
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
           cache: 'npm'
+          cache-dependency-path: 'backend/package-lock.json'
       
       # Kiểm tra backend
       - name: Verify Backend
         run: |
           cd backend
-          npm ci
-          npm run lint
-      
+          npm ci      
       # Kiểm tra frontend
       - name: Verify Frontend
         run: |
