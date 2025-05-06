@@ -159,17 +159,19 @@ exports.refreshToken = async (refreshToken) => {
 
 exports.loginWithGoogle = async (profile) => {
     try {
+        console.log('111');
         let user = await User.findOne({ googleId: profile.id });
-
+        console.log('122');
         if (!user) {
+            console.log('132');
             user = await User.create({
                 name: profile.displayName,
                 email: profile.emails[0].value,
                 googleId: profile.id,
                 avatar: profile.photos[0].value,
             });
+            console.log('user',user);
         }
-
         return {
             code: 200,
             message: 'Login with Google successfully',

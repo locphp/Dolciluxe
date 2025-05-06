@@ -143,7 +143,6 @@ export const googleLoginUser = async (dispatch) => {
       withCredentials: true,
     });
     const { user, access_token, refresh_token } = res.data;
-
     localStorage.setItem('access_token', access_token);
     localStorage.setItem('refresh_token', refresh_token);
     localStorage.setItem('login_type', 'google');
@@ -153,3 +152,20 @@ export const googleLoginUser = async (dispatch) => {
     dispatch(loginFail());
   }
 };
+
+// export const googleLoginSuccess = async (dispatch) => {
+//   dispatch(loginStart());
+//   try {
+//     const res = await response.get('/api/auth/google/success', {
+//       withCredentials: true,
+//     });
+//     const { user, access_token, refresh_token } = res.data;
+//     localStorage.setItem('access_token', access_token);
+//     localStorage.setItem('refresh_token', refresh_token);
+//     localStorage.setItem('login_type', 'google');
+
+//     dispatch(loginSuccess({ user, access_token, refresh_token }));
+//   } catch (err) {
+//     dispatch(loginFail());
+//   }
+// };

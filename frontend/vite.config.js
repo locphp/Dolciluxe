@@ -16,4 +16,16 @@ export default defineConfig({
       external: ['react-icons'],
     },
   },
+  // server: {
+  //   allowedHosts: [
+  //     'hormone-outlets-whats-mambo.trycloudflare.com'
+  //   ]
+  // },
+  // proxy: {
+  //   '/api': {
+  //     target: 'http://localhost:8080', // backend chạy local
+  //     changeOrigin: true,
+  //     secure: false,
+  //   },
+  // },
 });

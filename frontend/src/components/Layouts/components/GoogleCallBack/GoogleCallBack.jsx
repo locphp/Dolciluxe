@@ -36,22 +36,24 @@ import { BE_BASE_URL } from '~/services/axios';
 export const GoogleCallBack = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  console.log('bebaseurl:', BE_BASE_URL);
   useEffect(() => {
     const fetchGoogleUser = async () => {
+      console.log('fetchGoogleUser called');
       try {
+        console.log('fetchGoogleUser called1');
         const res = await axios.get(`${BE_BASE_URL}/api/auth/google/success`, {
           withCredentials: true,
         });
+        console.log('Google login response:', res);
         localStorage.setItem('login_type', 'google');
-        // console.log('Google login response:', res);
         localStorage.removeItem('loggedOut');
         sessionStorage.removeItem('googleSynced');
         dispatch(loginSuccess(res.data.data)); // tùy backend trả về user ở đâu
         navigate('/'); // điều hướng đến hồ sơ
       } catch (err) {
         // dispatch(logOutSuccess());
-        // console.error('Google login failed', err);
+        console.error('Google login failed', err);
         navigate('/');
       }
     };
