@@ -79,12 +79,8 @@ jobs:
     needs: [deploy-frontend, deploy-backend]
     runs-on: ubuntu-latest
     steps:
-      - name: Slack Notification
-        if: always()
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_COLOR: ${{ job.status == 'success' && '#36a64f' || '#ff0000' }}
-          SLACK_TITLE: 'Deploy Dolciluxe ${{ job.status }}'
-          SLACK_MESSAGE: 'Triển khai ${{ github.ref }} đã ${{ job.status }}'
-          SLACK_USERNAME: 'GitHub Actions'
+      - name: Show Deployment URLs
+        run: |
+          echo "✅ Deployment Successful"
+          echo "Frontend: https://your-vercel-url.com"
+          echo "Backend: https://${{ secrets.RENDER_SERVICE_ID }}.onrender.com"
