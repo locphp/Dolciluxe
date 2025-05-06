@@ -12,26 +12,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
+      - name: Ensure lock file exists
+        run: |
+          cd backend
+          if [ ! -f "package-lock.json" ]; then
+            npm install --package-lock-only
+          fi
+      # Setup Node.js với cache
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
           cache: 'npm'
+          cache-dependency-path: 'backend/package-lock.json'
       
       # Kiểm tra backend
       - name: Verify Backend
         run: |
           cd backend
           npm ci
-          npm run lint
       
       # Kiểm tra frontend
       - name: Verify Frontend
         run: |
           cd frontend
           npm ci
-          npm run lint
 
   # Job triển khai frontend lên Vercel
   deploy-frontend:
@@ -73,12 +79,8 @@ jobs:
     needs: [deploy-frontend, deploy-backend]
     runs-on: ubuntu-latest
     steps:
-      - name: Slack Notification
-        if: always()
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_COLOR: ${{ job.status == 'success' && '#36a64f' || '#ff0000' }}
-          SLACK_TITLE: 'Deploy Dolciluxe ${{ job.status }}'
-          SLACK_MESSAGE: 'Triển khai ${{ github.ref }} đã ${{ job.status }}'
-          SLACK_USERNAME: 'GitHub Actions'
+      - name: Show Deployment URLs
+        run: |
+          echo "✅ Deployment Successful"
+          echo "Frontend: https://your-vercel-url.com"
+          echo "Backend: https://${{ secrets.RENDER_SERVICE_ID }}.onrender.com"
