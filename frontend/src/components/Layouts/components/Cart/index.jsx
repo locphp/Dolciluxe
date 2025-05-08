@@ -26,7 +26,7 @@ const Cart = () => {
     if (!cartItems || cartItems.length === 0) return;
 
     const productId = location.state.autoSelectedKey;
-    const targetItem = cartItems.find(item => item.product._id === productId);
+    const targetItem = cartItems.find((item) => item.product._id === productId);
 
     if (targetItem) {
       setSelectedRowKeys([productId]);
@@ -39,15 +39,13 @@ const Cart = () => {
 
     // Tính toán selectedItemIds tương ứng
     const newSelectedItemIds = cartItems
-      .filter(item => newSelectedRowKeys.includes(item.product._id))
-      .map(item => item._id);
+      .filter((item) => newSelectedRowKeys.includes(item.product._id))
+      .map((item) => item._id);
 
     setSelectedItemIds(newSelectedItemIds);
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     console.log('selectedItemIds changed: ', newSelectedItemIds);
   };
-
-
 
   const showModal = () => {
     setOpen(true);
@@ -102,28 +100,28 @@ const Cart = () => {
     const stateId = Date.now().toString(36) + Math.random().toString(36).substring(2);
 
     // Lưu vào localStorage với key có prefix
-    localStorage.setItem(`checkoutState_${stateId}`, JSON.stringify({
-      cartItems,
-      selectedRowKeys,
-      selectedItemIds
-    }));
-
+    localStorage.setItem(
+      `checkoutState_${stateId}`,
+      JSON.stringify({
+        cartItems,
+        selectedRowKeys,
+        selectedItemIds,
+      }),
+    );
 
     navigate(`/checkout?state=${stateId}`, {
-
       state: {
-
         cartItems: cartItems, // Truyền toàn bộ giỏ hàng
-        selectedItems: selectedItemIds.length > 0
-          ? cartItems.filter(item => selectedItemIds.includes(item._id))
-          : cartItems, // Nếu không chọn thì truyền tất cả
-        totalAmount: selectedItemIds.length > 0
-          ? selectedItemIds.reduce((sum, itemId) => {
-            const item = cartItems.find(cartItem => cartItem._id === itemId);
-            return sum + (item ? item.product.price * item.quantity : 0);
-          }, 0)
-          : cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
-      }
+        selectedItems:
+          selectedItemIds.length > 0 ? cartItems.filter((item) => selectedItemIds.includes(item._id)) : cartItems, // Nếu không chọn thì truyền tất cả
+        totalAmount:
+          selectedItemIds.length > 0
+            ? selectedItemIds.reduce((sum, itemId) => {
+                const item = cartItems.find((cartItem) => cartItem._id === itemId);
+                return sum + (item ? item.product.price * item.quantity : 0);
+              }, 0)
+            : cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0),
+      },
     });
   };
 
@@ -135,7 +133,7 @@ const Cart = () => {
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
-      currency: 'VND'
+      currency: 'VND',
     }).format(value);
   };
 
@@ -155,36 +153,42 @@ const Cart = () => {
     selectedRowKeys.reduce((sum, key) => {
       const item = cartItems.find((cartItem) => cartItem.product._id === key);
       return sum + (item ? item.product.price * item.quantity : 0);
-    }, 0)
+    }, 0),
   );
 
   const hasSelected = selectedRowKeys.length > 0;
 
   return (
-    <div style={{
-      marginTop: '64px',
-      width: '100%',
-      backgroundColor: 'white',
-      paddingBottom: '64px'
-    }}>
+    <div
+      style={{
+        marginTop: '64px',
+        width: '100%',
+        backgroundColor: 'white',
+        paddingBottom: '64px',
+      }}
+    >
       <div style={{ margin: '0 5rem' }}>
-        <h1 style={{
-          textAlign: 'center',
-          fontSize: '48px',
-          fontWeight: 'bold',
-          lineHeight: '72px',
-          marginTop: '40px'
-        }}>
+        <h1
+          style={{
+            textAlign: 'center',
+            fontSize: '48px',
+            fontWeight: 'bold',
+            lineHeight: '72px',
+            marginTop: '40px',
+          }}
+        >
           Giỏ hàng
         </h1>
-        <Text style={{
-          display: 'block',
-          padding: '20px 0',
-          textAlign: 'center',
-          fontSize: '14px',
-          fontWeight: 'normal',
-          lineHeight: '16px'
-        }}>
+        <Text
+          style={{
+            display: 'block',
+            padding: '20px 0',
+            textAlign: 'center',
+            fontSize: '14px',
+            fontWeight: 'normal',
+            lineHeight: '16px',
+          }}
+        >
           Nơi cập nhật những trạng thái tốt nhất
         </Text>
         <Flex gap="middle" vertical>
@@ -194,13 +198,15 @@ const Cart = () => {
             onQuantityChange={handleQuantityChange}
             onRemoveItem={handleRemoveItem}
           />
-          <div style={{
-            position: 'sticky',
-            bottom: 0,
-            zIndex: 10,
-            backgroundColor: 'white',
-            padding: '16px',
-          }}>
+          <div
+            style={{
+              position: 'sticky',
+              bottom: 0,
+              zIndex: 10,
+              backgroundColor: 'white',
+              padding: '16px',
+            }}
+          >
             <CartActions
               hasSelected={hasSelected}
               onRemoveSelected={showModal}
