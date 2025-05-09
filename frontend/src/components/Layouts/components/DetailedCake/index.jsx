@@ -100,7 +100,7 @@ function DetailedCake() {
   return (
     <div className="mt-16 w-full bg-white">
   <div className="mx-4 sm:mx-8 lg:mx-[5rem]">
-    {/* Breadcrumb */}
+    {/* Breadcrumb
     <div className="flex flex-wrap items-center text-primary capitalize text-sm sm:text-base lg:text-lg">
       <NavLink to="/">Trang chủ</NavLink>
       <span className="mx-2">&gt;&gt;</span>
@@ -109,8 +109,8 @@ function DetailedCake() {
       <NavLink to="/birthday-cake">{categoryName}</NavLink>
       <span className="mx-2">&gt;&gt;</span>
       <span>{cake.productName}</span>
-    </div>
-
+    </div> */}
+  <br></br>
     {/* Chi tiết bánh */}
     <div className="my-10 flex flex-col lg:flex-row gap-5">
       <img
