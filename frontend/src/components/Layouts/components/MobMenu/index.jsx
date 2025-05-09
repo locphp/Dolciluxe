@@ -79,11 +79,6 @@ function MobMenu() {
             </Link>
           </li>
           <li>
-            <Link to="/generator" className="sub-menu" onClick={() => setIsOpen(false)}>
-              ai
-            </Link>
-          </li>
-          <li>
             <Link to="/about" className="sub-menu" onClick={() => setIsOpen(false)}>
               về chúng tôi
             </Link>
