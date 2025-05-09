@@ -5,60 +5,25 @@ const { Text } = Typography;
 
 const CartActions = ({
     hasSelected,
-    onRemoveSelected,
     onCheckout,
     selectedCount,
     totalAmount,
     loading,
 }) => {
     return (
-        <div
-            style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '16px',
-                backgroundColor: 'white',
-                borderBottom: '2px solid #f0f0f0',
-                padding: '16px',
-            }}
-            className="sm:flex-row sm:justify-between sm:items-center"
-        >
-            <Button
-                type="text"
-                onClick={hasSelected ? onRemoveSelected : null}
-                size="middle"
-                loading={loading}
-                className="self-start sm:self-auto"
-            >
-                Xóa 
-            </Button>
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '16px',
-                }}
-                className="sm:flex-row sm:items-center sm:justify-end sm:gap-8"
-            >
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'flex-start',
-                        gap: '8px',
-                    }}
-                    className="sm:flex-row sm:items-center sm:gap-4"
-                >
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            {/* Bỏ trống nếu không cần gì bên trái */}
+            <div className="sm:flex-row sm:items-center sm:gap-4" />
+
+            {/* Phần hiển thị Tổng cộng + Button */}
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-4 w-full sm:w-auto">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 text-center sm:text-left">
                     <Text className="text-sm sm:text-base">
                         Tổng cộng ({selectedCount} sản phẩm):
                     </Text>
                     <Text
-                        style={{
-                            fontSize: 24,
-                            fontWeight: 'bold',
-                            color: '#664545',
-                        }}
-                        className="text-lg sm:text-xl"
+                        className="text-lg sm:text-xl font-bold"
+                        style={{ color: '#664545' }}
                     >
                         {totalAmount}
                     </Text>
@@ -68,12 +33,12 @@ const CartActions = ({
                     style={{
                         backgroundColor: hasSelected ? '#664545' : undefined,
                         borderColor: hasSelected ? '#664545' : undefined,
-                        width: '200px',
                     }}
                     onClick={onCheckout}
                     size="large"
                     disabled={!hasSelected}
                     loading={loading}
+                    className="w-full sm:w-auto"
                 >
                     Mua hàng
                 </Button>
