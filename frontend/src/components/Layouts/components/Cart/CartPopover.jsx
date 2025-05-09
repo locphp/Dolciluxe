@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Badge, Popover, List, Avatar, Button, Typography, Spin } from 'antd';
 import { Cart } from '~/assets/icons';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +9,7 @@ import {
     selectCartTotalItems,
     selectCartLoading,
     selectCartError,
-    resetCart
+    resetCart,
 } from '~/redux/cartSlice';
 
 const { Text } = Typography;
@@ -17,6 +17,7 @@ const { Text } = Typography;
 const CartPopover = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [isMobile, setIsMobile] = useState(false);
 
     // Lấy dữ liệu từ Redux store
     const user = useSelector((state) => state.auth.login.currentUser);
@@ -25,12 +26,22 @@ const CartPopover = () => {
     const loading = useSelector(selectCartLoading);
     const error = useSelector(selectCartError);
 
+    // Kiểm tra kích thước màn hình
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768); // Mobile nếu màn hình <= 768px
+        };
+        handleResize(); // Gọi khi component mount
+        window.addEventListener('resize', handleResize); // Lắng nghe sự kiện resize
+        return () => window.removeEventListener('resize', handleResize); // Cleanup
+    }, []);
+
     // Fetch giỏ hàng khi component mount hoặc user thay đổi
     useEffect(() => {
         if (user?.accessToken) {
             dispatch(fetchCart());
         } else {
-            dispatch(resetCart())
+            dispatch(resetCart());
         }
     }, [user?.accessToken, dispatch]);
 
@@ -82,7 +93,7 @@ const CartPopover = () => {
                                             ellipsis
                                             style={{
                                                 maxWidth: 160,
-                                                fontWeight: 500
+                                                fontWeight: 500,
                                             }}
                                         >
                                             {item.product.productName}
@@ -91,7 +102,7 @@ const CartPopover = () => {
                                     <Text strong style={{ color: '#664545' }}>
                                         {new Intl.NumberFormat('vi-VN', {
                                             style: 'currency',
-                                            currency: 'VND'
+                                            currency: 'VND',
                                         }).format(item.product.price)}
                                     </Text>
                                 </div>
@@ -101,14 +112,16 @@ const CartPopover = () => {
                             </div>
                         )}
                     />
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginTop: 12,
-                        borderTop: '1px solid #f0f0f0',
-                        paddingTop: 12
-                    }}>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginTop: 12,
+                            borderTop: '1px solid #f0f0f0',
+                            paddingTop: 12,
+                        }}
+                    >
                         <Text strong>
                             {cartItems.length > 5 ? `5/${cartItems.length} sản phẩm` : `${cartItems.length} sản phẩm`}
                         </Text>
@@ -145,12 +158,19 @@ const CartPopover = () => {
 
     return (
         <Popover
-            placement="bottomRight"
+            placement={isMobile ? 'bottom' : 'bottomRight'}
             content={content}
             title="Giỏ hàng"
             trigger="hover"
-            overlayStyle={{ maxWidth: 400 }}
-
+            overlayStyle={
+                isMobile
+                    ? {
+                          maxWidth: '90vw', // Đảm bảo popup không vượt quá chiều rộng màn hình
+                          left: '50%', // Căn giữa theo chiều ngang
+                          transform: 'translateX(-50%)', // Dịch chuyển để căn giữa
+                      }
+                    : {}
+            }
         >
             <Badge
                 count={cartItems.length}
@@ -161,7 +181,7 @@ const CartPopover = () => {
                     backgroundColor: '#ff0000',
                     color: 'white',
                     fontWeight: 'bold',
-                    boxShadow: '0 0 0 1px #fff' // Viền trắng để nổi bật
+                    boxShadow: '0 0 0 1px #fff', // Viền trắng để nổi bật
                 }}
             >
                 <Cart
@@ -171,8 +191,8 @@ const CartPopover = () => {
                         cursor: 'pointer',
                         transition: 'transform 0.2s',
                         ':hover': {
-                            transform: 'scale(1.1)'
-                        }
+                            transform: 'scale(1.1)',
+                        },
                     }}
                 />
             </Badge>
