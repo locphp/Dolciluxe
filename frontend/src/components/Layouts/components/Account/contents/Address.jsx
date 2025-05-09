@@ -135,139 +135,140 @@ export default function Address() {
   };
 
   return (
-    <div className="p-4">
-      <div className="flex items-center justify-between mb-6">
-        <Text strong className="text-xl">Địa chỉ giao hàng</Text>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={() => handleOpen()}
-        >
-          Thêm địa chỉ
-        </Button>
-      </div>
+    <div className="w-full">
+        <div className="flex flex-col w-full">
+            <div className="flex items-center justify-between mb-6">
+                <Text strong className="text-xl">Địa chỉ giao hàng</Text>
+                <Button
+                    type="primary"
+                    icon={<PlusOutlined />}
+                    onClick={() => handleOpen()}
+                >
+                    Thêm địa chỉ
+                </Button>
+            </div>
 
-      {addresses.length === 0 ? (
-        <Card>
-          <Text className="text-gray-500">Chưa có địa chỉ nào.</Text>
-        </Card>
-      ) : (
-        <List
-          dataSource={[...addresses].sort((a, b) => b.isDefault - a.isDefault)} // Sắp xếp địa chỉ mặc định lên đầu
-          renderItem={(addr) => (
-            <List.Item className="!p-0 !border-b">
-              <div className={`flex items-center w-full p-4 hover:bg-gray-50 ${addr.isDefault ? 'bg-blue-50' : ''}`}>
-                {/* Phần thông tin chính */}
-                <div className="flex items-center flex-1 min-w-0">
-                  <EnvironmentOutlined className={`mr-3 ${addr.isDefault ? 'text-blue-500' : 'text-gray-500'}`} />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 truncate">
-                      <Text strong className="truncate max-w-[120px]">
-                        {addr.fullName}
-                      </Text>
-                      <Text type="secondary">|</Text>
-                      <Text className="text-gray-600 truncate max-w-[100px]">
-                        {addr.phone}
-                      </Text>
-                      {addr.isDefault && (
-                        <Tag color="blue" className="ml-2 flex-shrink-0">
-                          Mặc định
-                        </Tag>
-                      )}
-                    </div>
-                    <Text ellipsis className="text-gray-600 mt-1">
-                      {addr.full_address || `${addr.detail}, ${addr.ward}, ${addr.district}, ${addr.province}`}
-                    </Text>
-                  </div>
-                </div>
+            {addresses.length === 0 ? (
+                <Card>
+                    <Text className="text-gray-500">Chưa có địa chỉ nào.</Text>
+                </Card>
+            ) : (
+                <List
+                    dataSource={[...addresses].sort((a, b) => b.isDefault - a.isDefault)}
+                    renderItem={(addr) => (
+                        <List.Item className="!p-0 !border-b">
+                            <div className={`flex items-center w-full p-4 hover:bg-gray-50 ${addr.isDefault ? 'bg-blue-50' : ''}`}>
+                                <div className="flex items-center flex-1 min-w-0">
+                                    <EnvironmentOutlined className={`mr-3 ${addr.isDefault ? 'text-blue-500' : 'text-gray-500'}`} />
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-center gap-2 truncate">
+                                            <Text strong className="truncate max-w-[120px]">
+                                                {addr.fullName}
+                                            </Text>
+                                            <Text type="secondary">|</Text>
+                                            <Text className="text-gray-600 truncate max-w-[100px]">
+                                                {addr.phone}
+                                            </Text>
+                                            {addr.isDefault && (
+                                                <Tag color="blue" className="ml-2 flex-shrink-0">
+                                                    Mặc định
+                                                </Tag>
+                                            )}
+                                        </div>
+                                        <Text ellipsis className="text-gray-600 mt-1">
+                                            {addr.full_address || `${addr.detail}, ${addr.ward}, ${addr.district}, ${addr.province}`}
+                                        </Text>
+                                    </div>
+                                </div>
 
-                {/* Phần nút hành động */}
-                <div className="flex items-center gap-2 ml-4 flex-shrink-0">
-                  {!addr.isDefault && (
-                    <Button size="small" variant="outlined" onClick={() => handleSetDefault(addr._id)} className="mt-2">
-                      Đặt làm địa chỉ mặc định
-                    </Button>
-                  )}
+                                <div className="flex items-center gap-2 ml-4 flex-shrink-0">
+                                    {!addr.isDefault && (
+                                        <Button size="small" variant="outlined" onClick={() => handleSetDefault(addr._id)} className="mt-2">
+                                            Đặt làm địa chỉ mặc định
+                                        </Button>
+                                    )}
 
-                  <Button
-                    type="text"
-                    icon={<EditOutlined />}
-                    onClick={() => handleOpen(addr)}
-                    className="text-gray-500 hover:text-primary"
-                  />
+                                    <Button
+                                        type="text"
+                                        icon={<EditOutlined />}
+                                        onClick={() => handleOpen(addr)}
+                                        className="text-gray-500 hover:text-primary"
+                                    />
 
-                  <Popconfirm
-                    title="Xóa địa chỉ này?"
-                    onConfirm={() => handleDelete(addr._id)}
-                    okText="Xóa"
-                    cancelText="Hủy"
-                    disabled={addr.isDefault} // Vô hiệu hóa xóa nếu là địa chỉ mặc định
-                  >
+                                    <Popconfirm
+                                        title="Xóa địa chỉ này?"
+                                        onConfirm={() => handleDelete(addr._id)}
+                                        okText="Xóa"
+                                        cancelText="Hủy"
+                                        disabled={addr.isDefault}
+                                    >
+                                        <Button
+                                            type="text"
+                                            icon={<DeleteOutlined />}
+                                            className={`text-gray-500 hover:text-red-500 ${addr.isDefault ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                            danger
+                                            disabled={addr.isDefault}
+                                        />
+                                    </Popconfirm>
+                                </div>
+                            </div>
+                        </List.Item>
+                    )}
+                />
+            )}
+
+            <Modal
+                title={editId ? 'Cập nhật địa chỉ' : 'Thêm địa chỉ mới'}
+                open={open}
+                onCancel={handleClose}
+                footer={[
+                    <Button key="back" onClick={handleClose}>
+                        Hủy
+                    </Button>,
                     <Button
-                      type="text"
-                      icon={<DeleteOutlined />}
-                      className={`text-gray-500 hover:text-red-500 ${addr.isDefault ? 'opacity-50 cursor-not-allowed' : ''}`}
-                      danger
-                      disabled={addr.isDefault}
-                    />
-                  </Popconfirm>
-                </div>
-              </div>
-            </List.Item>
-          )}
-        />
-      )}
+                        key="submit"
+                        type="primary"
+                        loading={loading}
+                        onClick={handleSubmit}
+                    >
+                        Lưu
+                    </Button>,
+                ]}
+                width={900}
+            >
+                <Form
+                    form={form}
+                    layout="vertical"
+                    initialValues={initialForm}
+                    className="w-full"
+                >
+                    <Form.Item
+                        name="fullName"
+                        label="Họ và tên"
+                        rules={[{ required: true, message: 'Vui lòng nhập họ tên' }]}
+                    >
+                        <Input />
+                    </Form.Item>
 
-      <Modal
-        title={editId ? 'Cập nhật địa chỉ' : 'Thêm địa chỉ mới'}
-        open={open}
-        onCancel={handleClose}
-        footer={[
-          <Button key="back" onClick={handleClose}>
-            Hủy
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={loading}
-            onClick={handleSubmit}
-          >
-            Lưu
-          </Button>,
-        ]}
-        width={700}
-      >
-        <Form
-          form={form}
-          layout="vertical"
-          initialValues={initialForm}
-        >
-          <Form.Item
-            name="fullName"
-            label="Họ và tên"
-            rules={[{ required: true, message: 'Vui lòng nhập họ tên' }]}
-          >
-            <Input />
-          </Form.Item>
+                    <Form.Item
+                        name="phone"
+                        label="Số điện thoại"
+                        rules={[{ required: true, message: 'Vui lòng nhập số điện thoại' }]}
+                    >
+                        <Input />
+                    </Form.Item>
 
-          <Form.Item
-            name="phone"
-            label="Số điện thoại"
-            rules={[{ required: true, message: 'Vui lòng nhập số điện thoại' }]}
-          >
-            <Input />
-          </Form.Item>
+                    <AddressSelector form={form} />
 
-          <AddressSelector form={form} />
-
-          <Form.Item
-            name="isDefault"
-            valuePropName="checked"
-          >
-            <Checkbox>Đặt làm địa chỉ mặc định</Checkbox>
-          </Form.Item>
-        </Form>
-      </Modal>
+                    <Form.Item
+                        name="isDefault"
+                        valuePropName="checked"
+                    >
+                        <Checkbox>Đặt làm địa chỉ mặc định</Checkbox>
+                    </Form.Item>
+                </Form>
+            </Modal>
+        </div>
     </div>
-  );
+);
 }

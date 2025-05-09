@@ -26,7 +26,7 @@ const Cart = () => {
     if (!cartItems || cartItems.length === 0) return;
 
     const productId = location.state.autoSelectedKey;
-    const targetItem = cartItems.find((item) => item.product._id === productId);
+    const targetItem = cartItems.find(item => item.product._id === productId);
 
     if (targetItem) {
       setSelectedRowKeys([productId]);
@@ -39,13 +39,15 @@ const Cart = () => {
 
     // Tính toán selectedItemIds tương ứng
     const newSelectedItemIds = cartItems
-      .filter((item) => newSelectedRowKeys.includes(item.product._id))
-      .map((item) => item._id);
+      .filter(item => newSelectedRowKeys.includes(item.product._id))
+      .map(item => item._id);
 
     setSelectedItemIds(newSelectedItemIds);
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     console.log('selectedItemIds changed: ', newSelectedItemIds);
   };
+
+
 
   const showModal = () => {
     setOpen(true);
@@ -100,28 +102,28 @@ const Cart = () => {
     const stateId = Date.now().toString(36) + Math.random().toString(36).substring(2);
 
     // Lưu vào localStorage với key có prefix
-    localStorage.setItem(
-      `checkoutState_${stateId}`,
-      JSON.stringify({
-        cartItems,
-        selectedRowKeys,
-        selectedItemIds,
-      }),
-    );
+    localStorage.setItem(`checkoutState_${stateId}`, JSON.stringify({
+      cartItems,
+      selectedRowKeys,
+      selectedItemIds
+    }));
+
 
     navigate(`/checkout?state=${stateId}`, {
+
       state: {
+
         cartItems: cartItems, // Truyền toàn bộ giỏ hàng
-        selectedItems:
-          selectedItemIds.length > 0 ? cartItems.filter((item) => selectedItemIds.includes(item._id)) : cartItems, // Nếu không chọn thì truyền tất cả
-        totalAmount:
-          selectedItemIds.length > 0
-            ? selectedItemIds.reduce((sum, itemId) => {
-                const item = cartItems.find((cartItem) => cartItem._id === itemId);
-                return sum + (item ? item.product.price * item.quantity : 0);
-              }, 0)
-            : cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0),
-      },
+        selectedItems: selectedItemIds.length > 0
+          ? cartItems.filter(item => selectedItemIds.includes(item._id))
+          : cartItems, // Nếu không chọn thì truyền tất cả
+        totalAmount: selectedItemIds.length > 0
+          ? selectedItemIds.reduce((sum, itemId) => {
+            const item = cartItems.find(cartItem => cartItem._id === itemId);
+            return sum + (item ? item.product.price * item.quantity : 0);
+          }, 0)
+          : cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
+      }
     });
   };
 
@@ -133,7 +135,7 @@ const Cart = () => {
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
-      currency: 'VND',
+      currency: 'VND'
     }).format(value);
   };
 
@@ -153,78 +155,46 @@ const Cart = () => {
     selectedRowKeys.reduce((sum, key) => {
       const item = cartItems.find((cartItem) => cartItem.product._id === key);
       return sum + (item ? item.product.price * item.quantity : 0);
-    }, 0),
+    }, 0)
   );
 
   const hasSelected = selectedRowKeys.length > 0;
 
   return (
-    <div
-      style={{
-        marginTop: '64px',
-        width: '100%',
-        backgroundColor: 'white',
-        paddingBottom: '64px',
-      }}
-    >
-      <div style={{ margin: '0 5rem' }}>
-        <h1
-          style={{
-            textAlign: 'center',
-            fontSize: '48px',
-            fontWeight: 'bold',
-            lineHeight: '72px',
-            marginTop: '40px',
-          }}
-        >
-          Giỏ hàng
-        </h1>
-        <Text
-          style={{
-            display: 'block',
-            padding: '20px 0',
-            textAlign: 'center',
-            fontSize: '14px',
-            fontWeight: 'normal',
-            lineHeight: '16px',
-          }}
-        >
-          Nơi cập nhật những trạng thái tốt nhất
-        </Text>
-        <Flex gap="middle" vertical>
-          <CartTable
-            dataSource={dataSource}
-            rowSelection={rowSelection}
-            onQuantityChange={handleQuantityChange}
-            onRemoveItem={handleRemoveItem}
-          />
-          <div
-            style={{
-              position: 'sticky',
-              bottom: 0,
-              zIndex: 10,
-              backgroundColor: 'white',
-              padding: '16px',
-            }}
-          >
-            <CartActions
-              hasSelected={hasSelected}
-              onRemoveSelected={showModal}
-              onCheckout={handleCheckout}
-              selectedCount={selectedRowKeys.length}
-              totalAmount={totalAmount}
-            />
-            <CartModal
-              open={open}
-              onOk={handleOk}
-              onCancel={handleCancel}
-              confirmLoading={confirmLoading}
-              modalText={modalText}
-            />
-          </div>
-        </Flex>
+    <div className="mt-16 w-full bg-white pb-16">
+  <div className="mx-4 sm:mx-8 lg:mx-[5rem]">
+    <h1 className="text-center text-3xl sm:text-4xl lg:text-5xl font-bold leading-[48px] sm:leading-[56px] lg:leading-[72px] mt-10">
+      Giỏ hàng
+    </h1>
+    <Text className="block py-5 text-center text-sm sm:text-base lg:text-lg font-normal">
+      Nơi cập nhật những trạng thái tốt nhất
+    </Text>
+    <div className="flex flex-col gap-6">
+      <CartTable
+        dataSource={dataSource}
+        rowSelection={rowSelection}
+        onQuantityChange={handleQuantityChange}
+        onRemoveItem={handleRemoveItem}
+      />
+      <div className="sticky bottom-0 z-10 bg-white p-4">
+        <CartActions
+          hasSelected={hasSelected}
+          onRemoveSelected={showModal}
+          onCheckout={handleCheckout}
+          selectedCount={selectedRowKeys.length}
+          totalAmount={totalAmount}
+        />
+        <CartModal
+          open={open}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          confirmLoading={confirmLoading}
+          modalText={modalText}
+        />
       </div>
     </div>
+  </div>
+</div>
   );
 };
 
