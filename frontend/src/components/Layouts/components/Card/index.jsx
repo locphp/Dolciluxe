@@ -30,7 +30,6 @@ function Card({ image_link, product_name, description, price, index, id, categor
       ).unwrap();
       await dispatch(fetchCart()).unwrap();
       triggerSuccessPopup();
-      message.success('Đã thêm vào giỏ hàng');
     } catch (error) {
       console.error('Lỗi khi thêm vào giỏ hàng:', error);
       message.error('Có lỗi xảy ra khi thêm vào giỏ hàng');
@@ -43,7 +42,7 @@ function Card({ image_link, product_name, description, price, index, id, categor
       hoverable
       className="w-full sm:w-[250px] md:w-[300px] lg:w-[350px] mx-auto transform transition-transform duration-300"
       style={{
-        transform: 'scale(0.9)',  
+        transform: 'scale(0.9)',
       }}
       cover={
         <Link to={`/detailed/${id}`} state={{ categoryName }}>
