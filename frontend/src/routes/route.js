@@ -26,6 +26,7 @@ import PaymentSuccess from "~/components/Layouts/components/Payment/PaymentSuces
 import PaymentFail from "~/components/Layouts/components/Payment/PaymentFail";
 import Checkout from "~/components/Layouts/components/Checkout/Checkout";
 import OrderSuccess from "~/components/Layouts/components/Payment/COD";
+import NotFound from "~/pages/error";
 // import Checkout from "~/components/Layouts/components/Checkout";
 const publicRoute = [
   { path: "/", component: Home },
@@ -49,7 +50,8 @@ const publicRoute = [
   {
     path: '/checkout',
     component: Checkout,
-  }
+  },
+  {path: '*', component: NotFound},
 ]
 
 const privateRoute = [

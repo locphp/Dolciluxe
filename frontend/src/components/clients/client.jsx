@@ -36,7 +36,7 @@ export function UserTooltip({ onClick, currentUser }) {
   // console.log('👉 currentUser trong UserTooltip:', currentUser);
   // console.log('👉 currentUser admin trong UserTooltip:', currentUser?.data?.isAdmin);
   // console.log('👉 currentUser admin trong UserTooltip:', currentUser?.isAdmin);
-
+  console.log(currentUser);
   return (
     <Tooltip
       theme={customThemeTooltip}
@@ -50,7 +50,7 @@ export function UserTooltip({ onClick, currentUser }) {
               <li className="px-3 py-2 hover:text-fourth">Lịch sử mua hàng</li>
             </Link>
             {(currentUser?.data?.isAdmin || currentUser?.isAdmin) && (
-              <Link to="/admin/dashboard">
+              <Link to="/admin/product_management">
                 <li className="rounded-tl-lg rounded-tr-lg px-3 py-2 hover:text-fourth">Công cụ quản lí</li>
               </Link>
             )}
@@ -62,7 +62,7 @@ export function UserTooltip({ onClick, currentUser }) {
       }
     >
       <img
-        src={currentUser?.profile_picture || currentUser?.avatar || currentUser?.data.avatar || avatar}
+        src={currentUser?.avatar || currentUser?.data.avatar || avatar}
         alt="User account"
         className="h-7 w-7 rounded-full border-2"
       />
