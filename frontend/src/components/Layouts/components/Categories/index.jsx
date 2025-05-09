@@ -46,83 +46,80 @@ function Categories() {
 
   return (
     <div className="mt-16 w-full bg-white">
-      <div className="mx-[5rem]">
-        {/* Đường dẫn breadcrumb */}
-        <div className="ml-[32px] flex h-11 items-center pt-[43px] text-primary">
-          <div>
-            <a href="/">Trang chủ </a>
+    <div className="w-full">
+    {/* Đường dẫn breadcrumb */}
+    {/* <div className="ml-4 sm:ml-8 lg:ml-16 flex h-11 items-center pt-[43px] text-primary">
+      <div>
+        <a href="/">Trang chủ </a>
+        <span>&gt;&gt;</span>
+        <a href="/category"> Menu Bánh </a>
+        {categoryName !== 'Tất cả sản phẩm' && (
+          <>
             <span>&gt;&gt;</span>
-            <a href="/category"> Menu Bánh </a>
-            {categoryName !== 'Tất cả sản phẩm' && (
-              <>
-                <span>&gt;&gt;</span>
-                <NavLink to="/" className="capitalize">
-                  {' '}
-                  {categoryName}{' '}
-                </NavLink>
-              </>
-            )}
-          </div>
-        </div>
-
-        {/* Tiêu đề */}
-        <h1 className="text-center text-5xl font-bold capitalize leading-[72px]">{categoryName}</h1>
-        <p className="py-5 text-center text-sm font-bold leading-4">
-          Bánh truyền thống là một trong những loại bánh đã đưa tên tuổi chúng tôi có được ngày hôm nay, đây là một
-          trong <br />
-          số nhiều loại bán chạy nhất hiện nay
-        </p>
-
-        {/* Thanh tìm kiếm + bộ lọc */}
-        <div className="mx-4 mb-4 flex items-center justify-end gap-4">
-          <input
-            type="text"
-            placeholder="Tìm theo tên bánh..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-[200px] rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-          <select
-            value={sortOption}
-            onChange={(e) => setSortOption(e.target.value)}
-            className="rounded-md border px-3 py-2 transition-colors duration-200 hover:bg-[#f5f5f5]"
-          >
-            <option value="">Chọn bộ lọc</option>
-            <option value="Giá từ thấp đến cao">Giá từ thấp đến cao</option>
-            <option value="Giá từ cao đến thấp">Giá từ cao đến thấp</option>
-          </select>
-        </div>
-
-        {/* Danh sách bánh */}
-        <div className="product lg:grid-custom-4 md:grid-custom-2 grid-custom-1 relative grid w-full justify-evenly">
-          {sortedCakesPerPage.currentData().map((cake, index) => (
-            <Card
-              key={index}
-              id={cake._id}
-              image_link={cake.imageLink}
-              description={cake.description}
-              product_name={cake.productName}
-              categoryName={categoryName}
-              price={cake.price}
-              cake={cake}
-            />
-          ))}
-        </div>
-
-        {/* Phân trang */}
-        <div className="flex items-center justify-center py-4">
-          <ThemeProvider theme={theme}>
-            <Pagination
-              count={sortedCakesPerPage.maxPage}
-              size="large"
-              page={sortedCakesPerPage.currentPage}
-              color="secondary"
-              onChange={(e, value) => sortedCakesPerPage.jump(value)}
-            />
-          </ThemeProvider>
-        </div>
-      </div>
+            <NavLink to="/" className="capitalize">
+              {' '}
+              {categoryName}{' '}
+            </NavLink>
+          </>
+        )}
+      </div> */}
     </div>
+    <br></br>
+    {/* Tiêu đề */}
+    <h1 className="text-center text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold md:font-bold capitalize leading-snug md:leading-[72px]">
+      {categoryName}
+    </h1>
+    <br></br>
+
+    <div className="mx-4 mb-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-4">
+      <input
+        type="text"
+        placeholder="Tìm theo tên bánh..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="w-full sm:w-[250px] md:w-[300px] px-4 py-3 rounded-lg border border-gray-300 text-sm bg-gradient-to-r from-white to-[#e7e1e1] focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+      />
+      <select
+        value={sortOption}
+        onChange={(e) => setSortOption(e.target.value)}
+        className="w-full sm:w-[200px] px-4 py-3 rounded-lg border border-gray-300 text-sm bg-gradient-to-r from-[#e7e1e1] to-white hover:bg-[#f5f5f5] transition-all cursor-pointer"
+      >
+        <option value="">Chọn bộ lọc</option>
+        <option value="Giá từ thấp đến cao">Giá từ thấp đến cao</option>
+        <option value="Giá từ cao đến thấp">Giá từ cao đến thấp</option>
+      </select>
+    </div>
+
+    {/* Danh sách bánh */}
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+      {sortedCakesPerPage.currentData().map((cake, index) => (
+        <div key={index} className="flex justify-center">
+          <Card
+            id={cake._id}
+            image_link={cake.imageLink}
+            description={cake.description}
+            product_name={cake.productName}
+            categoryName={categoryName}
+            price={cake.price}
+            cake={cake}
+          />
+        </div>
+      ))}
+    </div>
+
+    {/* Phân trang */}
+    <div className="flex items-center justify-center py-4">
+      <ThemeProvider theme={theme}>
+        <Pagination
+          count={sortedCakesPerPage.maxPage}
+          size="large"
+          page={sortedCakesPerPage.currentPage}
+          color="secondary"
+          onChange={(e, value) => sortedCakesPerPage.jump(value)}
+        />
+      </ThemeProvider>
+    </div>
+  </div>
   );
 }
 

@@ -41,36 +41,25 @@ function Card({ image_link, product_name, description, price, index, id, categor
     <AntdCard
       key={index}
       hoverable
-      style={{ width: 300, margin: 16 }}
+      className="w-full sm:w-[250px] md:w-[300px] lg:w-[350px] mx-auto transform transition-transform duration-300"
+      style={{
+        transform: 'scale(0.9)',  
+      }}
       cover={
         <Link to={`/detailed/${id}`} state={{ categoryName }}>
           <img
             alt={product_name}
             src={image_link}
-            style={{ height: 300, objectFit: 'cover', borderTopLeftRadius: 8, borderTopRightRadius: 8 ,width: '100%'}}
+            className="h-[200px] sm:h-[250px] md:h-[300px] object-cover rounded-t-lg w-full"
           />
         </Link>
       }
-      actions={[
-        <Link to={`/detailed/${id}`} state={{ categoryName }}>
-          <Button type="text" icon={<EyeOutlined />}>Xem chi tiết</Button>
-        </Link>,
-        <Button
-          type="primary"
-          // style={{ color: '#664545' }}
-          icon={<ShoppingCartOutlined />}
-          onClick={() => handleAddToCart(cake)}
-        >
-          Thêm vào giỏ
-        </Button>,
-      ]}
     >
       <Meta
         title={
-          <span style={{ fontSize: 18 }}>
+          <span className="text-base md:text-lg lg:text-xl">
             {product_name}
           </span>
-
         }
         description={
           <>
@@ -78,19 +67,38 @@ function Card({ image_link, product_name, description, price, index, id, categor
               disabled
               defaultValue={5}
               character={<StarFilled />}
-              style={{ fontSize: 14, marginBottom: 8 }}
+              className="text-sm md:text-base"
             />
-            <p style={{ height: 40, marginBottom: 8 }} className="line-clamp-2">
+            <p className="line-clamp-2 text-sm md:text-base">
               {description}
             </p>
-            <span style={{ color: '#664545', fontWeight: 'bold', fontSize: 16 }}>
+            <span className="text-primary font-bold text-sm md:text-base lg:text-lg block mb-2">
               Giá: {Number(price).toLocaleString('vi-VN')}₫
             </span>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Link to={`/detailed/${id}`} state={{ categoryName }} className="w-full sm:w-auto">
+                <Button type="text" icon={<EyeOutlined />} className="w-full sm:w-auto">
+                  Xem chi tiết
+                </Button>
+              </Link>
+              <Button
+                type="primary"
+                icon={<ShoppingCartOutlined />}
+                onClick={() => handleAddToCart(cake)}
+                className="w-full sm:w-auto"
+              >
+                Thêm vào giỏ
+              </Button>
+            </div>
           </>
         }
       />
     </AntdCard>
+
   );
 }
 
 export default Card;
+
+
+
