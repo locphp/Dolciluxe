@@ -25,8 +25,8 @@ app.use(session({
   cookie: {
     maxAge: 1000 * 60 * 60 * 24, // 1 day
     httpOnly: true,
-    sameSite: 'lax',   // hoặc 'none' nếu frontend khác domain
-    secure: false     // true nếu dùng HTTPS
+    sameSite: 'none',   // hoặc 'none' nếu frontend khác domain
+    secure: true     // true nếu dùng HTTPS
   }
 }));
 
