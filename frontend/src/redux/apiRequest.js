@@ -38,7 +38,7 @@ export const loginUser = async (dispatch, user, navigate, redirectPath = '/') =>
         toast.error('Tài khoản chưa được đăng ký', {
           position: 'bottom-right',
         });
-      } else if (err.response.status === 401) {
+      } else if (err.response.status === 400) {
         toast.error('Sai mật khẩu', {
           position: 'bottom-right',
         });
