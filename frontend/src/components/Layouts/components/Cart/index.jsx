@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Typography, message } from 'antd';
+import { Typography, message, Spin } from 'antd';
 import { useCart } from './hooks';
 import CartTable from './CartTable';
 import CartActions from './CartActions';
@@ -15,11 +15,21 @@ const Cart = () => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
 
   const user = useSelector((state) => state.auth.login.currentUser);
-  const { cartItems, removeItem, removeMultipleItems, updateItemQuantity } = useCart(user);
+  const { cartItems, loading, removeItem, removeMultipleItems, updateItemQuantity } = useCart(user);
   const navigate = useNavigate();
+
+  // Kiểm tra và cập nhật trạng thái loading khi cartItems hoặc loading thay đổi
+  useEffect(() => {
+    if (cartItems && cartItems.length > 0) {
+      setIsLoading(false);
+    } else if (loading === false) {
+      setIsLoading(false);
+    }
+  }, [cartItems, loading]);
 
   useEffect(() => {
     if (!location.state?.autoSelectedKey || !location.state?.isBuyNow) return;
@@ -46,8 +56,6 @@ const Cart = () => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     console.log('selectedItemIds changed: ', newSelectedItemIds);
   };
-
-
 
   const showModal = () => {
     setOpen(true);
@@ -108,11 +116,8 @@ const Cart = () => {
       selectedItemIds
     }));
 
-
     navigate(`/checkout?state=${stateId}`, {
-
       state: {
-
         cartItems: cartItems, // Truyền toàn bộ giỏ hàng
         selectedItems: selectedItemIds.length > 0
           ? cartItems.filter(item => selectedItemIds.includes(item._id))
@@ -139,7 +144,7 @@ const Cart = () => {
     }).format(value);
   };
 
-  const dataSource = cartItems.map((item) => ({
+  const dataSource = cartItems?.map((item) => ({
     key: item.product._id,
     itemId: item._id,
     product: {
@@ -149,11 +154,11 @@ const Cart = () => {
     price: formatCurrency(item.product.price),
     quantity: item.quantity,
     total: formatCurrency(item.product.price * item.quantity),
-  }));
+  })) || [];
 
   const totalAmount = formatCurrency(
     selectedRowKeys.reduce((sum, key) => {
-      const item = cartItems.find((cartItem) => cartItem.product._id === key);
+      const item = cartItems?.find((cartItem) => cartItem.product._id === key);
       return sum + (item ? item.product.price * item.quantity : 0);
     }, 0)
   );
@@ -162,38 +167,40 @@ const Cart = () => {
 
   return (
     <div className="mt-16 w-full bg-white pb-16">
-      <div className="mx-4 sm:mx-8 lg:mx-[5rem]">
-        <h1 className="text-center text-3xl sm:text-4xl lg:text-5xl font-bold leading-[48px] sm:leading-[56px] lg:leading-[72px] mt-10">
-          Giỏ hàng
-        </h1>
-        <Text className="block py-5 text-center text-sm sm:text-base lg:text-lg font-normal">
-          Nơi cập nhật những trạng thái tốt nhất
-        </Text>
-        <div className="flex flex-col gap-6">
-          <CartTable
-            dataSource={dataSource}
-            rowSelection={rowSelection}
-            onQuantityChange={handleQuantityChange}
-            onRemoveItem={handleRemoveItem}
-          />
-          <div className="sticky bottom-0 z-10 bg-white p-4">
-            <CartActions
-              hasSelected={hasSelected}
-              onRemoveSelected={showModal}
-              onCheckout={handleCheckout}
-              selectedCount={selectedRowKeys.length}
-              totalAmount={totalAmount}
+      <Spin spinning={isLoading} size="large">
+        <div className="mx-4 sm:mx-8 lg:mx-[5rem]">
+          <h1 className="text-center text-3xl sm:text-4xl lg:text-5xl font-bold leading-[48px] sm:leading-[56px] lg:leading-[72px] mt-10">
+            Giỏ hàng
+          </h1>
+          <Text className="block py-5 text-center text-sm sm:text-base lg:text-lg font-normal">
+            Nơi cập nhật những trạng thái tốt nhất
+          </Text>
+          <div className="flex flex-col gap-6">
+            <CartTable
+              dataSource={dataSource}
+              rowSelection={rowSelection}
+              onQuantityChange={handleQuantityChange}
+              onRemoveItem={handleRemoveItem}
             />
-            <CartModal
-              open={open}
-              onOk={handleOk}
-              onCancel={handleCancel}
-              confirmLoading={confirmLoading}
-              modalText={modalText}
-            />
+            <div className="sticky bottom-0 z-10 bg-white p-4">
+              <CartActions
+                hasSelected={hasSelected}
+                onRemoveSelected={showModal}
+                onCheckout={handleCheckout}
+                selectedCount={selectedRowKeys.length}
+                totalAmount={totalAmount}
+              />
+              <CartModal
+                open={open}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                confirmLoading={confirmLoading}
+                modalText={modalText}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      </Spin>
     </div>
   );
 };

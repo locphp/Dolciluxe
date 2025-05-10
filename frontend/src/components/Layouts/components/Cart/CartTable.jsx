@@ -1,11 +1,23 @@
-import React from 'react';
-import { Table, Image, Typography, InputNumber, Popconfirm, Button, Empty } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Table, Image, Typography, InputNumber, Popconfirm, Button, Empty, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 const { Text } = Typography;
 
-const CartTable = ({ dataSource, rowSelection, onQuantityChange, onRemoveItem }) => {
+const CartTable = ({ dataSource, rowSelection, onQuantityChange, onRemoveItem, loading }) => {
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (Array.isArray(dataSource) && dataSource.length > 0) {
+            setIsLoading(false);
+        } else if (loading === false) {
+            setIsLoading(false);
+        } else if (Array.isArray(dataSource) && dataSource.length === 0 && loading !== true) {
+            setIsLoading(false);
+        }
+    }, [dataSource, loading]);
+
     const renderEmptyCart = () => (
         <Empty
             image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -22,6 +34,7 @@ const CartTable = ({ dataSource, rowSelection, onQuantityChange, onRemoveItem })
             </Button>
         </Empty>
     );
+    
     const columns = [
         {
             title: 'Sản phẩm',
@@ -91,19 +104,25 @@ const CartTable = ({ dataSource, rowSelection, onQuantityChange, onRemoveItem })
     ];
     
     return (
-        <div style={{ overflowX: 'auto' }}>
-            <Table
-                rowSelection={rowSelection}
-                columns={columns}
-                dataSource={dataSource}
-                pagination={false}
-                locale={{
-                    emptyText: renderEmptyCart(), // Sử dụng custom empty component
-                }}
-                scroll={{ x: 800 }} // Cho phép cuộn ngang nếu bảng quá rộng
-            />
-        </div>
+        <Spin spinning={isLoading} size="large">
+            <div style={{ overflowX: 'auto' }}>
+                <Table
+                    rowSelection={rowSelection}
+                    columns={columns}
+                    dataSource={dataSource}
+                    pagination={false}
+                    locale={{
+                        emptyText: renderEmptyCart(), 
+                    }}
+                    scroll={{ x: 800 }} 
+                />
+            </div>
+        </Spin>
     );
+};
+
+CartTable.defaultProps = {
+    loading: undefined
 };
 
 export default CartTable;
