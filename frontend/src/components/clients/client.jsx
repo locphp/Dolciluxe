@@ -50,7 +50,7 @@ export function UserTooltip({ onClick, currentUser }) {
               <li className="px-3 py-2 hover:text-fourth">Lịch sử mua hàng</li>
             </Link>
             {(currentUser?.data?.isAdmin || currentUser?.isAdmin) && (
-              <Link to="/admin/product_management">
+              <Link to="/admin/dashboard">
                 <li className="rounded-tl-lg rounded-tr-lg px-3 py-2 hover:text-fourth">Công cụ quản lí</li>
               </Link>
             )}
