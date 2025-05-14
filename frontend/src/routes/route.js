@@ -9,7 +9,7 @@ import DetailedCake from "~/components/Layouts/components/DetailedCake";
 import Condition from "~/pages/Condition";
 import Cart from "~/components/Layouts/components/Cart";
 import AccountPage from "~/pages/Account";
-import AdminDashboard from "~/pages/AdminDashboard";
+import AdminDashboard from "~/pages/AdminDashboard/dashboard";
 import AdminLogin from "~/pages/AdminLogin";
 import DefaultLayout from "~/components/Layouts/DefaultLayout";
 import DashBoardLayout from "~/components/Layouts/DashboardLayout";
