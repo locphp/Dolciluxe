@@ -9,7 +9,7 @@ import DetailedCake from "~/components/Layouts/components/DetailedCake";
 import Condition from "~/pages/Condition";
 import Cart from "~/components/Layouts/components/Cart";
 import AccountPage from "~/pages/Account";
-import AdminDashboard from "~/pages/AdminDashboard";
+import AdminDashboard from "~/pages/AdminDashboard/dashboard";
 import AdminLogin from "~/pages/AdminLogin";
 import DefaultLayout from "~/components/Layouts/DefaultLayout";
 import DashBoardLayout from "~/components/Layouts/DashboardLayout";
@@ -26,6 +26,7 @@ import PaymentSuccess from "~/components/Layouts/components/Payment/PaymentSuces
 import PaymentFail from "~/components/Layouts/components/Payment/PaymentFail";
 import Checkout from "~/components/Layouts/components/Checkout/Checkout";
 import OrderSuccess from "~/components/Layouts/components/Payment/COD";
+import NotFound from "~/pages/error";
 // import Checkout from "~/components/Layouts/components/Checkout";
 const publicRoute = [
   { path: "/", component: Home },
@@ -49,7 +50,8 @@ const publicRoute = [
   {
     path: '/checkout',
     component: Checkout,
-  }
+  },
+  {path: '*', component: NotFound},
 ]
 
 const privateRoute = [
